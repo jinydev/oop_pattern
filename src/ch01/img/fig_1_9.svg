@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 250" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Center Manager Circle (부장) -->
+  <g filter="url(#shadow)">
+    <circle cx="80" cy="70" r="35" fill="#ffffff" stroke="#ea580c" stroke-width="2.5" />
+    <text x="80" y="75" font-family="'Inter', sans-serif" font-size="14" font-weight="bold" fill="#ea580c" text-anchor="middle">부장</text>
+  </g>
+
+  <!-- Employee 1 Circle (사원1) -->
+  <g filter="url(#shadow)">
+    <circle cx="280" cy="70" r="30" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+    <text x="280" y="74" font-family="'Inter', sans-serif" font-size="12" font-weight="600" fill="#334155" text-anchor="middle">사원1</text>
+  </g>
+
+  <!-- Employee 2 Circle (사원2) -->
+  <g filter="url(#shadow)">
+    <circle cx="210" cy="180" r="30" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+    <text x="210" y="184" font-family="'Inter', sans-serif" font-size="12" font-weight="600" fill="#334155" text-anchor="middle">사원2</text>
+  </g>
+
+  <!-- Employee 3 Circle (사원3) -->
+  <g filter="url(#shadow)">
+    <circle cx="80" cy="190" r="30" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+    <text x="80" y="194" font-family="'Inter', sans-serif" font-size="12" font-weight="600" fill="#334155" text-anchor="middle">사원3</text>
+  </g>
+
+  <!-- Dotted Arrows pointing from 부장 to employees -->
+  <g>
+    <!-- Arrow to 사원1 -->
+    <path d="M 115,70 L 240,70" fill="none" stroke="#475569" stroke-width="1.5" stroke-dasharray="4,3" />
+    <polygon points="240,66 248,70 240,74" fill="#475569" />
+
+    <!-- Arrow to 사원2 -->
+    <path d="M 105,95 L 182,158" fill="none" stroke="#475569" stroke-width="1.5" stroke-dasharray="4,3" />
+    <polygon points="178,162 188,163 184,154" fill="#475569" />
+
+    <!-- Arrow to 사원3 -->
+    <path d="M 80,105 L 80,150" fill="none" stroke="#475569" stroke-width="1.5" stroke-dasharray="4,3" />
+    <polygon points="76,150 80,158 84,150" fill="#475569" />
+  </g>
+</svg>

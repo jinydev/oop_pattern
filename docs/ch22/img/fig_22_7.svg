@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 200" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Outer Abstract Class Box -->
+  <g transform="translate(130, 20)" filter="url(#shadow)">
+    <rect width="160" height="150" rx="8" fill="#ffffff" stroke="#3b82f6" stroke-width="2" />
+    <path d="M 0,8 A 8,8 0 0 1 8,0 L 152,0 A 8,8 0 0 1 160,8 L 160,25 L 0,25 Z" fill="#3b82f6" />
+    <text x="80" y="16" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">추상 클래스 (Abstract Class)</text>
+
+    <!-- make() template method -->
+    <g transform="translate(20, 35)">
+      <rect width="120" height="30" rx="4" fill="#eff6ff" stroke="#2563eb" stroke-width="1.2" />
+      <text x="60" y="19" font-family="monospace" font-size="10" font-weight="bold" fill="#1e3a8a" text-anchor="middle">make()</text>
+    </g>
+
+    <!-- Abstract Sub-methods -->
+    <g transform="translate(15, 95)">
+      <!-- Bread() -->
+      <g transform="translate(0, 0)">
+        <rect width="60" height="30" rx="3" fill="#f8fafc" stroke="#94a3b8" stroke-dasharray="2,2" stroke-width="1" />
+        <text x="30" y="19" font-family="monospace" font-size="9" font-weight="bold" fill="#475569" text-anchor="middle">Bread()</text>
+      </g>
+      
+      <!-- Jam() -->
+      <g transform="translate(70, 0)">
+        <rect width="60" height="30" rx="3" fill="#f8fafc" stroke="#94a3b8" stroke-dasharray="2,2" stroke-width="1" />
+        <text x="30" y="19" font-family="monospace" font-size="9" font-weight="bold" fill="#475569" text-anchor="middle">Jam()</text>
+      </g>
+    </g>
+
+    <!-- Arrows from make() to Bread() and Jam() -->
+    <path d="M 80,65 L 50,95" fill="none" stroke="#2563eb" stroke-width="1.2" />
+    <polygon points="52,91 46,95 51,98" fill="#2563eb" />
+
+    <path d="M 80,65 L 110,95" fill="none" stroke="#2563eb" stroke-width="1.2" />
+    <polygon points="109,98 114,95 108,91" fill="#2563eb" />
+  </g>
+
+  <!-- Left indicator Label -->
+  <g transform="translate(10, 50)">
+    <rect width="100" height="40" rx="4" fill="#eff6ff" stroke="#cbd5e1" stroke-width="1" />
+    <text x="50" y="16" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#1e3a8a" text-anchor="middle">외형적인 뼈대</text>
+    <text x="50" y="28" font-family="'Inter', sans-serif" font-size="8" fill="#475569" text-anchor="middle">(공통적인 기능)</text>
+    
+    <!-- arrow pointing to make() -->
+    <path d="M 100,20 L 145,20" fill="none" stroke="#2563eb" stroke-width="1.2" />
+    <polygon points="145,17 151,20 145,23" fill="#2563eb" />
+  </g>
+</svg>

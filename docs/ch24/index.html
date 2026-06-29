@@ -1,0 +1,1927 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- 기본 메타데이터 --><meta name="description" content="Jiny linux"><meta name="author" content="HojinLee"><!-- 제목 설정 --><title>CHAPTER 24 인터프리터 패턴</title>
+  <meta name="title" content="CHAPTER 24 인터프리터 패턴" /><!-- 키워드 설정 --><!-- Open Graph 메타데이터 --><meta property="og:title" content="CHAPTER 24 인터프리터 패턴"><meta property="og:description" content="Jiny linux"><meta property="og:type" content="website"><meta property="og:locale" content="ko">
+  <meta property="og:site_name" content="linux">
+  <meta property="og:url" content="http://0.0.0.0:4000/ch24/">
+  <!-- 대표 URL (캐노니컬) -->
+  <link rel="canonical" href="http://0.0.0.0:4000/ch24/">
+
+  <!-- Twitter 카드 메타데이터 --><meta name="twitter:card" content="summary"><meta property="twitter:title" content="CHAPTER 24 인터프리터 패턴"><!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="CHAPTER 24 인터프리터 패턴" />
+<meta name="author" content="Hojin" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="24가지 패턴으로 알아보는 객체지향의 원리" />
+<meta name="twitter:description" property="og:description" content="24가지 패턴으로 알아보는 객체지향의 원리" />
+<link rel="canonical" href="http://0.0.0.0:4000/ch24/" />
+<meta property="og:url" content="http://0.0.0.0:4000/ch24/" />
+<meta property="og:site_name" content="쉽게 배워 바로 써먹는 디자인 패턴" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="CHAPTER 24 인터프리터 패턴" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Hojin"},"description":"24가지 패턴으로 알아보는 객체지향의 원리","headline":"CHAPTER 24 인터프리터 패턴","url":"http://0.0.0.0:4000/ch24/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/assets/css/docs.css" rel="stylesheet" />
+  <link href="/assets/css/highlight.css" rel="stylesheet" />
+
+  <style>
+    blockquote {
+      border-left: solid 5px #dee2e6;
+      padding: 5px 10px;
+      background-color: #f8f9fa;
+    }
+  </style>
+
+  <style>
+    h1 a {
+      text-decoration: none;
+    }
+
+    h2 a {
+      text-decoration: none;
+    }
+
+    h3 a {
+      text-decoration: none;
+    }
+
+    h4 a {
+      text-decoration: none;
+    }
+
+    h5 a {
+      text-decoration: none;
+    }
+
+    h6 a {
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      vertical-align: top
+    }
+
+    strong a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* 스크롤바 커스텀 */
+    /* 임의의 영역 생성 */
+    .scrollBar {}
+
+    /* 아래의 모든 코드는 영역::코드로 사용 */
+    .scrollBar::-webkit-scrollbar {
+      width: 7px;
+      /* 스크롤바의 너비 */
+    }
+
+    .scrollBar::-webkit-scrollbar-thumb {
+      height: 30%;
+      /* 스크롤바의 길이 */
+      background: #cccccc;
+      /* 스크롤바의 색상 */
+
+      border-radius: 5px;
+    }
+
+    .scrollBar::-webkit-scrollbar-track {
+      background: rgba(33, 122, 244, .1);
+      /*스크롤바 뒷 배경 색상*/
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4VBPCT3CR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-R4VBPCT3CR');
+  </script>
+
+
+</head>
+
+<body>
+  <header class="navbar navbar-expand-lg bd-navbar sticky-top">
+    <nav class="container bd-gutter flex-wrap flex-lg-nowrap position-relative" aria-label="Main navigation">
+
+      <!-- Mobile: Left Toggle (Browse) -->
+      <div class="bd-navbar-toggle d-lg-none">
+        <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdSidebar"
+          aria-controls="bdSidebar" aria-label="Toggle docs navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="bi" fill="currentColor"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z">
+            </path>
+          </svg>
+          <span class="d-none fs-6 pe-1">Browse</span>
+        </button>
+      </div>
+
+      <!-- Brand: Desktop (Static), Mobile (Absolute Center) -->
+      <a class="navbar-brand p-0 me-0 me-lg-2 ms-lg-0 d-none d-lg-inline-block" href="/" aria-label="jinydev">
+        <svg width="32" height="26" viewBox="0 0 32 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M24.2746 5.33377C25.8486 7.33981 25.1183 11.1792 24.3961 13.0177C24.4028 13.0199 24.4094 13.0221 24.4161 13.0243L24.4013 13.0248L22.649 12.9082C22.649 12.9053 22.6488 12.9013 22.649 12.8993C22.9902 8.93373 22.5975 7.34575 22.2147 7.07677C17.6316 10.3896 13.5379 9.33658 12.2725 9.01111C11.928 8.9225 11.7932 8.88781 11.9152 9.00988C12.2872 9.38185 13.1336 9.82821 13.7371 10.1465H13.7372L13.7376 10.1467C13.8743 10.2188 13.9985 10.2843 14.1019 10.3409C9.12673 10.3984 7.12659 8.00279 6.53855 7.29846C6.47859 7.22664 6.4333 7.1724 6.40105 7.14015C6.11408 6.85318 4.49961 5.87252 3.99256 7.74227C3.50142 9.55335 3.81246 11.6775 3.97665 12.7988C3.99089 12.896 3.99257 12.8981 3.99257 12.9298L2.37635 13.0248L2.37213 13.0247C0.223493 8.05534 1.83854 5.26971 3.29536 4.2246C3.29536 1.78444 6.27428 -0.592359 10.0455 0.263262C14.8768 1.64043 16.3468 1.18409 18.0759 0.647278C18.774 0.430562 19.5143 0.200726 20.5351 0.073124C25.2219 -0.512739 26.7993 2.56612 27 4.16122C26.2141 3.70487 24.8556 4.73165 24.2746 5.33377ZM12.3374 1.5872C11.1225 1.16466 7.99257 0.717209 6.3478 2.41116C5.98397 2.78587 5.55554 3.48864 5.55554 3.48864C5.55554 3.48864 4.82665 4.81961 4.25622 4.24919C3.68579 3.67878 5.0168 1.96749 6.06259 1.46044C7.10838 0.953388 9.70703 0.0660505 12.3374 1.5872Z"
+            fill="currentColor" />
+          <path
+            d="M10.078 13.5002H3.10601C2.2309 13.5002 1.52148 14.2097 1.52148 15.0848V18.3172C1.52148 19.1923 2.2309 19.9018 3.10601 19.9018H10.078C10.9531 19.9018 11.6625 19.1923 11.6625 18.3172V15.0848C11.6625 14.2097 10.9531 13.5002 10.078 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M0.823513 14.6094H0.379847C0.187322 14.6094 0.03125 14.7654 0.03125 14.958V15.9721C0.03125 16.1646 0.187322 16.3207 0.379847 16.3207H0.823513C1.01604 16.3207 1.17211 16.1646 1.17211 15.9721V14.958C1.17211 14.7654 1.01604 14.6094 0.823513 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M16.7326 13.5002H23.7045C24.5796 13.5002 25.2891 14.2097 25.2891 15.0848V18.3172C25.2891 19.1923 24.5796 19.9018 23.7045 19.9018H16.7326C15.8575 19.9018 15.1481 19.1923 15.1481 18.3172V15.0848C15.1481 14.2097 15.8575 13.5002 16.7326 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M25.9861 14.6094H26.4297C26.6222 14.6094 26.7783 14.7654 26.7783 14.958V15.9721C26.7783 16.1646 26.6222 16.3207 26.4297 16.3207H25.9861C25.7935 16.3207 25.6375 16.1646 25.6375 15.9721V14.958C25.6375 14.7654 25.7935 14.6094 25.9861 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M12.2954 15.5601H14.5137C14.7062 15.5601 14.8623 15.7161 14.8623 15.9087V16.9228C14.8623 17.1153 14.7062 17.2713 14.5137 17.2713H12.2954C12.1028 17.2713 11.9468 17.1153 11.9468 16.9228V15.9087C11.9468 15.7161 12.1028 15.5601 12.2954 15.5601Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M9.93343 16.3937C9.93343 16.7087 9.76317 16.9641 9.55314 16.9641C9.34311 16.9641 9.17285 16.7087 9.17285 16.3937C9.17285 16.0786 9.34311 15.8232 9.55314 15.8232C9.76317 15.8232 9.93343 16.0786 9.93343 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M16.9688 16.3937C16.9688 16.7087 17.139 16.9641 17.3491 16.9641C17.5591 16.9641 17.7293 16.7087 17.7293 16.3937C17.7293 16.0786 17.5591 15.8232 17.3491 15.8232C17.139 15.8232 16.9688 16.0786 16.9688 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M14.2758 20.1016C13.642 20.6086 12.7863 20.3551 12.5645 20.1016C12.6278 20.4185 12.8687 20.8622 13.4518 20.8622C14.0349 20.8622 14.2441 20.3551 14.2758 20.1016Z"
+            fill="currentColor" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.1312 22.411C12.1575 22.2914 12.2759 22.2157 12.3956 22.2421L14.6347 22.735C14.7544 22.7614 14.83 22.8797 14.8036 22.9994C14.7773 23.119 14.659 23.1947 14.5393 23.1683L12.3002 22.6753C12.1805 22.649 12.1049 22.5307 12.1312 22.411Z"
+            fill="currentColor" />
+          <path
+            d="M13.4203 27.6754C9.00897 27.7261 5.77228 23.6613 4.70536 21.6225C4.54691 21.3197 4.42016 21.2739 4.32509 21.3373C4.17297 21.4387 4.28282 21.6437 4.32507 21.7493C4.85747 22.9916 5.58213 24.0416 5.87791 24.4113C4.83846 26.1353 4.49409 27.855 4.45183 28.4994C6.1758 26.8008 7.91668 26.8832 8.57162 27.1367C13.7055 29.7987 16.5577 27.929 18.1739 27.1367C19.4669 26.5029 21.4803 27.7388 22.3254 28.436C22.224 26.8642 21.3747 25.1402 20.9627 24.4747C21.6282 23.5873 22.1669 22.5099 22.4522 21.9711C22.6803 21.5401 22.6106 21.369 22.5472 21.3373C22.3951 21.2613 22.2092 21.4958 22.1353 21.6225C21.6599 22.4148 18.9345 27.6121 13.4203 27.6754Z"
+            fill="currentColor" />
+        </svg>
+      </a>
+      <a class="navbar-brand p-0 me-0 position-absolute top-50 start-50 translate-middle d-lg-none" href="/"
+        aria-label="jinydev">
+        <svg width="100" height="26" viewBox="0 0 112 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M24.2746 5.33377C25.8486 7.33981 25.1183 11.1792 24.3961 13.0177C24.4028 13.0199 24.4094 13.0221 24.4161 13.0243L24.4013 13.0248L22.649 12.9082C22.649 12.9053 22.6488 12.9013 22.649 12.8993C22.9902 8.93373 22.5975 7.34575 22.2147 7.07677C17.6316 10.3896 13.5379 9.33658 12.2725 9.01111C11.928 8.9225 11.7932 8.88781 11.9152 9.00988C12.2872 9.38185 13.1336 9.82821 13.7371 10.1465H13.7372L13.7376 10.1467C13.8743 10.2188 13.9985 10.2843 14.1019 10.3409C9.12673 10.3984 7.12659 8.00279 6.53855 7.29846C6.47859 7.22664 6.4333 7.1724 6.40105 7.14015C6.11408 6.85318 4.49961 5.87252 3.99256 7.74227C3.50142 9.55335 3.81246 11.6775 3.97665 12.7988C3.99089 12.896 3.99257 12.8981 3.99257 12.9298L2.37635 13.0248L2.37213 13.0247C0.223493 8.05534 1.83854 5.26971 3.29536 4.2246C3.29536 1.78444 6.27428 -0.592359 10.0455 0.263262C14.8768 1.64043 16.3468 1.18409 18.0759 0.647278C18.774 0.430562 19.5143 0.200726 20.5351 0.073124C25.2219 -0.512739 26.7993 2.56612 27 4.16122C26.2141 3.70487 24.8556 4.73165 24.2746 5.33377ZM12.3374 1.5872C11.1225 1.16466 7.99257 0.717209 6.3478 2.41116C5.98397 2.78587 5.55554 3.48864 5.55554 3.48864C5.55554 3.48864 4.82665 4.81961 4.25622 4.24919C3.68579 3.67878 5.0168 1.96749 6.06259 1.46044C7.10838 0.953388 9.70703 0.0660505 12.3374 1.5872Z"
+            fill="currentColor" />
+          <path
+            d="M10.078 13.5002H3.10601C2.2309 13.5002 1.52148 14.2097 1.52148 15.0848V18.3172C1.52148 19.1923 2.2309 19.9018 3.10601 19.9018H10.078C10.9531 19.9018 11.6625 19.1923 11.6625 18.3172V15.0848C11.6625 14.2097 10.9531 13.5002 10.078 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M0.823513 14.6094H0.379847C0.187322 14.6094 0.03125 14.7654 0.03125 14.958V15.9721C0.03125 16.1646 0.187322 16.3207 0.379847 16.3207H0.823513C1.01604 16.3207 1.17211 16.1646 1.17211 15.9721V14.958C1.17211 14.7654 1.01604 14.6094 0.823513 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M16.7326 13.5002H23.7045C24.5796 13.5002 25.2891 14.2097 25.2891 15.0848V18.3172C25.2891 19.1923 24.5796 19.9018 23.7045 19.9018H16.7326C15.8575 19.9018 15.1481 19.1923 15.1481 18.3172V15.0848C15.1481 14.2097 15.8575 13.5002 16.7326 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M25.9861 14.6094H26.4297C26.6222 14.6094 26.7783 14.7654 26.7783 14.958V15.9721C26.7783 16.1646 26.6222 16.3207 26.4297 16.3207H25.9861C25.7935 16.3207 25.6375 16.1646 25.6375 15.9721V14.958C25.6375 14.7654 25.7935 14.6094 25.9861 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M12.2954 15.5601H14.5137C14.7062 15.5601 14.8623 15.7161 14.8623 15.9087V16.9228C14.8623 17.1153 14.7062 17.2713 14.5137 17.2713H12.2954C12.1028 17.2713 11.9468 17.1153 11.9468 16.9228V15.9087C11.9468 15.7161 12.1028 15.5601 12.2954 15.5601Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M9.93343 16.3937C9.93343 16.7087 9.76317 16.9641 9.55314 16.9641C9.34311 16.9641 9.17285 16.7087 9.17285 16.3937C9.17285 16.0786 9.34311 15.8232 9.55314 15.8232C9.76317 15.8232 9.93343 16.0786 9.93343 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M16.9688 16.3937C16.9688 16.7087 17.139 16.9641 17.3491 16.9641C17.5591 16.9641 17.7293 16.7087 17.7293 16.3937C17.7293 16.0786 17.5591 15.8232 17.3491 15.8232C17.139 15.8232 16.9688 16.0786 16.9688 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M14.2758 20.1016C13.642 20.6086 12.7863 20.3551 12.5645 20.1016C12.6278 20.4185 12.8687 20.8622 13.4518 20.8622C14.0349 20.8622 14.2441 20.3551 14.2758 20.1016Z"
+            fill="currentColor" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.1312 22.411C12.1575 22.2914 12.2759 22.2157 12.3956 22.2421L14.6347 22.735C14.7544 22.7614 14.83 22.8797 14.8036 22.9994C14.7773 23.119 14.659 23.1947 14.5393 23.1683L12.3002 22.6753C12.1805 22.649 12.1049 22.5307 12.1312 22.411Z"
+            fill="currentColor" />
+          <path
+            d="M13.4203 27.6754C9.00897 27.7261 5.77228 23.6613 4.70536 21.6225C4.54691 21.3197 4.42016 21.2739 4.32509 21.3373C4.17297 21.4387 4.28282 21.6437 4.32507 21.7493C4.85747 22.9916 5.58213 24.0416 5.87791 24.4113C4.83846 26.1353 4.49409 27.855 4.45183 28.4994C6.1758 26.8008 7.91668 26.8832 8.57162 27.1367C13.7055 29.7987 16.5577 27.929 18.1739 27.1367C19.4669 26.5029 21.4803 27.7388 22.3254 28.436C22.224 26.8642 21.3747 25.1402 20.9627 24.4747C21.6282 23.5873 22.1669 22.5099 22.4522 21.9711C22.6803 21.5401 22.6106 21.369 22.5472 21.3373C22.3951 21.2613 22.2092 21.4958 22.1353 21.6225C21.6599 22.4148 18.9345 27.6121 13.4203 27.6754Z"
+            fill="currentColor" />
+          <text x="32" y="21" font-family="Arial, sans-serif" font-weight="bold" font-size="22"
+            fill="currentColor">Jiny</text>
+        </svg>
+      </a>
+
+      <!-- Mobile: Right Toggle (Menu) -->
+      <div class="d-flex d-lg-none ms-auto">
+        <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdNavbar"
+          aria-controls="bdNavbar" aria-label="Toggle navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid"
+            viewBox="0 0 16 16">
+            <path
+              d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- OffCanvas -->
+      <div class="offcanvas-lg offcanvas-end flex-grow-1" tabindex="-1" id="bdNavbar"
+        aria-labelledby="bdNavbarOffcanvasLabel" data-bs-scroll="true">
+        <!-- OffCanver Header -->
+        <div class="offcanvas-header px-4 pb-0">
+          <h5 class="offcanvas-title text-white" id="bdNavbarOffcanvasLabel">Jiny</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"
+            data-bs-target="#bdNavbar">
+          </button>
+        </div>
+
+        <!-- OffCanver Body -->
+        <div class="offcanvas-body p-4 pt-0 p-lg-0">
+          <hr class="d-lg-none text-white-50">
+
+          <ul class="navbar-nav flex-column flex-lg-row bd-navbar-nav">
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/ch00/">패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part01/">생성패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part02/">구조패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part03/">행동패턴</a>
+            </li>
+            
+          </ul>
+
+          <hr class="d-lg-none text-white-50">
+
+          <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
+            <li class="nav-item col-6 col-lg-auto">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://github.com/jinydev/datas" target="_blank"
+                rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
+                  viewBox="0 0 512 499.36" role="img">
+                  <title>GitHub</title>
+                  <path fill="currentColor" fill-rule="evenodd"
+                    d="M256 0C114.64 0 0 114.61 0 256c0 113.09 73.34 209 175.08 242.9 12.8 2.35 17.47-5.56 17.47-12.34 0-6.08-.22-22.18-.35-43.54-71.2 15.49-86.2-34.34-86.2-34.34-11.64-29.57-28.42-37.45-28.42-37.45-23.27-15.84 1.73-15.55 1.73-15.55 25.69 1.81 39.21 26.38 39.21 26.38 22.84 39.12 59.92 27.82 74.5 21.27 2.33-16.54 8.94-27.82 16.25-34.22-56.84-6.43-116.6-28.43-116.6-126.49 0-27.95 10-50.8 26.35-68.69-2.63-6.48-11.42-32.5 2.51-67.75 0 0 21.49-6.88 70.4 26.24a242.65 242.65 0 0 1 128.18 0c48.87-33.13 70.33-26.24 70.33-26.24 14 35.25 5.18 61.27 2.55 67.75 16.41 17.9 26.31 40.75 26.31 68.69 0 98.35-59.85 120-116.88 126.32 9.19 7.9 17.38 23.53 17.38 47.41 0 34.22-.31 61.83-.31 70.23 0 6.85 4.61 14.81 17.6 12.31C438.72 464.97 512 369.08 512 256.02 512 114.62 397.37 0 256 0z">
+                  </path>
+                </svg>
+                <small class="d-lg-none ms-2">GitHub</small>
+              </a>
+            </li>
+
+            <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+              <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+              <hr class="d-lg-none my-2 text-white-50">
+            </li>
+
+            <li class="nav-item col-6 col-lg-auto">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://jiny.dev" aria-label="Home">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
+                  viewBox="0 0 16 16" role="img">
+                  <title>Home</title>
+                  <path fill="currentColor"
+                    d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z" />
+                </svg>
+                <small class="d-lg-none ms-2">Home</small>
+              </a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container bd-gutter mt-3 my-md-4 bd-layout">
+    <aside class="bd-sidebar scrollBar">
+        <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="bdSidebar"
+            aria-labelledby="bdSidebarOffcanvasLabel">
+            <div class="offcanvas-header border-bottom">
+                <h5 class="offcanvas-title" id="bdSidebarOffcanvasLabel">학습목차</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"
+                    data-bs-target="#bdSidebar"></button>
+            </div>
+
+            <div class="offcanvas-body">
+                <!-- 네비게이션 -->
+                <nav class="bd-links w-100" id="bd-docs-nav" aria-label="Docs navigation">
+  <ul class="bd-links-nav list-unstyled mb-0 pb-3 pb-md-2 pe-lg-2">
+    <li class="bd-links-group py-2">
+      <strong class="bd-links-heading d-flex w-100 align-items-center fw-semibold">
+        디자인 패턴 목차
+      </strong>
+      <ul class="list-unstyled fw-normal pb-2 small">
+        
+        
+
+        
+        <li>
+          
+          <a href="/part03/"
+            class="bd-links-link d-inline-block rounded ">
+            Part 3 행동 패턴
+          </a>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-2"
+            aria-expanded="false">
+            CHAPTER 14 반복자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-2">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch14/#141-객체의-집합"
+                  class="bd-links-link d-inline-block rounded">
+                  14.1 객체의 집합
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#142-배열"
+                  class="bd-links-link d-inline-block rounded">
+                  14.2 배열
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#143-집합체"
+                  class="bd-links-link d-inline-block rounded">
+                  14.3 집합체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#144-반복자"
+                  class="bd-links-link d-inline-block rounded">
+                  14.4 반복자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#145-작업-분할"
+                  class="bd-links-link d-inline-block rounded">
+                  14.5 작업 분할
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#146-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  14.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#147-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  14.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-3"
+            aria-expanded="false">
+            CHAPTER 15 명령 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-3">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch15/#151-명령-처리"
+                  class="bd-links-link d-inline-block rounded">
+                  15.1 명령 처리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#152-명령-패턴의-구성과-특징"
+                  class="bd-links-link d-inline-block rounded">
+                  15.2 명령 패턴의 구성과 특징
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#153-인터페이스"
+                  class="bd-links-link d-inline-block rounded">
+                  15.3 인터페이스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#154-명령"
+                  class="bd-links-link d-inline-block rounded">
+                  15.4 명령
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#155-리시버"
+                  class="bd-links-link d-inline-block rounded">
+                  15.5 리시버
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#156-인보커"
+                  class="bd-links-link d-inline-block rounded">
+                  15.6 인보커
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#157-클라이언트"
+                  class="bd-links-link d-inline-block rounded">
+                  15.7 클라이언트
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#158-undo"
+                  class="bd-links-link d-inline-block rounded">
+                  15.8 undo
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#159-장단점"
+                  class="bd-links-link d-inline-block rounded">
+                  15.9 장단점
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#1510-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  15.10 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#1511-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  15.11 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-4"
+            aria-expanded="false">
+            CHAPTER 16 방문자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-4">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch16/#161-데이터-처리"
+                  class="bd-links-link d-inline-block rounded">
+                  16.1 데이터 처리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#162-분리"
+                  class="bd-links-link d-inline-block rounded">
+                  16.2 분리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#163-원소-객체"
+                  class="bd-links-link d-inline-block rounded">
+                  16.3 원소 객체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#164-방문자"
+                  class="bd-links-link d-inline-block rounded">
+                  16.4 방문자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#165-반복자"
+                  class="bd-links-link d-inline-block rounded">
+                  16.5 반복자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#166-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  16.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#167-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  16.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-5"
+            aria-expanded="false">
+            CHAPTER 17 체인 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-5">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch17/#171-제어문"
+                  class="bd-links-link d-inline-block rounded">
+                  17.1 제어문
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#172-동작-조건"
+                  class="bd-links-link d-inline-block rounded">
+                  17.2 동작 조건
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#173-행동-분리"
+                  class="bd-links-link d-inline-block rounded">
+                  17.3 행동 분리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#174-사슬-연결"
+                  class="bd-links-link d-inline-block rounded">
+                  17.4 사슬 연결
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#175-체인-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  17.5 체인 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#176-미들웨어"
+                  class="bd-links-link d-inline-block rounded">
+                  17.6 미들웨어
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#177-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  17.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#178-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  17.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-6"
+            aria-expanded="false">
+            CHAPTER 18 감시자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-6">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch18/#observer"
+                  class="bd-links-link d-inline-block rounded">
+                  ob·ser·ver
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#181-감시자"
+                  class="bd-links-link d-inline-block rounded">
+                  18.1 감시자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#182-구성"
+                  class="bd-links-link d-inline-block rounded">
+                  18.2 구성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#183-관계"
+                  class="bd-links-link d-inline-block rounded">
+                  18.3 관계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#184-주체"
+                  class="bd-links-link d-inline-block rounded">
+                  18.4 주체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#185-감시자"
+                  class="bd-links-link d-inline-block rounded">
+                  18.5 감시자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#186-동작-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  18.6 동작 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#187-활용"
+                  class="bd-links-link d-inline-block rounded">
+                  18.7 활용
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#188-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  18.8 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#189-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  18.9 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-7"
+            aria-expanded="false">
+            CHAPTER 19 중재자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-7">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch19/#191-중재"
+                  class="bd-links-link d-inline-block rounded">
+                  19.1 중재
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#192-중재자"
+                  class="bd-links-link d-inline-block rounded">
+                  19.2 중재자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#193-동료-객체"
+                  class="bd-links-link d-inline-block rounded">
+                  19.3 동료 객체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#194-기본-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  19.4 기본 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#195-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  19.5 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#196-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  19.6 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-8"
+            aria-expanded="false">
+            CHAPTER 20 상태 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-8">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch20/#201-상태란"
+                  class="bd-links-link d-inline-block rounded">
+                  20.1 상태란
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#202-상태-처리"
+                  class="bd-links-link d-inline-block rounded">
+                  20.2 상태 처리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#203-패턴-구현"
+                  class="bd-links-link d-inline-block rounded">
+                  20.3 패턴 구현
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#204-객체-생성"
+                  class="bd-links-link d-inline-block rounded">
+                  20.4 객체 생성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#205-상태-전환"
+                  class="bd-links-link d-inline-block rounded">
+                  20.5 상태 전환
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#206-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  20.6 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#207-효과"
+                  class="bd-links-link d-inline-block rounded">
+                  20.7 효과
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#208-패턴-유사성"
+                  class="bd-links-link d-inline-block rounded">
+                  20.8 패턴 유사성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#209-적용-사례"
+                  class="bd-links-link d-inline-block rounded">
+                  20.9 적용 사례
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#2010-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  20.10 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-9"
+            aria-expanded="false">
+            CHAPTER 21 메멘토 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-9">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch21/#211-상태-저장"
+                  class="bd-links-link d-inline-block rounded">
+                  21.1 상태 저장
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#212-캡슐화"
+                  class="bd-links-link d-inline-block rounded">
+                  21.2 캡슐화
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#213-메멘토"
+                  class="bd-links-link d-inline-block rounded">
+                  21.3 메멘토
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#214-originator-클래스"
+                  class="bd-links-link d-inline-block rounded">
+                  21.4 Originator 클래스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#215-caretaker-클래스"
+                  class="bd-links-link d-inline-block rounded">
+                  21.5 CareTaker 클래스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#216-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  21.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#217-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  21.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-10"
+            aria-expanded="false">
+            CHAPTER 22 템플릿 메서드 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-10">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch22/#221-프로그램의-구조"
+                  class="bd-links-link d-inline-block rounded">
+                  22.1 프로그램의 구조
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#222-템플릿"
+                  class="bd-links-link d-inline-block rounded">
+                  22.2 템플릿
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#223-일반화"
+                  class="bd-links-link d-inline-block rounded">
+                  22.3 일반화
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#224-추상화"
+                  class="bd-links-link d-inline-block rounded">
+                  22.4 추상화
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#225-템플릿-메서드"
+                  class="bd-links-link d-inline-block rounded">
+                  22.5 템플릿 메서드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#226-의존성-디자인"
+                  class="bd-links-link d-inline-block rounded">
+                  22.6 의존성 디자인
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#227-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  22.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#228-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  22.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-11"
+            aria-expanded="false">
+            CHAPTER 23 전략 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-11">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch23/#231-문제"
+                  class="bd-links-link d-inline-block rounded">
+                  23.1 문제
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#232-알고리즘"
+                  class="bd-links-link d-inline-block rounded">
+                  23.2 알고리즘
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#233-분리"
+                  class="bd-links-link d-inline-block rounded">
+                  23.3 분리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#234-인터페이스"
+                  class="bd-links-link d-inline-block rounded">
+                  23.4 인터페이스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#235-전략"
+                  class="bd-links-link d-inline-block rounded">
+                  23.5 전략
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#236-전략-실행"
+                  class="bd-links-link d-inline-block rounded">
+                  23.6 전략 실행
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#237-적용-사례"
+                  class="bd-links-link d-inline-block rounded">
+                  23.7 적용 사례
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#238-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  23.8 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#239-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  23.9 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0  w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-12"
+            aria-expanded="true">
+            CHAPTER 24 인터프리터 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse show" id="collapse-12">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch24/#241-언어"
+                  class="bd-links-link d-inline-block rounded">
+                  24.1 언어
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#242-언어-설계"
+                  class="bd-links-link d-inline-block rounded">
+                  24.2 언어 설계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#243-처리계"
+                  class="bd-links-link d-inline-block rounded">
+                  24.3 처리계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#244-중간-코드"
+                  class="bd-links-link d-inline-block rounded">
+                  24.4 중간 코드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#245-해석"
+                  class="bd-links-link d-inline-block rounded">
+                  24.5 해석
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#246-클래스-표현"
+                  class="bd-links-link d-inline-block rounded">
+                  24.6 클래스 표현
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#247-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  24.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#248-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  24.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+      </ul>
+    </li>
+  </ul>
+</nav>
+            </div>
+        </div>
+    </aside>
+
+    <main class="bd-main order-1">
+        <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        
+        
+        
+        
+        
+        
+        <li class="breadcrumb-item active" aria-current="page">CHAPTER 24 인터프리터 패턴</li>
+        
+        
+        
+    </ol>
+</nav>
+
+        <div class="bd-content ps-lg-2">
+            
+<p>in·ter·pret·er
+[ ɪn|tɜːrprɪtə(r) ] 🔊</p>
+
+<p><strong>CHAPTER 24</strong>
+<strong>인터프리터 패턴</strong></p>
+
+<p>인터프리터 패턴은 간단한 언어적 문법을 표현하는 패턴입니다.</p>
+
+<h2 id="241-언어">24.1 언어</h2>
+
+<p>이 세상에는 수많은 언어가 존재합니다. 컴퓨터는 0과 1로 동작하는 시스템이지만, 실제 컴퓨터를 사용할 때는 추상화된 고급 언어로 코드를 작성합니다.</p>
+
+<h3 id="2411-저수준-언어">24.1.1 저수준 언어</h3>
+<p>컴퓨터는 0과 1로 동작하는데 이를 기계어라고 합니다. 사람이 기계어로 프로그램을 작성하는 것은 어려우므로, 보다 쉽게 작성하기 위해 어셈블리와 같은 언어가 만들어졌습니다.</p>
+
+<p>어셈블리어는 한 줄의 기계어에 한 줄의 명령어가 대응하는 구조입니다. 어셈블리어는 기계어를 코드로 쉽게 변환할 수 있도록 매핑 기술을 응용했습니다. 이러한 어셈블리어를 저수준 Lowlevel 언어라고 하거나, 기계어와 고급 언어 사이에 있어서 중간 언어라고 부르기도 합니다.</p>
+
+<p><strong>516</strong> 3부 행동 패턴</p>
+
+<h3 id="2412-고급-언어">24.1.2 고급 언어</h3>
+<p>어셈블리어는 기계어를 쉽게 작성할 수 있도록 도와주지만 사람이 접근하기는 어렵습니다. 또한 어셈블리어는 기계어와 매우 밀접하게 관계되어 있어 모든 시스템에서 통일화된 규격도 없습니다.</p>
+
+<p>고급 언어를 사용하면 시스템 특성에 구속받지 않고 일반 사람도 프로그램을 작성할 수 있습니다. 대표적으로 C언어가 있습니다. 그 외에 PHP, 자바와 같은 추상적 언어도 발전했습니다. 고급 언어의 장점은 기계어나 어셈블리어보다 편리하게 동작을 이해하고 코드를 작성할 수 있다는 점입니다.</p>
+
+<p>추상화된 고급 언어를 사용하여 개발하는 것은 보다 다양한 기종에서 동작할 수 있도록 하는 것입니다. 프로그램을 여러 시스템 환경에서 구동하기 위해서는 추상화된 언어의 해석 Interpret 과정이 필요합니다.</p>
+
+<h2 id="242-언어-설계">24.2 언어 설계</h2>
+
+<p>해석자 패턴은 간단한 미니 언어를 구현하는 패턴입니다. 이 패턴은 간단한 언어의 문법을 정의하고 그 언어의 문장을 해석하는 방법을 구현합니다.</p>
+
+<h3 id="2421-문법-표현">24.2.1 문법 표현</h3>
+<p>하나의 언어를 개발하는 일은 오랜 시간이 필요한 작업이며 시간이 지나면서 변화도 많이 일어납니다. 나중에 언어를 쉽게 확장할 수 있도록 만들려면 올바른 설계 구조를 가져야 합니다.</p>
+
+<p>언어 설계의 첫 단추는 규칙을 작성하는 것입니다. 언어 규칙을 명백하게 표현해야 하므로 표기법을 작성합니다. 언어 문법을 표기하는 방법은 크게 두 종류입니다.</p>
+
+<ul>
+  <li>구문 도표 표기법: 그림으로 표현</li>
+  <li>배커스-나우르 표기법(Backus-Naur form, BNF): 문자로 표현</li>
+</ul>
+
+<p>구문 도표는 그림으로 표현하기 때문에 쉽게 이해할 수 있지만, 수정이 어렵다는 점에서 실제 현장에서는 BNF 표기법을 더 많이 이용합니다.</p>
+
+<p>24장 인터프리터 패턴 <strong>517</strong></p>
+
+<h3 id="2422-bnf-표기법">24.2.2 BNF 표기법</h3>
+<p>BNF 표기법은 ‘Backus-Naur Form’의 약자로 프로그래밍 언어를 정의할 때 사용하는 메타 표기법입니다. 문법을 수학적인 수식으로 표기할 때 많이 이용합니다.</p>
+
+<p>입력된 언어의 문장을 해석하기 위해 먼저 다음과 같이 BNF 표기법으로 정의합니다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;expression&gt; ::= &lt;expression&gt;
+</code></pre></div></div>
+
+<p>치환 기호(::=) 왼쪽은 정의되는 대상이고 오른쪽은 내용을 의미합니다. 비종료는 <code class="language-plaintext highlighter-rouge">&lt; &gt;</code> 기호로 표시하고, 선택은 <code class="language-plaintext highlighter-rouge">|</code> 기호를 이용하여 문법을 표현합니다.</p>
+
+<p>BNF 표기법은 정규화 표현을 처리하는 경우에도 많이 사용되며, 정규 표현식은 패턴을 정의하는 데 사용됩니다.</p>
+
+<h3 id="2423-해석자-패턴-구조">24.2.3 해석자 패턴 구조</h3>
+<p>해석자 패턴은 문장의 어휘를 해석하고 처리하기 위해 다음과 같은 5가지 구성 요소를 갖고 있습니다.</p>
+
+<ul>
+  <li>추상 구문 트리 인터페이스(Abstract Expression)</li>
+  <li>종료 기호(Terminal Expression)</li>
+  <li>비종료 기호(Non-Terminal Expression)</li>
+  <li>해석기 정보(Context)</li>
+  <li>문장을 나타내는 추상 구문 트리(Client)</li>
+</ul>
+
+<h2 id="243-처리계">24.3 처리계</h2>
+
+<p>새로운 언어 모델을 BNF 표기법으로 설계했다면, 실제 해석하고 처리할 구현부를 작성해야 합니다. 해석자의 처리계는 크게 어휘 분석과 구문 분석으로 나뉩니다.</p>
+
+<p><strong>518</strong> 3부 행동 패턴</p>
+
+<h3 id="2431-어휘-분석">24.3.1 어휘 분석</h3>
+<p>문장으로 작성된 어휘 Lex는 텍스트 문자열이고, 어휘 분석은 문장의 텍스트를 토큰으로 분리하는 작업입니다. 토큰은 문자열에서 각각의 의미와 위치를 구별하며, 어휘 분석에서 의미 있는 식별자를 구별합니다.</p>
+
+<p>다음 문자열은 연산하는 동작입니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$lex</span> <span class="o">=</span> <span class="s2">"{{ 1 1 + }}"</span><span class="p">;</span> <span class="c1">// 후위 표기법 어휘</span>
+</code></pre></div></div>
+
+<p>문자열로 작성된 언어가 어떤 구조인지 해석하기 위해서는 먼저 토큰 token 분리가 필요합니다. 연산식의 언어는 시작 식별자(<code class="language-plaintext highlighter-rouge">{{</code>)와 종료 식별자(<code class="language-plaintext highlighter-rouge">}}</code>) 안에 존재하며, 어휘는 각각의 공백으로 구분돼 있습니다. 공백 기호를 이용해 토큰을 분리합니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">token</span> <span class="o">=</span> <span class="nb">explode</span><span class="p">(</span><span class="s2">" "</span><span class="p">,</span> <span class="nv">$text</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>토큰으로 분리된 문자열은 1차원 배열로 반환합니다. 토큰은 어휘에서 키워드, 식별자, 상수, 리터럴, 연산자, 분리자 등을 구별하며 해석 처리를 위한 단위를 분리합니다.</p>
+
+<h3 id="2432-구문-분석">24.3.2 구문 분석</h3>
+<p>토큰으로 분리된 어휘를 해석하기 위해 자료 구조를 생성합니다. 토큰으로 분리된 1차원 배열은 구문 분석 단계를 통해 구문 트리를 작성합니다. 구문 트리는 하나의 자료 구조입니다.</p>
+
+<p>다음은 간단한 구문입니다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 + 2
+</code></pre></div></div>
+
+<p>이 구문이 어떤 구조인지 해석해봅시다. 구조 해석을 위해 BNF 표기법으로 정의한 내용에 따라 분석합니다. 분석된 구문 트리는 다음과 같은 모양이 됩니다.</p>
+
+<p>24장 인터프리터 패턴 <strong>519</strong></p>
+
+<h4 id="그림-24-1-구문-트리">그림 24-1 구문 트리</h4>
+
+<p><img src="./img/fig_24_1.svg" alt="그림 24-1" /></p>
+
+<p>[그림 24-1]의 구문 트리는 이진 트리 구조이며, 구문 분석으로 생성된 트리 자료는 메모리에 저장됩니다.</p>
+
+<p>BNF로 표현된 문법을 분석하면 part-whole 형태의 트리 구조가 됩니다. Part-whole 형태로 분석된 트리 구조는 재귀적 방법으로 처리합니다. Part-whole 트리 구조는 복합체 패턴으로 구현할 수 있습니다.</p>
+
+<h3 id="2433-역할">24.3.3 역할</h3>
+<p>해석자에는 문법 규칙이 존재합니다. 구문 분석의 첫 번째 역할은 어휘를 토큰으로 분리하고, 생성된 자료 구조를 파싱하여 문법을 검사하는 것입니다. 어휘 분석은 분리된 토큰열이 BNF로 설계한 구문과 일치하는지 확인하는 과정입니다. 그리고 해석된 문법 규칙에 따라 동작을 수행합니다. 문법이 일치하지 않을 경우 오류를 출력합니다.</p>
+
+<p>구문 분석의 두 번째 역할은 어휘에서 주석, 행 바꿈, 공백 삭제 등 해석에 불필요한 정보를 정리하는 작업입니다. 부수적인 정보는 사람이 코드를 이해하기 쉽게 도와주는 것일 뿐, 실제 프로그램 동작에는 영향을 미치지 않습니다.</p>
+
+<h3 id="2434-어휘-분석-루틴">24.3.4 어휘 분석 루틴</h3>
+<p>처리계의 어휘 분석과 구문 분석은 상호 관계를 갖고 있습니다. 언어 처리는 보통 형태로 반복하면서 해석 처리를 수행합니다.</p>
+
+<p><strong>520</strong> 3부 행동 패턴</p>
+
+<h4 id="그림-24-2-처리계-루틴">그림 24-2 처리계 루틴</h4>
+
+<p><img src="./img/fig_24_2.svg" alt="그림 24-2" /></p>
+
+<p>이때 구문 분석은 ‘문장 해석’ -&gt; ‘표현식 해석’을 주로 담당하고, 어휘 분석은 ‘다음 토큰 읽기’를 담당합니다.</p>
+
+<h3 id="2435-context-클래스">24.3.5 Context 클래스</h3>
+<p>해석자 패턴의 Context 클래스는 표현된 어휘를 해석하기 위한 정보를 포괄적으로 갖고 있습니다. Context 클래스는 문자열로 표현된 어휘 문장의 구문을 해석하고 토큰의 전후 관계를 표시합니다.</p>
+
+<p>예제 24-1 Interpreter/01/Context.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Context</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="nv">$token</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">(</span><span class="nv">$text</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">token</span> <span class="o">=</span> <span class="nb">explode</span><span class="p">(</span><span class="s2">" "</span><span class="p">,</span><span class="nv">$text</span><span class="p">);</span>
+        <span class="k">echo</span> <span class="s2">"토큰 분리</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="nb">print_r</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">token</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 시작 기호 판별</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">isStart</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">current</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">token</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"{{"</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nb">next</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">token</span><span class="p">);</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>24장 인터프리터 패턴 <strong>521</strong></p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">next</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$token</span> <span class="o">=</span> <span class="nb">current</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">token</span><span class="p">);</span>
+        <span class="nb">next</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">token</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nv">$token</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Context 클래스는 해석자에게 보내는 토큰 정보이며, 구분 해석을 위한 메서드를 제공합니다.</p>
+
+<h2 id="244-중간-코드">24.4 중간 코드</h2>
+
+<p>언어를 해석해서 처리하는 컴파일러, 인터프리터와 같은 언어는 해석을 처리하는 여러 단계의 패스를 갖고 있습니다.</p>
+
+<h3 id="2441-패스">24.4.1 패스</h3>
+<p>언어의 해석과 동작은 한 번에 처리할 수 없습니다. 패스 pass는 해석과 수행을 처리하기 위한 중간 단계 과정입니다. 몇 번에 패스가 이루어지는가에 따라 해석기의 성능이 좌우됩니다.</p>
+
+<p>일반적으로 두 번 이상의 패스를 가지며, 어셈블리어는 2-Pass 해석기입니다. 첫 번째 패스에서는 토큰을 분리해 식별자를 분리하고, 두 번째는 연산 등을 처리하기 위한 표현을 변경합니다.</p>
+
+<p>해석자는 구문 분석된 어휘를 처리하기 위해 중간 코드를 생성합니다.</p>
+
+<h3 id="2442-내부-구현">24.4.2 내부 구현</h3>
+<p>언어 해석 과정은 컴퓨터의 자원을 소모시킵니다. 또한 여러 단계의 패스를 통과하므로 처리 속도가 느려집니다. 2-Pass 단계는 해석기의 성능을 개선하기 위해 구문 분석된 트리를 변환</p>
+
+<p><strong>522</strong> 3부 행동 패턴</p>
+
+<p>작업하는 것입니다.</p>
+
+<p>이러한 내부 변환 작업은 스택을 이용합니다. 보통 컴파일러는 레지스터를 베이스로, 인터프리터는 스택을 베이스로 하여 변환 작업합니다. 이러한 베이스를 오퍼랜드 스택이라고 합니다.</p>
+
+<p>명령은 내부 변환 과정에서 정규화 작업을 같이 수행합니다. 정규화된 명령 작업을 통해 동작을 실행하는데, 정규화 작업은 동작 코드를 치환하며 프로그램의 크기를 줄이는 효과도 있습니다.</p>
+
+<h3 id="2443-폴란드-표기법">24.4.3 폴란드 표기법</h3>
+<p>식별자와 연산식 등의 어휘 문장은 우선순위가 존재합니다. 중간 단계는 생성된 구문 트리를 우선순위에 맞게 변환 작업합니다.</p>
+
+<p>폴란드 표기법 Polish notation은 폴란드의 얀 루카시에비치가 1920년에 산술식을 논리 표기법으로 적용한 것입니다. 이 표기법은 산술식에서 연산자와 피연산자의 위치를 변경하여 컴퓨터가 쉽게 처리하도록 도와줍니다. 산술 표현은 크게 3가지 표기법이 있습니다.</p>
+
+<ul>
+  <li>중위 표기법(Infix)</li>
+  <li>후위 표기법(Postfix)</li>
+  <li>전위 표기법(Prefix)</li>
+</ul>
+
+<p>일반적으로 우리가 알고 있는 다음과 같은 수식은 중위 표기법입니다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A * B + C / D
+</code></pre></div></div>
+
+<p>이 수식에서는 두 번째 연산자인 덧셈 기호(+)가 제일 먼저 나타나지만, 실제 수식에서는 나눗셈 기호(/)가 더 높은 우선순위를 가집니다. 토큰으로 분리한 자료 구조는 이러한 연산자의 우선순위를 반영하지 못합니다.</p>
+
+<p>이를 위해 중간 코드에서는 연산자 우선순위에 맞게 트리 구조를 조정합니다. 순위를 변경하면 다음과 같습니다.</p>
+
+<ul>
+  <li>전위 표기: <code class="language-plaintext highlighter-rouge">+ * a b / c d</code></li>
+  <li>후위 표기: <code class="language-plaintext highlighter-rouge">a b * c d / +</code></li>
+</ul>
+
+<p>24장 인터프리터 패턴 <strong>523</strong></p>
+
+<h2 id="245-해석">24.5 해석</h2>
+
+<p>해석자 interpreter는 통역을 의미합니다. 하나의 언어를 이해할 수 있도록 통역과 해석이 실행됩니다.</p>
+
+<h3 id="2451-명령">24.5.1 명령</h3>
+<p>언어는 복잡한 동작을 간단한 표현으로 실행하는 것이며, 동작을 실행하려면 표현 해석이 필요합니다. 표현한 구문을 해석해 명령을 쉬운 표현 방법으로 전달합니다. 이 경우 명령을 나열하여 행동을 간접적으로 전달하는 효과를 얻을 수 있습니다.</p>
+
+<p>해석자는 언어 문장의 규칙을 분석하고 이를 표현하는 동작을 처리합니다. 또한 복잡한 동작을 매번 코드로 작성하는 대신, 표현을 통해 기능을 구현할 수 있습니다. 이러한 동작을 해석자라고 합니다.</p>
+
+<h3 id="2452-기호">24.5.2 기호</h3>
+<p>BNF로 정의된 특정 언어의 문장을 해석하고 처리합니다. 설계된 문법은 크게 종료 기호와 비종료 기호로 구분됩니다.</p>
+
+<h4 id="그림-24-3-종료-기호">그림 24-3 종료 기호</h4>
+
+<p><img src="./img/fig_24_3.svg" alt="그림 24-3" /></p>
+
+<p><strong>524</strong> 3부 행동 패턴</p>
+
+<p>즉 언어의 해석은 BNF 표기틀 종료 기호가 나열하는 과정을 말합니다.</p>
+
+<h3 id="2453-추상-구문-트리">24.5.3 추상 구문 트리</h3>
+<p>컴퓨터 기계어와 달리 인간이 구현하는 고급 언어에는 추상적 개념이 적용됩니다. 1차원적인 자료 구조로는 추상화된 언어를 처리할 수 없으며 하나의 언어를 처리하기 위해 광범위한 자료 구조가 필요합니다.</p>
+
+<p>구문 트리 syntax tree는 언어에서 표현한 구문의 정보를 가진 단순한 자료 구조입니다. 추상적이라는 의미는 실제 구문에서 나타내는 모든 세세한 것을 일일이 다루지 않는다는 것을 말합니다. 실제 구현은 추상화를 통해 하위 클래스에 위임하고 트리 형태의 어휘 구조를 복합체 패턴으로 적용합니다. 추상 구문 트리는 복합체 패턴 내에 있는 하나의 객체로 볼 수 있습니다.</p>
+
+<p>추상 구문 표현 Abstract Expression은 모든 노드에 적용되는 공통된 인터페이스를 갖고 있습니다.</p>
+
+<p>추상 구문 트리는 컴파일러 등을 제작할 때 사용하는 자료 구조로, 문장 정보를 나누고 평가 순서를 재정의합니다. 주요 역할은 컴파일러가 작성된 언어를 해석할 때 단계별로 중간 표현을 처리하는 것입니다.</p>
+
+<h3 id="2454-파서">24.5.4 파서</h3>
+<p>토큰과 추상 구문 트리는 어휘 구조를 분석합니다. 작성된 어휘의 규칙이 복잡할 경우 이를 처리하는 로직이 방대해질 수 있습니다. 이때 별도의 파서 parser를 사용하면 보다 효율적으로 처리할 수 있습니다.</p>
+
+<p>파서는 문장의 구조를 트리 구조로 표현한 것입니다. 파서는 언어의 문법을 구체적으로 반영한다는 점에서 추상 구문 트리와 구별됩니다. 파서는 크게 두 종류의 트리로 구분합니다.</p>
+
+<ul>
+  <li>구조 트리</li>
+  <li>의존성 트리</li>
+</ul>
+
+<p>문법 단위의 크기가 클 때는 별도의 파서와 같은 구문 생성기 사용을 권장합니다. 파서는 구성 요소를 위해 별개의 기호를 사용하여 치환하지 않습니다.</p>
+
+<p>24장 인터프리터 패턴 <strong>525</strong></p>
+
+<h2 id="246-클래스-표현">24.6 클래스 표현</h2>
+
+<p>해석자 패턴은 계층적 언어를 해석하여 처리하기 위한 구조입니다. 클래스의 계통으로 문법 규칙을 구성해 연산을 처리합니다.</p>
+
+<h3 id="2461-노드">24.6.1 노드</h3>
+<p>노드는 구문 트리에서 최상위 인터페이스입니다. 노드의 실제 구현은 하위 클래스에서 정의합니다.</p>
+
+<p>예제 24-2 Interface/01/Expression.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">interface</span> <span class="nc">Expression</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">interpret</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Interpreter() 메서드는 컨텍스트 context의 구문을 해석합니다.</p>
+
+<p>먼저 전달 받은 컨텍스트 구문은 문자열을 해석해 토큰을 생성합니다. 토큰으로 구별된 구문은 해석을 통해 구문 트리를 생성합니다. 실제 노드가 구문을 해석할 때는 처리 단위를 구별할 수 있는 토큰을 갖고 오며 토큰을 통해 표현을 구별합니다.</p>
+
+<h3 id="2462-비종료-기호">24.6.2 비종료 기호</h3>
+<p>비종료 기호는 식별자와 같이 종료되지 않은 기호이고 해석을 위해 전개되는 표현이며 기호나 규칙에 대한 노드만 가진 트리를 말합니다.</p>
+
+<p>BNF 문법에서 오른쪽에 나타나는 모든 기호에 대해 클래스를 선언합니다. 비종료 기호의 추상 구문 트리 해석 interpret을 구현합니다.</p>
+
+<p><strong>526</strong> 3부 행동 패턴</p>
+
+<p>예제 24-3 Interpreter/01/Add.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 비종료 기호</span>
+<span class="kd">class</span> <span class="nc">Add</span> <span class="kd">implements</span> <span class="nc">Expression</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="nv">$left</span><span class="p">;</span>
+    <span class="k">private</span> <span class="nv">$right</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">(</span><span class="nv">$left</span><span class="p">,</span> <span class="nv">$right</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="nv">$left</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="nv">$right</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">interpret</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="nf">interpret</span><span class="p">()</span> <span class="o">+</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="nf">interpret</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>확장된 BNF 표기에서는 비종료 기호를 반복 사용하도록 설계할 수 있습니다. 반복적인 기호를 사용할 경우 플라이웨이트 패턴을 이용해 기호를 공유할 수 있습니다.</p>
+
+<h3 id="2463-종료-기호">24.6.3 종료 기호</h3>
+<p>종료 기호 terminal는 문법 해석의 마지막 종착점으로, BNF 표기가 더 이상 문자 또는 숫자로 치환되지 않는 최종적인 기호를 말합니다.</p>
+
+<p>여기서는 종료 기호의 추상 구문 트리 해석을 구현해보겠습니다.</p>
+
+<p>예제 24-4 Interpreter/01/Terminal.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 종료 기호</span>
+<span class="kd">class</span> <span class="nc">Terminal</span> <span class="kd">implements</span> <span class="nc">Expression</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="nv">$n</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">(</span><span class="nv">$n</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>24장 인터프리터 패턴 <strong>527</strong></p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">n</span> <span class="o">=</span> <span class="nv">$n</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">interpret</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">n</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="2464-클라이언트">24.6.4 클라이언트</h3>
+<p>해석자 패턴의 클라이언트 client는 표현 문장을 나타내는 추상 구문 트리를 말합니다. 추상 구문 트리는 non-terminal 클래스와 terminal 클래스의 객체로 구성되고 구성 객체의 interpret()를 호출합니다.</p>
+
+<p>예제 24-5 Interpreter/01/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require</span> <span class="s2">"Expression.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"Context.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"Terminal.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"Add.php"</span><span class="p">;</span>
+
+<span class="nv">$lex</span> <span class="o">=</span> <span class="s2">"{{ 1 1 + }}"</span><span class="p">;</span> <span class="c1">// 후위 표기법 어휘</span>
+<span class="nv">$context</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Context</span><span class="p">(</span><span class="nv">$lex</span><span class="p">);</span>
+
+<span class="k">if</span><span class="p">(</span> <span class="nv">$token</span> <span class="o">=</span> <span class="nv">$context</span><span class="o">-&gt;</span><span class="nf">isStart</span><span class="p">())</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"연산 해석 시작</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="nv">$stack</span> <span class="o">=</span> <span class="p">[];</span> <span class="c1">// 스택</span>
+    <span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">){</span>
+        <span class="nv">$token</span> <span class="o">=</span> <span class="nv">$context</span><span class="o">-&gt;</span><span class="nb">next</span><span class="p">();</span>
+        <span class="k">if</span><span class="p">(</span><span class="nv">$token</span> <span class="o">==</span> <span class="s2">"}}"</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">echo</span> <span class="s2">"구문 연산 종료</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">if</span><span class="p">(</span><span class="nb">is_numeric</span><span class="p">(</span><span class="nv">$token</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">echo</span> <span class="nv">$token</span><span class="mf">.</span><span class="s2">" 스택 저장</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+            <span class="nb">array_push</span><span class="p">(</span><span class="nv">$stack</span><span class="p">,</span> <span class="k">new</span> <span class="nc">Terminal</span><span class="p">(</span><span class="nv">$token</span><span class="p">));</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nv">$token</span> <span class="o">==</span> <span class="s2">"+"</span><span class="p">)</span> <span class="p">{</span>
+</code></pre></div></div>
+
+<p><strong>528</strong> 3부 행동 패턴</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>            <span class="k">echo</span> <span class="s2">"+ 연산 "</span><span class="p">;</span>
+
+            <span class="c1">// 스택에서 두 개의 피연산자를 읽음</span>
+            <span class="nv">$left</span> <span class="o">=</span> <span class="nb">array_pop</span><span class="p">(</span><span class="nv">$stack</span><span class="p">);</span>
+            <span class="nv">$right</span> <span class="o">=</span> <span class="nb">array_pop</span><span class="p">(</span><span class="nv">$stack</span><span class="p">);</span>
+
+            <span class="c1">// 비종료 연산을 수행합니다.</span>
+            <span class="nv">$add</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Add</span><span class="p">(</span><span class="nv">$left</span><span class="p">,</span> <span class="nv">$right</span><span class="p">);</span>
+            <span class="nv">$value</span> <span class="o">=</span> <span class="nv">$add</span><span class="o">-&gt;</span><span class="nf">interpret</span><span class="p">();</span>
+            <span class="k">echo</span> <span class="s2">"= "</span><span class="mf">.</span><span class="nv">$value</span><span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+            <span class="c1">// 결과를 다시 스택에 저장합니다.</span>
+            <span class="nb">array_push</span><span class="p">(</span><span class="nv">$stack</span><span class="p">,</span> <span class="k">new</span> <span class="nc">Terminal</span><span class="p">(</span><span class="nv">$value</span><span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"판별할 수 없는 해석입니다."</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">echo</span> <span class="s2">"최종 결과 = "</span><span class="mf">.</span><span class="nb">array_pop</span><span class="p">(</span><span class="nv">$stack</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">interpret</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index.php
+토큰 분리
+Array
+(
+    [0] =&gt; {{
+    [1] =&gt; 1
+    [2] =&gt; 1
+    [3] =&gt; +
+    [4] =&gt; }}
+)
+연산 해석 시작
+1 스택 저장
+1 스택 저장
++ 연산 = 2
+구문 연산 종료
+최종 결과 = 2
+</code></pre></div></div>
+
+<p>24장 인터프리터 패턴 <strong>529</strong></p>
+
+<h2 id="247-관련-패턴">24.7 관련 패턴</h2>
+
+<p>인터프리터 패턴을 적용할 때는 다음과 같은 패턴도 같이 활용되며 이들은 유사한 특징을 갖고 있습니다.</p>
+
+<h3 id="2471-복합체-패턴">24.7.1 복합체 패턴</h3>
+<p>해석자 패턴은 구문 트리를 생성합니다. 해석자 패턴이 트리 구조를 가진 측면에서 복합체 패턴을 응용합니다. 또한 복합체 패턴을 사용할 때도 해석자 패턴을 응용할 수 있으며, 복합체 패턴이 하나의 언어 구조로 정의될 때 해석자 패턴으로 변경됩니다.</p>
+
+<h3 id="2472-플라이웨이트-패턴">24.7.2 플라이웨이트 패턴</h3>
+<p>BNF 표기 시 ‘비종료 기호’가 반복적으로 수행됩니다. 어떤 명령이 반복적으로 수행될 때 해당 정의가 공유될 수 있는데, 이때 플라이웨이트 패턴을 응용합니다.</p>
+
+<h3 id="2473-방문자-패턴">24.7.3 방문자 패턴</h3>
+<p>해석자 패턴은 구문 트리의 각 노드를 순회하여 처리하는데, 노드를 순회할 때 방문자 패턴을 응용합니다.</p>
+
+<h2 id="248-정리">24.8 정리</h2>
+
+<p>해석자는 미니 언어를 처리하는 패턴으로, 우리가 인터프리터 언어를 구현하는 것과 같습니다. 어떤 행위의 처리 로직을 매번 구현하는 것보다 간단한 문장 표현으로 행위 처리를 대체할 수 있습니다. 이때 문장을 해석하고 처리하는 패턴이 해석자 패턴입니다.</p>
+
+<p>해석자 패턴은 문법의 규칙을 클래스로 표현합니다. 클래스를 변경하면 문법 규칙을 쉽게 변경할 수 있고, 기존의 클래스를 상속해 확장할 수도 있습니다. 해석자 패턴은 정규 표현식, SQL</p>
+
+<p><strong>530</strong> 3부 행동 패턴</p>
+
+<p>구문, 셸 해석 등이 있으며 컴파일러 등을 구현할 때도 널리 사용됩니다. 또한 해석자 패턴은 데이터를 주고받을 때도 유용하게 적용할 수 있으며, JSON과 같이 문자열로 변환된 데이터의 구조를 해석할 때도 사용할 수 있습니다.</p>
+
+<p>해석자 패턴은 특정 언어를 분석해 트리 구조를 생성 처리하므로 프로그램 속도가 저하될 수 있습니다. 복잡한 표현 분석은 해석자 패턴으로 처리하는 것이 부담스러우므로 별도의 파서 분석기를 이용하는 것이 좋습니다. 별도의 파서를 만들어 처리하면 코드 성능 저하를 다소 줄일 수 있습니다.</p>
+
+<p>해석자 패턴은 디자인 패턴 중 가장 어렵고 복잡한 구조입니다.</p>
+
+<p>해석자 패턴을 적용하는 것은 간단한 문법을 처리하기 위해서이며 일반적인 개발 언어처럼 고효율 처리를 위한 패턴 로직이 아닙니다. 일반적인 프로그래밍 언어 해석은 이보다 훨씬 복잡합니다.</p>
+
+<p>24장 인터프리터 패턴 <strong>531</strong></p>
+
+
+
+            <!-- 다음/이전 학습 페이지네이션 -->
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+
+<div class="d-flex justify-content-between align-items-center mt-5 mb-4 py-3 border-top border-bottom">
+  <div>
+    
+      <span class="text-muted small me-2">이전 학습</span>
+      <a href="/ch23/" class="text-decoration-none fw-semibold">
+        &laquo; CHAPTER 23 전략 패턴
+      </a>
+    
+  </div>
+
+  <div class="text-end">
+    
+  </div>
+</div>
+
+
+            <div class="mt-10">
+                <!-- 구글 에스센스 광고 -->
+                <script async
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3321560028329475"
+                    crossorigin="anonymous"></script>
+                <!-- jinydev-java -->
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3321560028329475"
+                    data-ad-slot="9323221865" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+
+        </div>
+
+        <div class="bd-toc mt-3 mb-5 my-lg-0 ps-xl-3 mb-lg-5 text-body-secondary">
+
+  <button class="btn btn-link p-md-0 mb-2 mb-md-0 text-decoration-none bd-toc-toggle d-md-none" type="button"
+    data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents">
+    서브목차
+    <svg class="bi d-md-none ms-2" aria-hidden="true">
+      <use xlink:href="#chevron-expand"></use>
+    </svg>
+  </button>
+
+  <strong class="d-none d-md-block h6 my-2">서브목차</strong>
+
+  <div class="collapse bd-toc-collapse" id="tocContents">
+    <nav id="TableOfContents">
+      <!--
+      <ul>
+        <li><a href="#quick-start">Quick start</a></li>
+        <li><a href="#cdn-links">CDN links</a></li>
+        <li><a href="#next-steps">Next steps</a></li>
+        <li><a href="#js-components">JS components</a></li>
+        <li><a href="#important-globals">Important globals</a>
+          <ul>
+            <li><a href="#html5-doctype">HTML5 doctype</a></li>
+            <li><a href="#responsive-meta-tag">Responsive meta tag</a></li>
+            <li><a href="#box-sizing">Box-sizing</a></li>
+            <li><a href="#reboot">Reboot</a></li>
+          </ul>
+        </li>
+        <li><a href="#community">Community</a></li>
+      </ul>
+      -->
+    </nav>
+  </div>
+</div>
+    </main>
+
+
+</div>
+
+  <footer class="container">
+  <hr class="mt-5 mb-3">
+  <div class="row align-items-center pb-3">
+    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+      <p class="mb-0 text-secondary">Copyright 2017~2026 JinyDev. All Rights Reserved.</p>
+    </div>
+    <div class="col-md-6 text-center text-md-end">
+      
+      <a href="https://datas.jiny.dev" class="text-decoration-none text-secondary ms-3">빅데이터</a>
+      
+      <a href="https://mysql.jiny.dev" class="text-decoration-none text-secondary ms-3">MySQL</a>
+      
+      <a href="https://php.jiny.dev" class="text-decoration-none text-secondary ms-3">PHP</a>
+      
+      <a href="https://java.jiny.dev" class="text-decoration-none text-secondary ms-3">자바</a>
+      
+      <a href="https://git.jiny.dev" class="text-decoration-none text-secondary ms-3">깃&깃허브</a>
+      
+      <a href="https://linux.jiny.dev" class="text-decoration-none text-secondary ms-3">리눅스</a>
+      
+    </div>
+  </div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+    window.addEventListener('load', async function () {
+      mermaid.initialize({ startOnLoad: false });
+
+      const mermaidCodes = document.querySelectorAll('pre code.language-mermaid');
+      const mermaidDivs = [];
+
+      mermaidCodes.forEach(codeBlock => {
+        const mermaidDefinition = codeBlock.textContent.trim();
+        const container = codeBlock.closest('div.highlighter-rouge');
+
+        const mermaidDiv = document.createElement('div');
+        mermaidDiv.className = 'mermaid';
+        mermaidDiv.textContent = mermaidDefinition;
+
+        if (container) {
+          container.replaceWith(mermaidDiv);
+        } else {
+          const pre = codeBlock.parentElement;
+          if (pre) pre.replaceWith(mermaidDiv);
+        }
+        mermaidDivs.push(mermaidDiv);
+      });
+
+      if (mermaidDivs.length > 0) {
+        await mermaid.run({ nodes: mermaidDivs });
+      }
+    });
+  </script>
+  <script src="/assets/js/toc.js"></script>
+  <script src="/assets/js/sidebar.js"></script>
+
+</body>
+
+</html>

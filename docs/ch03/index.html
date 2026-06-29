@@ -1,0 +1,1579 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- 기본 메타데이터 --><meta name="description" content="Jiny linux"><meta name="author" content="HojinLee"><!-- 제목 설정 --><title>CHAPTER 3 팩토리 메서드 패턴</title>
+  <meta name="title" content="CHAPTER 3 팩토리 메서드 패턴" /><!-- 키워드 설정 --><!-- Open Graph 메타데이터 --><meta property="og:title" content="CHAPTER 3 팩토리 메서드 패턴"><meta property="og:description" content="Jiny linux"><meta property="og:type" content="website"><meta property="og:locale" content="ko">
+  <meta property="og:site_name" content="linux">
+  <meta property="og:url" content="http://0.0.0.0:4000/ch03/">
+  <!-- 대표 URL (캐노니컬) -->
+  <link rel="canonical" href="http://0.0.0.0:4000/ch03/">
+
+  <!-- Twitter 카드 메타데이터 --><meta name="twitter:card" content="summary"><meta property="twitter:title" content="CHAPTER 3 팩토리 메서드 패턴"><!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="CHAPTER 3 팩토리 메서드 패턴" />
+<meta name="author" content="Hojin" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="24가지 패턴으로 알아보는 객체지향의 원리" />
+<meta name="twitter:description" property="og:description" content="24가지 패턴으로 알아보는 객체지향의 원리" />
+<link rel="canonical" href="http://0.0.0.0:4000/ch03/" />
+<meta property="og:url" content="http://0.0.0.0:4000/ch03/" />
+<meta property="og:site_name" content="쉽게 배워 바로 써먹는 디자인 패턴" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="CHAPTER 3 팩토리 메서드 패턴" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Hojin"},"description":"24가지 패턴으로 알아보는 객체지향의 원리","headline":"CHAPTER 3 팩토리 메서드 패턴","url":"http://0.0.0.0:4000/ch03/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/assets/css/docs.css" rel="stylesheet" />
+  <link href="/assets/css/highlight.css" rel="stylesheet" />
+
+  <style>
+    blockquote {
+      border-left: solid 5px #dee2e6;
+      padding: 5px 10px;
+      background-color: #f8f9fa;
+    }
+  </style>
+
+  <style>
+    h1 a {
+      text-decoration: none;
+    }
+
+    h2 a {
+      text-decoration: none;
+    }
+
+    h3 a {
+      text-decoration: none;
+    }
+
+    h4 a {
+      text-decoration: none;
+    }
+
+    h5 a {
+      text-decoration: none;
+    }
+
+    h6 a {
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      vertical-align: top
+    }
+
+    strong a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* 스크롤바 커스텀 */
+    /* 임의의 영역 생성 */
+    .scrollBar {}
+
+    /* 아래의 모든 코드는 영역::코드로 사용 */
+    .scrollBar::-webkit-scrollbar {
+      width: 7px;
+      /* 스크롤바의 너비 */
+    }
+
+    .scrollBar::-webkit-scrollbar-thumb {
+      height: 30%;
+      /* 스크롤바의 길이 */
+      background: #cccccc;
+      /* 스크롤바의 색상 */
+
+      border-radius: 5px;
+    }
+
+    .scrollBar::-webkit-scrollbar-track {
+      background: rgba(33, 122, 244, .1);
+      /*스크롤바 뒷 배경 색상*/
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4VBPCT3CR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-R4VBPCT3CR');
+  </script>
+
+
+</head>
+
+<body>
+  <header class="navbar navbar-expand-lg bd-navbar sticky-top">
+    <nav class="container bd-gutter flex-wrap flex-lg-nowrap position-relative" aria-label="Main navigation">
+
+      <!-- Mobile: Left Toggle (Browse) -->
+      <div class="bd-navbar-toggle d-lg-none">
+        <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdSidebar"
+          aria-controls="bdSidebar" aria-label="Toggle docs navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="bi" fill="currentColor"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z">
+            </path>
+          </svg>
+          <span class="d-none fs-6 pe-1">Browse</span>
+        </button>
+      </div>
+
+      <!-- Brand: Desktop (Static), Mobile (Absolute Center) -->
+      <a class="navbar-brand p-0 me-0 me-lg-2 ms-lg-0 d-none d-lg-inline-block" href="/" aria-label="jinydev">
+        <svg width="32" height="26" viewBox="0 0 32 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M24.2746 5.33377C25.8486 7.33981 25.1183 11.1792 24.3961 13.0177C24.4028 13.0199 24.4094 13.0221 24.4161 13.0243L24.4013 13.0248L22.649 12.9082C22.649 12.9053 22.6488 12.9013 22.649 12.8993C22.9902 8.93373 22.5975 7.34575 22.2147 7.07677C17.6316 10.3896 13.5379 9.33658 12.2725 9.01111C11.928 8.9225 11.7932 8.88781 11.9152 9.00988C12.2872 9.38185 13.1336 9.82821 13.7371 10.1465H13.7372L13.7376 10.1467C13.8743 10.2188 13.9985 10.2843 14.1019 10.3409C9.12673 10.3984 7.12659 8.00279 6.53855 7.29846C6.47859 7.22664 6.4333 7.1724 6.40105 7.14015C6.11408 6.85318 4.49961 5.87252 3.99256 7.74227C3.50142 9.55335 3.81246 11.6775 3.97665 12.7988C3.99089 12.896 3.99257 12.8981 3.99257 12.9298L2.37635 13.0248L2.37213 13.0247C0.223493 8.05534 1.83854 5.26971 3.29536 4.2246C3.29536 1.78444 6.27428 -0.592359 10.0455 0.263262C14.8768 1.64043 16.3468 1.18409 18.0759 0.647278C18.774 0.430562 19.5143 0.200726 20.5351 0.073124C25.2219 -0.512739 26.7993 2.56612 27 4.16122C26.2141 3.70487 24.8556 4.73165 24.2746 5.33377ZM12.3374 1.5872C11.1225 1.16466 7.99257 0.717209 6.3478 2.41116C5.98397 2.78587 5.55554 3.48864 5.55554 3.48864C5.55554 3.48864 4.82665 4.81961 4.25622 4.24919C3.68579 3.67878 5.0168 1.96749 6.06259 1.46044C7.10838 0.953388 9.70703 0.0660505 12.3374 1.5872Z"
+            fill="currentColor" />
+          <path
+            d="M10.078 13.5002H3.10601C2.2309 13.5002 1.52148 14.2097 1.52148 15.0848V18.3172C1.52148 19.1923 2.2309 19.9018 3.10601 19.9018H10.078C10.9531 19.9018 11.6625 19.1923 11.6625 18.3172V15.0848C11.6625 14.2097 10.9531 13.5002 10.078 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M0.823513 14.6094H0.379847C0.187322 14.6094 0.03125 14.7654 0.03125 14.958V15.9721C0.03125 16.1646 0.187322 16.3207 0.379847 16.3207H0.823513C1.01604 16.3207 1.17211 16.1646 1.17211 15.9721V14.958C1.17211 14.7654 1.01604 14.6094 0.823513 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M16.7326 13.5002H23.7045C24.5796 13.5002 25.2891 14.2097 25.2891 15.0848V18.3172C25.2891 19.1923 24.5796 19.9018 23.7045 19.9018H16.7326C15.8575 19.9018 15.1481 19.1923 15.1481 18.3172V15.0848C15.1481 14.2097 15.8575 13.5002 16.7326 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M25.9861 14.6094H26.4297C26.6222 14.6094 26.7783 14.7654 26.7783 14.958V15.9721C26.7783 16.1646 26.6222 16.3207 26.4297 16.3207H25.9861C25.7935 16.3207 25.6375 16.1646 25.6375 15.9721V14.958C25.6375 14.7654 25.7935 14.6094 25.9861 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M12.2954 15.5601H14.5137C14.7062 15.5601 14.8623 15.7161 14.8623 15.9087V16.9228C14.8623 17.1153 14.7062 17.2713 14.5137 17.2713H12.2954C12.1028 17.2713 11.9468 17.1153 11.9468 16.9228V15.9087C11.9468 15.7161 12.1028 15.5601 12.2954 15.5601Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M9.93343 16.3937C9.93343 16.7087 9.76317 16.9641 9.55314 16.9641C9.34311 16.9641 9.17285 16.7087 9.17285 16.3937C9.17285 16.0786 9.34311 15.8232 9.55314 15.8232C9.76317 15.8232 9.93343 16.0786 9.93343 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M16.9688 16.3937C16.9688 16.7087 17.139 16.9641 17.3491 16.9641C17.5591 16.9641 17.7293 16.7087 17.7293 16.3937C17.7293 16.0786 17.5591 15.8232 17.3491 15.8232C17.139 15.8232 16.9688 16.0786 16.9688 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M14.2758 20.1016C13.642 20.6086 12.7863 20.3551 12.5645 20.1016C12.6278 20.4185 12.8687 20.8622 13.4518 20.8622C14.0349 20.8622 14.2441 20.3551 14.2758 20.1016Z"
+            fill="currentColor" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.1312 22.411C12.1575 22.2914 12.2759 22.2157 12.3956 22.2421L14.6347 22.735C14.7544 22.7614 14.83 22.8797 14.8036 22.9994C14.7773 23.119 14.659 23.1947 14.5393 23.1683L12.3002 22.6753C12.1805 22.649 12.1049 22.5307 12.1312 22.411Z"
+            fill="currentColor" />
+          <path
+            d="M13.4203 27.6754C9.00897 27.7261 5.77228 23.6613 4.70536 21.6225C4.54691 21.3197 4.42016 21.2739 4.32509 21.3373C4.17297 21.4387 4.28282 21.6437 4.32507 21.7493C4.85747 22.9916 5.58213 24.0416 5.87791 24.4113C4.83846 26.1353 4.49409 27.855 4.45183 28.4994C6.1758 26.8008 7.91668 26.8832 8.57162 27.1367C13.7055 29.7987 16.5577 27.929 18.1739 27.1367C19.4669 26.5029 21.4803 27.7388 22.3254 28.436C22.224 26.8642 21.3747 25.1402 20.9627 24.4747C21.6282 23.5873 22.1669 22.5099 22.4522 21.9711C22.6803 21.5401 22.6106 21.369 22.5472 21.3373C22.3951 21.2613 22.2092 21.4958 22.1353 21.6225C21.6599 22.4148 18.9345 27.6121 13.4203 27.6754Z"
+            fill="currentColor" />
+        </svg>
+      </a>
+      <a class="navbar-brand p-0 me-0 position-absolute top-50 start-50 translate-middle d-lg-none" href="/"
+        aria-label="jinydev">
+        <svg width="100" height="26" viewBox="0 0 112 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M24.2746 5.33377C25.8486 7.33981 25.1183 11.1792 24.3961 13.0177C24.4028 13.0199 24.4094 13.0221 24.4161 13.0243L24.4013 13.0248L22.649 12.9082C22.649 12.9053 22.6488 12.9013 22.649 12.8993C22.9902 8.93373 22.5975 7.34575 22.2147 7.07677C17.6316 10.3896 13.5379 9.33658 12.2725 9.01111C11.928 8.9225 11.7932 8.88781 11.9152 9.00988C12.2872 9.38185 13.1336 9.82821 13.7371 10.1465H13.7372L13.7376 10.1467C13.8743 10.2188 13.9985 10.2843 14.1019 10.3409C9.12673 10.3984 7.12659 8.00279 6.53855 7.29846C6.47859 7.22664 6.4333 7.1724 6.40105 7.14015C6.11408 6.85318 4.49961 5.87252 3.99256 7.74227C3.50142 9.55335 3.81246 11.6775 3.97665 12.7988C3.99089 12.896 3.99257 12.8981 3.99257 12.9298L2.37635 13.0248L2.37213 13.0247C0.223493 8.05534 1.83854 5.26971 3.29536 4.2246C3.29536 1.78444 6.27428 -0.592359 10.0455 0.263262C14.8768 1.64043 16.3468 1.18409 18.0759 0.647278C18.774 0.430562 19.5143 0.200726 20.5351 0.073124C25.2219 -0.512739 26.7993 2.56612 27 4.16122C26.2141 3.70487 24.8556 4.73165 24.2746 5.33377ZM12.3374 1.5872C11.1225 1.16466 7.99257 0.717209 6.3478 2.41116C5.98397 2.78587 5.55554 3.48864 5.55554 3.48864C5.55554 3.48864 4.82665 4.81961 4.25622 4.24919C3.68579 3.67878 5.0168 1.96749 6.06259 1.46044C7.10838 0.953388 9.70703 0.0660505 12.3374 1.5872Z"
+            fill="currentColor" />
+          <path
+            d="M10.078 13.5002H3.10601C2.2309 13.5002 1.52148 14.2097 1.52148 15.0848V18.3172C1.52148 19.1923 2.2309 19.9018 3.10601 19.9018H10.078C10.9531 19.9018 11.6625 19.1923 11.6625 18.3172V15.0848C11.6625 14.2097 10.9531 13.5002 10.078 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M0.823513 14.6094H0.379847C0.187322 14.6094 0.03125 14.7654 0.03125 14.958V15.9721C0.03125 16.1646 0.187322 16.3207 0.379847 16.3207H0.823513C1.01604 16.3207 1.17211 16.1646 1.17211 15.9721V14.958C1.17211 14.7654 1.01604 14.6094 0.823513 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M16.7326 13.5002H23.7045C24.5796 13.5002 25.2891 14.2097 25.2891 15.0848V18.3172C25.2891 19.1923 24.5796 19.9018 23.7045 19.9018H16.7326C15.8575 19.9018 15.1481 19.1923 15.1481 18.3172V15.0848C15.1481 14.2097 15.8575 13.5002 16.7326 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M25.9861 14.6094H26.4297C26.6222 14.6094 26.7783 14.7654 26.7783 14.958V15.9721C26.7783 16.1646 26.6222 16.3207 26.4297 16.3207H25.9861C25.7935 16.3207 25.6375 16.1646 25.6375 15.9721V14.958C25.6375 14.7654 25.7935 14.6094 25.9861 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M12.2954 15.5601H14.5137C14.7062 15.5601 14.8623 15.7161 14.8623 15.9087V16.9228C14.8623 17.1153 14.7062 17.2713 14.5137 17.2713H12.2954C12.1028 17.2713 11.9468 17.1153 11.9468 16.9228V15.9087C11.9468 15.7161 12.1028 15.5601 12.2954 15.5601Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M9.93343 16.3937C9.93343 16.7087 9.76317 16.9641 9.55314 16.9641C9.34311 16.9641 9.17285 16.7087 9.17285 16.3937C9.17285 16.0786 9.34311 15.8232 9.55314 15.8232C9.76317 15.8232 9.93343 16.0786 9.93343 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M16.9688 16.3937C16.9688 16.7087 17.139 16.9641 17.3491 16.9641C17.5591 16.9641 17.7293 16.7087 17.7293 16.3937C17.7293 16.0786 17.5591 15.8232 17.3491 15.8232C17.139 15.8232 16.9688 16.0786 16.9688 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M14.2758 20.1016C13.642 20.6086 12.7863 20.3551 12.5645 20.1016C12.6278 20.4185 12.8687 20.8622 13.4518 20.8622C14.0349 20.8622 14.2441 20.3551 14.2758 20.1016Z"
+            fill="currentColor" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.1312 22.411C12.1575 22.2914 12.2759 22.2157 12.3956 22.2421L14.6347 22.735C14.7544 22.7614 14.83 22.8797 14.8036 22.9994C14.7773 23.119 14.659 23.1947 14.5393 23.1683L12.3002 22.6753C12.1805 22.649 12.1049 22.5307 12.1312 22.411Z"
+            fill="currentColor" />
+          <path
+            d="M13.4203 27.6754C9.00897 27.7261 5.77228 23.6613 4.70536 21.6225C4.54691 21.3197 4.42016 21.2739 4.32509 21.3373C4.17297 21.4387 4.28282 21.6437 4.32507 21.7493C4.85747 22.9916 5.58213 24.0416 5.87791 24.4113C4.83846 26.1353 4.49409 27.855 4.45183 28.4994C6.1758 26.8008 7.91668 26.8832 8.57162 27.1367C13.7055 29.7987 16.5577 27.929 18.1739 27.1367C19.4669 26.5029 21.4803 27.7388 22.3254 28.436C22.224 26.8642 21.3747 25.1402 20.9627 24.4747C21.6282 23.5873 22.1669 22.5099 22.4522 21.9711C22.6803 21.5401 22.6106 21.369 22.5472 21.3373C22.3951 21.2613 22.2092 21.4958 22.1353 21.6225C21.6599 22.4148 18.9345 27.6121 13.4203 27.6754Z"
+            fill="currentColor" />
+          <text x="32" y="21" font-family="Arial, sans-serif" font-weight="bold" font-size="22"
+            fill="currentColor">Jiny</text>
+        </svg>
+      </a>
+
+      <!-- Mobile: Right Toggle (Menu) -->
+      <div class="d-flex d-lg-none ms-auto">
+        <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdNavbar"
+          aria-controls="bdNavbar" aria-label="Toggle navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid"
+            viewBox="0 0 16 16">
+            <path
+              d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- OffCanvas -->
+      <div class="offcanvas-lg offcanvas-end flex-grow-1" tabindex="-1" id="bdNavbar"
+        aria-labelledby="bdNavbarOffcanvasLabel" data-bs-scroll="true">
+        <!-- OffCanver Header -->
+        <div class="offcanvas-header px-4 pb-0">
+          <h5 class="offcanvas-title text-white" id="bdNavbarOffcanvasLabel">Jiny</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"
+            data-bs-target="#bdNavbar">
+          </button>
+        </div>
+
+        <!-- OffCanver Body -->
+        <div class="offcanvas-body p-4 pt-0 p-lg-0">
+          <hr class="d-lg-none text-white-50">
+
+          <ul class="navbar-nav flex-column flex-lg-row bd-navbar-nav">
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/ch00/">패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part01/">생성패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part02/">구조패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part03/">행동패턴</a>
+            </li>
+            
+          </ul>
+
+          <hr class="d-lg-none text-white-50">
+
+          <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
+            <li class="nav-item col-6 col-lg-auto">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://github.com/jinydev/datas" target="_blank"
+                rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
+                  viewBox="0 0 512 499.36" role="img">
+                  <title>GitHub</title>
+                  <path fill="currentColor" fill-rule="evenodd"
+                    d="M256 0C114.64 0 0 114.61 0 256c0 113.09 73.34 209 175.08 242.9 12.8 2.35 17.47-5.56 17.47-12.34 0-6.08-.22-22.18-.35-43.54-71.2 15.49-86.2-34.34-86.2-34.34-11.64-29.57-28.42-37.45-28.42-37.45-23.27-15.84 1.73-15.55 1.73-15.55 25.69 1.81 39.21 26.38 39.21 26.38 22.84 39.12 59.92 27.82 74.5 21.27 2.33-16.54 8.94-27.82 16.25-34.22-56.84-6.43-116.6-28.43-116.6-126.49 0-27.95 10-50.8 26.35-68.69-2.63-6.48-11.42-32.5 2.51-67.75 0 0 21.49-6.88 70.4 26.24a242.65 242.65 0 0 1 128.18 0c48.87-33.13 70.33-26.24 70.33-26.24 14 35.25 5.18 61.27 2.55 67.75 16.41 17.9 26.31 40.75 26.31 68.69 0 98.35-59.85 120-116.88 126.32 9.19 7.9 17.38 23.53 17.38 47.41 0 34.22-.31 61.83-.31 70.23 0 6.85 4.61 14.81 17.6 12.31C438.72 464.97 512 369.08 512 256.02 512 114.62 397.37 0 256 0z">
+                  </path>
+                </svg>
+                <small class="d-lg-none ms-2">GitHub</small>
+              </a>
+            </li>
+
+            <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+              <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+              <hr class="d-lg-none my-2 text-white-50">
+            </li>
+
+            <li class="nav-item col-6 col-lg-auto">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://jiny.dev" aria-label="Home">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
+                  viewBox="0 0 16 16" role="img">
+                  <title>Home</title>
+                  <path fill="currentColor"
+                    d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z" />
+                </svg>
+                <small class="d-lg-none ms-2">Home</small>
+              </a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container bd-gutter mt-3 my-md-4 bd-layout">
+    <aside class="bd-sidebar scrollBar">
+        <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="bdSidebar"
+            aria-labelledby="bdSidebarOffcanvasLabel">
+            <div class="offcanvas-header border-bottom">
+                <h5 class="offcanvas-title" id="bdSidebarOffcanvasLabel">학습목차</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"
+                    data-bs-target="#bdSidebar"></button>
+            </div>
+
+            <div class="offcanvas-body">
+                <!-- 네비게이션 -->
+                <nav class="bd-links w-100" id="bd-docs-nav" aria-label="Docs navigation">
+  <ul class="bd-links-nav list-unstyled mb-0 pb-3 pb-md-2 pe-lg-2">
+    <li class="bd-links-group py-2">
+      <strong class="bd-links-heading d-flex w-100 align-items-center fw-semibold">
+        디자인 패턴 목차
+      </strong>
+      <ul class="list-unstyled fw-normal pb-2 small">
+        
+        
+
+        
+        <li>
+          
+          <a href="/part01/"
+            class="bd-links-link d-inline-block rounded ">
+            Part 1 생성 패턴
+          </a>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-2"
+            aria-expanded="false">
+            CHAPTER 1 팩토리 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-2">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch01/#11-클래스와-객체지향"
+                  class="bd-links-link d-inline-block rounded">
+                  1.1 클래스와 객체지향
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch01/#12-의존성"
+                  class="bd-links-link d-inline-block rounded">
+                  1.2 의존성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch01/#13-의존성-주입"
+                  class="bd-links-link d-inline-block rounded">
+                  1.3 의존성 주입
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch01/#14-의존-관계의-문제점"
+                  class="bd-links-link d-inline-block rounded">
+                  1.4 의존 관계의 문제점
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch01/#15-팩토리-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  1.5 팩토리 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch01/#16-단순-팩토리"
+                  class="bd-links-link d-inline-block rounded">
+                  1.6 단순 팩토리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch01/#17-장점과-단점"
+                  class="bd-links-link d-inline-block rounded">
+                  1.7 장점과 단점
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch01/#18-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  1.8 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch01/#19-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  1.9 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-3"
+            aria-expanded="false">
+            CHAPTER 2 싱글턴 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-3">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch02/#21-객체-생성"
+                  class="bd-links-link d-inline-block rounded">
+                  2.1 객체 생성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch02/#22-유일한-객체"
+                  class="bd-links-link d-inline-block rounded">
+                  2.2 유일한 객체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch02/#23-싱글턴"
+                  class="bd-links-link d-inline-block rounded">
+                  2.3 싱글턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch02/#24-싱글턴-설계"
+                  class="bd-links-link d-inline-block rounded">
+                  2.4 싱글턴 설계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch02/#25-인스턴스-생성"
+                  class="bd-links-link d-inline-block rounded">
+                  2.5 인스턴스 생성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch02/#26-정적-클래스"
+                  class="bd-links-link d-inline-block rounded">
+                  2.6 정적 클래스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch02/#27-싱글턴-확장"
+                  class="bd-links-link d-inline-block rounded">
+                  2.7 싱글턴 확장
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch02/#28-자원-처리"
+                  class="bd-links-link d-inline-block rounded">
+                  2.8 자원 처리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch02/#29-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  2.9 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch02/#210-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  2.10 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0  w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-4"
+            aria-expanded="true">
+            CHAPTER 3 팩토리 메서드 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse show" id="collapse-4">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch03/#31-추상화"
+                  class="bd-links-link d-inline-block rounded">
+                  3.1 추상화
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch03/#32-패턴-확장"
+                  class="bd-links-link d-inline-block rounded">
+                  3.2 패턴 확장
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch03/#33-상위-클래스"
+                  class="bd-links-link d-inline-block rounded">
+                  3.3 상위 클래스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch03/#34-하위-클래스"
+                  class="bd-links-link d-inline-block rounded">
+                  3.4 하위 클래스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch03/#35-매개변수"
+                  class="bd-links-link d-inline-block rounded">
+                  3.5 매개변수
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch03/#36-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  3.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch03/#37-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  3.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-5"
+            aria-expanded="false">
+            CHAPTER 4 추상 팩토리 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-5">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch04/#41-팩토리-메서드"
+                  class="bd-links-link d-inline-block rounded">
+                  4.1 팩토리 메서드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch04/#42-그룹"
+                  class="bd-links-link d-inline-block rounded">
+                  4.2 그룹
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch04/#43-팩토리-그룹"
+                  class="bd-links-link d-inline-block rounded">
+                  4.3 팩토리 그룹
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch04/#44-공장-추가"
+                  class="bd-links-link d-inline-block rounded">
+                  4.4 공장 추가
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch04/#45-부품-추가-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  4.5 부품 추가 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch04/#46-패턴-결합"
+                  class="bd-links-link d-inline-block rounded">
+                  4.6 패턴 결합
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch04/#47-장점과-단점"
+                  class="bd-links-link d-inline-block rounded">
+                  4.7 장점과 단점
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch04/#48-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  4.8 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch04/#49-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  4.9 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-6"
+            aria-expanded="false">
+            CHAPTER 5 빌더 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-6">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch05/#51-건축물"
+                  class="bd-links-link d-inline-block rounded">
+                  5.1 건축물
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch05/#52-객체-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  5.2 객체 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch05/#53-빌더"
+                  class="bd-links-link d-inline-block rounded">
+                  5.3 빌더
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch05/#54-알고리즘"
+                  class="bd-links-link d-inline-block rounded">
+                  5.4 알고리즘
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch05/#55-생성-요청"
+                  class="bd-links-link d-inline-block rounded">
+                  5.5 생성 요청
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch05/#56-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  5.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch05/#57-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  5.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-7"
+            aria-expanded="false">
+            CHAPTER 6 프로토타입 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-7">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch06/#61-생성"
+                  class="bd-links-link d-inline-block rounded">
+                  6.1 생성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch06/#62-복사"
+                  class="bd-links-link d-inline-block rounded">
+                  6.2 복사
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch06/#63-프로토타입-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  6.3 프로토타입 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch06/#64-특징"
+                  class="bd-links-link d-inline-block rounded">
+                  6.4 특징
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch06/#65-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  6.5 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch06/#66-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  6.6 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+      </ul>
+    </li>
+  </ul>
+</nav>
+            </div>
+        </div>
+    </aside>
+
+    <main class="bd-main order-1">
+        <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        
+        
+        
+        
+        
+        
+        <li class="breadcrumb-item active" aria-current="page">CHAPTER 3 팩토리 메서드 패턴</li>
+        
+        
+        
+    </ol>
+</nav>
+
+        <div class="bd-content ps-lg-2">
+            
+<h1 id="chapter-3-팩토리-메서드-패턴-factory-method">CHAPTER 3 팩토리 메서드 패턴 (factory method)</h1>
+
+<p>팩토리 메서드 패턴은 팩토리 패턴의 확장 패턴으로, 팩토리 패턴과 템플릿 메서드 패턴이 결합된 패턴입니다.<sup id="fnref:1"><a href="#fn:1" class="footnote" rel="footnote" role="doc-noteref">1</a></sup></p>
+
+<h2 id="31-추상화">3.1 추상화</h2>
+<p>팩토리 메서드는 추상화 기법을 사용하여 패턴을 확장하므로, 팩토리 메서드 패턴을 이해하기 위해서는 먼저 객체지향의 추상화에 대한 개념을 학습해야 합니다.</p>
+
+<h3 id="311-추상-개념">3.1.1 추상 개념</h3>
+<p>복잡하고 어려운 기능을 한눈에 파악하는 것은 쉽지 않습니다. 또한 이해하기 위해 많은 시간과 노력을 들여야 합니다. 추상abstract은 사전적 의미로 중요한 부분만 분리하여 이해하기 쉽게 만드는 작업입니다. 사실 우리가 모듈의 복잡한 기능에 대해 이해할 때 처음부터 세부적인 부분 하나 하나를 면밀히 살펴보지는 않습니다.</p>
+
+<p>만일 파악하려는 기능이 요약된 정보가 있다면 보다 쉽게 이해할 수 있을 것입니다. 객체에 추</p>
+
+<p>상적 개념을 적용하는 이유는 객체의 동작을 보다 쉽게 파악하기 위해서입니다. 그렇다면 코드 작성 시 복잡한 기능을 어떻게 요약해서 정보를 만들어야 할까요? 먼저 기능을 이해하기 위해 세부 사항을 분리합니다.</p>
+
+<h3 id="312-코드-요약">3.1.2 코드 요약</h3>
+<p>추상화 작업은 코드를 요약하는 것입니다. 요약 시 상세한 내용은 무시합니다. 요약된 정보만으로도 실제 구현된 코드를 상세히 파악하지 않고 동작을 쉽게 이해할 수 있습니다.</p>
+
+<p>추상화 작업을 위해서는 먼저 요약된 정보와 실제 구현부를 분리합니다. 다음과 같이 클래스를 요약하여 추상화를 작성합니다.</p>
+
+<p>PHP 언어에서는 class 키워드 앞에 abstract 키워드를 붙여 추상 클래스를 작성합니다. [예제 3-1]은 Factory 클래스를 추상 클래스로 선언합니다.</p>
+
+<h4 id="예제-3-1-factorymethod01factoryphp">예제 3-1 FactoryMethod/01/factory.php</h4>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">abstract</span> <span class="kd">class</span> <span class="nc">Factory</span>
+<span class="p">{</span>
+    <span class="mf">...</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>추상적 구조의 골격을 형성합니다. 추상 클래스를 이용하여 구조에서 정보 부분만 분리할 수 있습니다.</p>
+
+<h2 id="32-패턴-확장">3.2 패턴 확장</h2>
+
+<p>추상화를 통해 팩토리 패턴을 확장합니다. 중요한 부분만 분리하여 추상 클래스의 골격을 형성합니다.</p>
+
+<h3 id="321-팩토리">3.2.1 팩토리</h3>
+<p>팩토리 패턴은 객체지향을 지원하는 현대적modern 프로그래밍에서 가장 폭넓게 사용되는 패턴 중 하나입니다. 예제 코드를 보며 팩토리 패턴을 복습하고 확장 방법에 대해서도 알아봅시다. 다음은 상품을 처리하는 객체입니다.</p>
+
+<h4 id="예제-3-2-factorymethod02lgproductphp">예제 3-2 FactoryMethod/02/LgProduct.php</h4>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// LG 노트북 생성 클래스</span>
+<span class="kd">class</span> <span class="nc">LgProduct</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">name</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"LG Gram laptop"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>제품을 관리하는 LgProduct 클래스를 선언합니다. 선언된 클래스를 사용하려면 객체를 생성해야 하며 객체 생성은 팩토리 패턴으로 구현합니다. 팩토리 패턴에서는 학습한 것처럼 객체 생성 요청을 별도의 클래스로 분리합니다. 다음과 같이 Factory 클래스를 선언합니다. Factory는 선언된 LgProduct 클래스의 객체 생성을 담당합니다.</p>
+
+<h4 id="예제-3-3-factorymethod02factoryphp">예제 3-3 FactoryMethod/02/factory.php</h4>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 팩토리</span>
+<span class="kd">class</span> <span class="nc">Factory</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">final</span> <span class="k">function</span> <span class="n">create</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nc">LgProduct</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Factory 클래스는 객체 생성을 담당하는 create() 메서드를 갖고 있습니다. 팩토리 패턴을 적용하여 create() 메서드에 객체 생성을 위임하며 메인 코드는 다음과 같습니다.</p>
+
+<h4 id="예제-3-4-factorymethod02indexphp">예제 3-4 FactoryMethod/02/index.php</h4>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 팩토리(Factory)</span>
+<span class="k">require</span> <span class="s2">"factory.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"LgProduct.php"</span><span class="p">;</span>
+
+<span class="nv">$fac</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Factory</span><span class="p">;</span>
+<span class="nv">$pro</span> <span class="o">=</span> <span class="nv">$fac</span><span class="o">-&gt;</span><span class="nf">create</span><span class="p">();</span> <span class="c1">// 팩토리 패턴</span>
+<span class="nv">$pro</span><span class="o">-&gt;</span><span class="nf">name</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index.php
+LG Gram laptop
+</code></pre></div></div>
+
+<p>Factory 클래스를 통해 선언한 LgProduct 클래스의 객체를 생성합니다.</p>
+
+<h3 id="322-추상화">3.2.2 추상화</h3>
+<p>앞에서 작성한 팩토리 패턴에 추상화를 결합하고 패턴을 확장해 구현합니다. 추상화를 적용하면 팩토리 패턴은 팩토리 메서드 패턴과 추상 팩토리 패턴 2가지 형태로 구분됩니다.</p>
+
+<p>예제 코드를 통해 확장된 패턴을 학습합니다. 기존의 Factory 클래스를 추상 클래스로 변경하는데, 추상 클래스를 적용하는 것은 객체를 생성하고 사용하는 것을 분리하기 위해서입니다.</p>
+
+<h4 id="예제-3-5-factorymethod03factoryphp">예제 3-5 FactoryMethod/03/factory.php</h4>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 팩토리 추상화</span>
+<span class="k">abstract</span> <span class="kd">class</span> <span class="nc">Factory</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">final</span> <span class="k">function</span> <span class="n">create</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// return new LgProduct();</span>
+        <span class="c1">// 하위 클래스로 위임</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">createProduct</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 추상 메서드 선언</span>
+    <span class="k">abstract</span> <span class="k">public</span> <span class="k">function</span> <span class="n">createProduct</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>변경된 Factory 클래스 안에는 추상 메서드도 선언되어 있습니다.</p>
+
+<p>추상 클래스의 객체를 생성하면 다음과 같이 오류가 발생합니다. 추상화된 메서드를 가진 클래스만으로는 독립적인 객체를 생성할 수 없는데, 이는 추상 메서드에 실제적인 구현부가 없기 때문입니다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index.php
+PHP Fatal error: Uncaught Error: Cannot instantiate abstract class Factory in D:\jiny\pettern\FactoryMethod\03\index.php:8
+Stack trace:
+#0 {main}
+ thrown in D:\jiny\pettern\FactoryMethod\03\index.php on line 8
+</code></pre></div></div>
+
+<p>객체를 생성하기 위해서는 추상 클래스를 상속받은 하위 클래스를 만들어 실제적인 추상 메서드의 구현부를 작성해야 합니다. 이처럼 추상화는 선언과 구현이 자연스럽게 분리됩니다. 또한 추상화로 분리된 클래스 사이에는 의존성이 발생합니다.</p>
+
+<h3 id="323-인터페이스">3.2.3 인터페이스</h3>
+<p>인터페이스는 클래스를 설계하는 방법을 규정하는 약속과 같습니다. 인터페이스를 적용하면 반드시 인터페이스에 선언된 정의에 따라 클래스에 구현합니다. 추상 클래스에도 인터페이스와 유사한 선언적 규정을 정의할 수 있습니다. 추상 클래스는 구체화되지 않은 추상 메서드를 선언할 수 있는데, 이는 인터페이스와 유사합니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//추상 메서드 선언</span>
+<span class="k">abstract</span> <span class="k">public</span> <span class="k">function</span> <span class="n">createProduct</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>선언된 추상 메서드는 인터페이스와 동일하게 상속받은 하위 클래스에서 반드시 메서드를 구현해야 합니다. 하위 클래스에 메서드 구현을 강제화함으로써 실제적인 동작 처리를 위임합니다. 추상화는 실제적인 동작을 하위 클래스에 위임함으로써 추상 클래스 안에서 미리 위임된 메서드를 사용할 수 있습니다. create() 메서드 안을 살펴보면 하위 클래스에 있을 createProduct()를 미리 호출하여 사용하는 것을 볼 수 있습니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="kt">final</span> <span class="k">function</span> <span class="n">create</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// return new LgProduct();</span>
+    <span class="c1">// 하위 클래스로 위임</span>
+    <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">createProduct</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="324-템플릿-메서드-패턴">3.2.4 템플릿 메서드 패턴</h3>
+<p>추상화를 통해 확장된 팩토리 메서드 패턴은 이후에 학습할 템플릿 메서드 패턴(23장)과 유사한 모습을 갖고 있습니다. 템플릿 메서드 또한 추상화 기법을 통해 정의와 구현을 분리해서 사용하기 때문입니다. 팩토리 메서드도 실제 생성되는 알고리즘을 하위 메서드로 위임하는데, 실제 구현을 위임한다는 측면에서 팩토리 메서드 패턴과 유사하다고 볼 수 있습니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="kt">final</span> <span class="k">function</span> <span class="n">create</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// return new LgProduct();</span>
+    <span class="c1">// 하위 클래스로 위임</span>
+    <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">createProduct</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>수정된 앞의 예제를 다시 살펴봅시다. 이전에는 create() 메서드가 직접 LgProduct 객체를 생성하여 반환했습니다. 하지만 추상화를 적용한 예제에서는 실제 객체 생성을 createProduct() 메서드로 위임합니다. 추상 클래스의 create() 메서드에서 호출한 createProduct() 메서드는 추상화 선언만 되어 있고, 아직 실제 구현 코드가 없습니다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                          추상 클래스
+                     ┌──────────────────┐
+                     │    상위 클래스   │
+                     │  ┌────────────┐  │
+                     │  │ 추상 메서드│  │
+                     │  └──────┬─────┘  │
+                     └─────────┼────────┘
+                               │
+                               ▼
+                     ┌─────────┼────────┐
+                     │    하위 클래스   │
+                     │  ┌──────┴─────┐  │
+  개발 코드 ─────────┼─&gt;│실제구현메서드│  │
+      ▲              │  └────────────┘  │
+      └──────────────┼──────────────────┘
+                     └──────────────────┘
+</code></pre></div></div>
+<p>[그림 3-1] 추상화를 이용한 메서드 선언</p>
+
+<p>이처럼 추상화를 사용하면 아직 실제 내용이 구현되지 않은 상태에서도 미리 메서드를 호출하여 사용할 수 있습니다.</p>
+
+<h3 id="325-패턴-차이">3.2.5 패턴 차이</h3>
+<p>팩토리 메서드 패턴과 템플릿 메서드 패턴에는 유사한 동작이 있습니다. 또한 해결하려는 목적에 따라 두 패턴에 차이가 있습니다. 유사한 2개의 패턴을 결합해서 사용하므로 팩토리 메서드 패턴을 이해하는 것은 어려울 수 있습니다.</p>
+
+<p>두 패턴의 공통점은 추상화를 사용해 객체를 생성하며, 상위 클래스에서 정의를 결정하고 하위 클래스에 구체적인 처리를 위임한다는 것입니다. 필요에 따라 템플릿 메서드 패턴을 먼저 학습해도 좋습니다.</p>
+
+<h2 id="33-상위-클래스">3.3 상위 클래스</h2>
+<p>팩토리 메서드는 추상화를 이용해 팩토리 패턴을 재구성했습니다. 추상 클래스로 변경되면 클래스는 강제적으로 상위 클래스와 하위 클래스로 분리됩니다. 먼저 추상 클래스 타입의 상위 클래스에 대해 알아봅시다.</p>
+
+<h3 id="331-분리">3.3.1 분리</h3>
+<p>추상화는 클래스의 골격 구조를 변경합니다. 일반 클래스가 추상화로 변경되면, 클래스는 추상 클래스와 구현 클래스로 분리됩니다. 추상 클래스란 abstract 키워드를 이용해 변경된 타입의 클래스를 말합니다. 추상화로 선언된 클래스는 일반적인 클래스 선언보다 객체의 결합 관계를 더 느슨한 관계로 변경합니다. 추상화가 적용되면 실제 추상 클래스는 상위 클래스 하나뿐이며 하위 클래스는 일반 클래스와 동일해집니다. 추상화로 분리된 상세한 구현은 하위 클래스로 위임하여 작성합니다. 위임을 통해 분리된 하위 클래스는 실제 내용을 자유롭게 변경하거나 처리할 수 있는 느슨한 관계를 갖게 됩니다.</p>
+
+<h3 id="332-공통된-기능">3.3.2 공통된 기능</h3>
+<p>추상화를 진행하면 클래스는 상위 클래스와 하위 클래스로 분리되고, 분리된 클래스는 상속을 통해 결합됩니다.</p>
+
+<p>추상화의 상위 클래스는 추상 클래스입니다. 추상 클래스는 설계 규약만 표현할 수 있는 인터페이스와 달리 행위 메서드를 추상 클래스 안에 같이 구현할 수 있습니다. 추상 클래스 안에 직접 구현된 메서드는 상속할 경우 하위 클래스에서도 사용 가능합니다. 추상 클래스가 implements 대신 extends를 사용하는 것도 상속이라는 특징 때문입니다.</p>
+
+<p>상속은 상위 클래스의 특징을 포함하는 포괄적 승계를 의미합니다. 따라서 추상 클래스도 메서드를 구현해 하위 클래스에서 필요한 기능을 전달할 수 있습니다. 주로 하위 클래스에서 사용되는 공통된 메서드 위주로 추상 클래스 안에 구현합니다.</p>
+
+<h3 id="333-개념적-정의">3.3.3 개념적 정의</h3>
+<p>분리된 객체의 추상 클래스가 가진 특징은 인터페이스와 같은 개념적 메서드 선언이 가능하다는 것입니다. 이를 추상 메서드라고 합니다.</p>
+
+<p>다음은 추상 클래스로 변경한 factory의 일부 코드입니다. 다음과 같이 추상 메서드로 선언한 것을 볼 수 있습니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//추상 메서드 선언</span>
+<span class="k">abstract</span> <span class="k">public</span> <span class="k">function</span> <span class="n">createProduct</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>추상 메서드는 인터페이스와 같이 정의 부분만 선언되며 실제 구현부는 존재하지 않습니다. 실제 구현부는 상속받는 하위 클래스에서 구현하며 인터페이스와 사용법이 유사합니다. 다만 메서드 선언 앞에 abstract 키워드가 붙는다는 차이가 있습니다.</p>
+
+<p>추상 클래스에 선언적 메서드를 정의했다면 상속받은 하위 클래스는 선언된 메서드의 실제 구현부를 반드시 만들어야 합니다. 추상 클래스 또한 인터페이스의 규약과 같이 구현부 작성 의무가 존재합니다. 이를 ‘하위 클래스에 구현을 위임한다’고 표현합니다. 이러한 위임은 추상화의 특징입니다.</p>
+
+<h3 id="334-템플릿">3.3.4 템플릿</h3>
+<p>팩토리 메서드와 템플릿 메서드의 공통점은 템플릿 구성입니다. 템플릿은 모두 추상화를 통해 구성합니다. 그렇다면 템플릿template이란 무엇일까요? 템플릿의 사전적 의미는 ‘형판’, ‘견본’, ‘본보기’이며 자주 사용하는 모습을 본떠 만들어둔 것을 말합니다.</p>
+
+<p>추상화된 메서드를 이용해 객체를 구성하는 모습이 비슷하다는 점에서 템플릿의 개념을 도입한 것입니다. 상위 클래스에서는 구조의 모습만 정의하며 실제 모습은 하위 클래스로 위임합니다. 추상화 기법은 템플릿 설계 시 요약과 세부 정보를 분리하는 데 유용합니다.</p>
+
+<h3 id="335-계층-구조">3.3.5 계층 구조</h3>
+<p>객체지향의 추상화는 일반 클래스를 개념적 클래스와 구현 클래스로 분리합니다. 개념적 클래스를 추상 클래스, 구현 클래스를 일반 클래스라고 합니다. 이렇게 분리된 클래스는 상속을 통해 계층적 구조를 갖게 됩니다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      추상 클래스 ─────────────&gt;  개념적 클래스
+                                       │
+                                       │ extends
+                                       ▼
+      일반 클래스 ─────────────&gt;   구현 클래스
+</code></pre></div></div>
+<p>[그림 3-2] 추상화로 인한 계층적 상속 구조</p>
+
+<p>상위 클래스에서는 문제 해결을 위한 공통 부분과 개념을 정의하는데, 상속 시 필요한 공통 기능 및 인터페이스와 유사한 개념적 선언들로 구성됩니다. 즉 상위 클래스는 구조화된 뼈대를 형성하는 역할을 하며, 하위 클래스는 상위 클래스에서 선언한 뼈대를 바탕으로 실제 구현부를 작성합니다. 상위 클래스는 구조적 골격만 형성할 뿐 실제 구현 내용은 팩토리 메서드 패턴마다 다르게 적용할 수 있기 때문에 하위 클래스에서 작업합니다.</p>
+
+<p>템플릿화된 구조적 골격은 다양한 생성 패턴에 응용할 수 있습니다. 기존 팩토리가 고정적인 생성 패턴들만 결합한다면, 팩토리 메서드는 느슨한 생성으로 결합합니다. 팩토리와 팩토리 메서드가 유사한 성격일 경우 생성 방법을 팩토리 메서드로 통일할 수 있습니다. 또한 템플릿의 특징을 이용해 세부적인 생성 방법을 다르게 결정할 수도 있습니다.</p>
+
+<h2 id="34-하위-클래스">3.4 하위 클래스</h2>
+
+<p>팩토리 메서드는 ‘추상 클래스+구현 클래스’로 분리됩니다. 상위 클래스를 상속받아 하위 클래스에 실제 기능을 구현합니다. 여기서는 예제에 코드를 추가하면서 하위 클래스의 특징과 구현 방법에 대해 학습해보겠습니다.</p>
+
+<h3 id="341-상속">3.4.1 상속</h3>
+<p>추상화를 통해 확장된 팩토리 메서드는 상위 추상 클래스만으로 실제 객체를 생성할 수 없습니다. 실제 객체를 만들기 위해서는 추상 클래스를 상속받아 구현 클래스를 만들어야 합니다.</p>
+
+<p>다음은 추상 클래스를 상속받아 구현한 하위 클래스입니다.</p>
+
+<h4 id="예제-3-6-factorymethod03productfactoryphp">예제 3-6 FactoryMethod/03/ProductFactory.php</h4>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 팩토리 메서드 구현 부분</span>
+<span class="kd">class</span> <span class="nc">ProductFactory</span> <span class="kd">extends</span> <span class="nc">Factory</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__CLASS__</span><span class="mf">.</span><span class="s2">"를 생성합니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>추상 클래스는 extends를 이용하여 상속받습니다. 하위 구현 클래스에는 추상 클래스에서 선언된 추상 메서드의 실제 구현을 작성합니다. 추상 메서드를 포함한 추상 클래스를 상속받는 경우, 반드시 하위 메서드에서 실제 구현부를 작성해야 합니다. 이는 강제적 의무 사항입니다. 만일 구현하지 않고 실행하면 다음과 같은 오류가 발생합니다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index.php
+PHP Fatal error: Class ProductFactory contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (Factory::createProduct) in D:\jiny\pettern\FactoryMethod\03\ProductFactory.php on line 12
+</code></pre></div></div>
+
+<p>이러한 오류가 발생되는 이유는 행동이 없는 메서드를 포함한 객체를 생성할 수 없기 때문입니다. 마치 인터페이스 규약과 같습니다.</p>
+
+<h3 id="342-메서드-구현">3.4.2 메서드 구현</h3>
+<p>실제적인 하위 메서드를 구현해봅시다. 추상화가 적용되면 실제적인 동작을 실행하는 코드가 분리되어 하위 클래스에 위치합니다. 상위 추상 클래스는 인터페이스적인 성격과 유사하게 메서드의 형태만 선언되어 있습니다. 먼저 상위 클래스에 메서드가 어떻게 선언되었는지 확인합니다. 하위 클래스 구현 시 상위 클래스에서 선언된 형태와 모양이 일치하지 않으면 오류가 발생하기 때문입니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//추상 메서드 선언</span>
+<span class="k">abstract</span> <span class="k">public</span> <span class="k">function</span> <span class="n">createProduct</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>상속받은 하위 클래스에 createProduct() 메서드 구현을 작성합니다.</p>
+
+<h4 id="예제-3-7-factorymethod03productfactoryphp---내용-추가">예제 3-7 FactoryMethod/03/ProductFactory.php - 내용 추가</h4>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 팩토리 메서드 구현 부분</span>
+<span class="kd">class</span> <span class="nc">ProductFactory</span> <span class="kd">extends</span> <span class="nc">Factory</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__CLASS__</span><span class="mf">.</span><span class="s2">"를 생성합니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">createProduct</span><span class="p">()</span> <span class="c1">// 추상 메서드 오버라이딩</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nc">LgProduct</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>하위 클래스는 상속받은 추상 클래스의 메서드를 오버라이드합니다. 상위 클래스의 추상 메서드 선언과 하위 클래스의 오버라이드를 통해 상황별로 대응할 수 있는 실제 동작 메서드를 다르게 정의할 수 있습니다.</p>
+
+<h4 id="그림-3-3-추상-메서드-오버라이드">그림 3-3 추상 메서드 오버라이드</h4>
+
+<p><img src="./img/fig_3_3.svg" alt="그림 3-3" /></p>
+
+<blockquote>
+  <p>[!NOTE]
+추상 팩토리 패턴은 구성(composition)을 이용하여 객체를 생성합니다.</p>
+</blockquote>
+
+<p>객체 생성 오버라이드로 구현된 추상 메서드를 좀 더 살펴봅시다. 실제 객체는 하위 클래스에서 생성합니다. createProduct() 메서드는 new 키워드로 객체를 직접 생성해 반환합니다. 예전에는 클래스 이름을 구체적으로 직접 명시하여 객체를 생성했습니다. 반면에 팩토리 메서드 패턴은 위임된 하위 클래스에서 메서드 호출로 객체를 생성합니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">function</span> <span class="n">createProduct</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nc">LgProduct</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>필요한 객체가 있을 경우 new 키워드를 직접 사용하여 객체를 생성하지 않고, 추상화로 재구현된 메서드를 호출함으로써 객체 생성을 처리합니다.</p>
+
+<p>팩토리 메서드 패턴은 객체 생성을 메서드 호출로 반환받기 때문에 이를 활용하는 상위 추상 클래스는 보다 느슨한 코드를 작성할 수 있습니다. 단계별 클래스를 상속하고 하위 클래스로 위임함으로써 의존성을 제거할 수 있습니다. 이처럼 팩토리 메서드 패턴은 객체를 생성하는 뼈대를 형성할 때 자주 응용합니다.</p>
+
+<p>실체 객체를 생성하고 반환받기 위해서는 상속받은 하위 클래스를 사용합니다. 실제화된 하위 클래스의 객체를 통해 요청된 객체의 생성을 처리할 수 있습니다.</p>
+
+<p>[예제 3-8]은 완성된 팩토리 메서드 패턴을 적용한 메인 코드입니다.</p>
+
+<p>96 1부 생성 패턴</p>
+
+<p>예제 3-8 FactoryMethod/03/index.php</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 팩토리(Factory)</span>
+<span class="k">require</span> <span class="s2">"factory.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"LgProduct.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"ProductFactory.php"</span><span class="p">;</span>
+
+<span class="nv">$fac</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ProductFactory</span><span class="p">;</span>
+<span class="nv">$pro</span> <span class="o">=</span> <span class="nv">$fac</span><span class="o">-&gt;</span><span class="nf">create</span><span class="p">();</span>
+<span class="nv">$pro</span><span class="o">-&gt;</span><span class="nf">name</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>요청된 객체 생성은 하위 구현 클래스의 메서드 호출로 이루어집니다. 구현부 안에 있는 create() 메서드가 new 키워드를 이용해 최종 객체를 생성하고 반환합니다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index.php
+ProductFactory를 생성합니다.
+LG Gram laptop
+</code></pre></div></div>
+
+<p>필요한 객체가 있을 경우 사용자는 팩토리 안에 있는 메서드만 호출하면 됩니다. 최종 생성되는 객체는 구현 메서드에서 자유롭게 수정할 수 있습니다.</p>
+
+<h3 id="343-객체를-생성하는-객체">3.4.3 객체를 생성하는 객체</h3>
+
+<p>생성 패턴의 특징은 생성을 담당하는 객체가 요청된 객체를 생성한다는 것입니다. 팩토리 메서드는 일반 팩토리 패턴보다 동작이 다소 복잡합니다. 팩토리 메서드에서 주목할 것은 객체 생성을 위한 인터페이스를 정의하는 것입니다. 인터페이스를 통해 의존성을 낮추고 보다 일반적인 코드로 생성 패턴을 구현할 수 있습니다.</p>
+
+<p>또는 추상화를 통해 쉽게 위임된 객체의 생성 코드를 분리할 수도 있으며, 객체 생성을 처리하는 메서드에서 if 조건으로 새로운 클래스를 추가할 수도 있습니다.</p>
+
+<h3 id="344-다형성">3.4.4 다형성</h3>
+
+<p>객체지향의 다형성은 구현 객체를 규격에 맞게 다양한 형태로 구현할 수 있는 것을 의미하며,</p>
+
+<p>3장 팩토리 메서드 패턴 97</p>
+
+<p>객체에 다형성을 적용하려면 인터페이스 처리가 필요합니다. 팩토리 메서드는 추상화를 통해 하위 클래스에 다형성을 부여합니다. 또한 상위 클래스에서 선언된 추상화를 통해 규격에 맞는 하위 메서드를 다르게 구현할 수 있습니다. 다형성의 특징과 추상화 기법을 응용하면 상속받은 클래스마다 다른 기능의 메서드를 구현할 수 있습니다.</p>
+
+<h4 id="그림-3-4-다형성-오버라이드">그림 3-4 다형성 오버라이드</h4>
+
+<p><img src="./img/fig_3_4.svg" alt="그림 3-4" /></p>
+
+<p>이처럼 추상화의 다형성은 실제 동작하는 객체의 생성을 다양하게 처리하는 데 적용하며, 어떤 객체를 생성해야 할지 예측할 수 없을 때 매우 유용합니다. 다형성을 이용한 생성 패턴 구현은 추상 팩토리에서 자세히 학습합니다.</p>
+
+<h3 id="345-개방-폐쇄-원칙">3.4.5 개방-폐쇄 원칙</h3>
+
+<p>개방-폐쇄 원칙(Open-Closed Principle, 이하 OCP)은 객체지향의 설계 원칙 중 하나로, 바뀌지 않는 공통된 부분을 분리하여 관리합니다. 객체지향 방법론에서 OCP 원칙을 적용하는 대표적인 방법은 다형성입니다.</p>
+
+<p>팩토리 패턴은 객체 생성을 다른 클래스로 캡슐화 처리한 것입니다. 하지만 팩토리 메서드의 경우 추상화를 통해 객체 생성을 더욱 유연하게 분리할 수 있습니다. 코드를 분리할 때 OCP 원칙을 적용할 수 있습니다.</p>
+
+<p>기존의 코드가 임의적으로 변하도록 놔두는 것은 좋지 않습니다. 인터페이스를 통해 다형성을 적용하면 메서드를 여러 가지 방법으로 재사용할 수 있습니다.</p>
+
+<p>98 1부 생성 패턴</p>
+
+<h3 id="346-의존성">3.4.6 의존성</h3>
+
+<p>생성 패턴은 객체의 생성 과정을 외부에 공개하지 않기 위해 사용합니다. 또한 생성 패턴을 사용하면 직접적으로 new 키워드를 사용하는 빈도가 줄어듭니다.</p>
+
+<h4 id="그림-3-5-객체-생성을-대신-처리">그림 3-5 객체 생성을 대신 처리</h4>
+
+<p><img src="./img/fig_3_5.svg" alt="그림 3-5" /></p>
+
+<p>객체 생성 과정에서 강한 의존 관계를 느슨한 관계로 처리할 수 있도록 변경하는데, 그 이유는 의존성을 줄이기 위해서입니다.</p>
+
+<h3 id="347-캡슐화와-관리">3.4.7 캡슐화와 관리</h3>
+
+<p>팩토리 메서드는 팩토리 패턴과 달리 캡슐화된 객체를 다시 하위 클래스로 분리합니다. 분리된 클래스는 상속을 통해 실체 객체 생성 처리가 위임됩니다. 패턴에게 객체 생성을 요청할 경우, 사용하는 코드에서는 자세한 객체 생성 방식을 알 필요가 없습니다.</p>
+
+<p>팩토리 메서드 패턴은 클래스 결합도가 낮고 유연성이 좋습니다. 또한 기능 개선 시 기능을 보완하기 위한 리팩터링 작업도 편리합니다.</p>
+
+<h2 id="35-매개변수">3.5 매개변수</h2>
+
+<p>객체 생성 과정을 분리함으로써 다양한 객체 생성을 처리할 수 있는데, 이때 객체 생성을 매개변수화하여 선택적으로 생성할 수도 있습니다. 분리된 객체는 어떤 객체를 최종 생성, 반환해야 하는지 결정합니다.</p>
+
+<p>3장 팩토리 메서드 패턴 99</p>
+
+<h3 id="351-재위임">3.5.1 재위임</h3>
+
+<p>팩토리 패턴은 객체 생성을 분리된 클래스로 위임하는 반면, 팩토리 메서드는 추상화를 통해 정의와 구현을 재분리합니다. 실제적인 객체 생성은 재분리된 하위 클래스에서 이루어집니다.</p>
+
+<h4 id="그림-3-6-객체-생성을-위한-중간-단계가-존재함">그림 3-6 객체 생성을 위한 중간 단계가 존재함</h4>
+
+<p><img src="./img/fig_3_6.svg" alt="그림 3-6" /></p>
+
+<p>예를 들어 팩토리 패턴은 부장이 사원을 지정하여 직접 일을 시키는 것이고, 팩토리 메서드 패턴은 중간에 위치한 과장에게 일을 위임하는 것입니다. 팩토리 메서드 패턴은 팩토리 패턴보다 하위 클래스 파일이 하나 더 생기므로 파일 수가 늘어나지만 하위 클래스를 추가함으로써 객체지향의 다양성을 적용할 수 있습니다.</p>
+
+<h3 id="352-다형성을-이용한-클래스-선택">3.5.2 다형성을 이용한 클래스 선택</h3>
+
+<p>팩토리 패턴에서는 매개변수를 이용해 객체를 선택 생성하는 방법에 대해 알아보았습니다. 팩토리 메서드도 매개변수를 이용해 다양한 객체를 선택 생성할 수 있습니다. 팩토리 메서드는 추상 클래스를 상속받아 하위 클래스를 추가합니다. 팩토리 메서드 패턴은 객체의 생성을 군집화하고 군집된 객체를 매개변수로 선택합니다.</p>
+
+<blockquote>
+  <p>[!NOTE]
+매개변수는 생성 패턴에서의 메서드로 전달되는 값입니다. 매개변수는 생성할 객체를 선택하는 조건 판별값으로 사용합니다. 팩토리 패턴에서는 매개변수와 조건문을 이용해 다양한 객체를 선택하고 생성할 수 있습니다.</p>
+</blockquote>
+
+<p>100 1부 생성 패턴</p>
+
+<p>예제 3-9 FactoryMethod/04/SamsungProduct.php</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 삼성 노트북 생성 클래스</span>
+<span class="kd">class</span> <span class="nc">SamsungProduct</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">name</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"Samsung Always laptop"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>객체를 선택할 수 있도록 추상 클래스 안에 있는 create() 메서드에 매개변수를 추가합니다. create($model)로 매개변수를 전달받지만, 실제 객체 생성은 하위 클래스에서 이루어집니다. 전달받은 값을 다시 추상 메서드의 인자값으로 전달합니다.</p>
+
+<p>예제 3-10 FactoryMethod/04/Factory.php</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 팩토리 추상화</span>
+<span class="k">abstract</span> <span class="kd">class</span> <span class="nc">Factory</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">final</span> <span class="k">function</span> <span class="n">create</span><span class="p">(</span><span class="nv">$model</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// return new LgProduct();</span>
+        <span class="c1">// 하위 클래스로 위임</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">createProduct</span><span class="p">(</span><span class="nv">$model</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 추상 메서드 선언</span>
+    <span class="k">abstract</span> <span class="k">public</span> <span class="k">function</span> <span class="n">createProduct</span><span class="p">(</span><span class="nv">$model</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>하위 클래스는 이렇게 전달받은 매개변수값을 이용하여 군집에 필요한 객체를 생성합니다.</p>
+
+<h3 id="353-매개변수-팩토리parameterized-factory-method">3.5.3 매개변수 팩토리(parameterized factory method)</h3>
+
+<p>뒤에서 학습할 추상 팩토리 패턴은 2개 이상의 추상 클래스를 사용하여 더 큰 객체의 그룹을 형성할 수 있습니다. 하지만 단일 그룹의 객체일 경우 팩토리 메서드의 매개변수만으로도 충분히 구현할 수 있습니다.</p>
+
+<p>3장 팩토리 메서드 패턴 101</p>
+
+<p>히 구현할 수 있습니다.</p>
+
+<p>대형 프로그램을 개발하다 보면 생각보다 많은 수의 객체를 생성해야 합니다. 또한 객체 관계 설정이 복잡해지고 객체 생성을 처리하는 코드 위치도 분산됩니다. 객체 생성을 한 곳에 집중해서 처리하면 유지 보수와 수정이 수월합니다.</p>
+
+<p>팩토리 메서드에서 입력받은 매개변수를 처리할 때 매개변수에 맞는 클래스를 선택하여 객체를 생성합니다.</p>
+
+<p>예제 3-11 FactoryMethod/04/ProductFactory.php</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 팩토리 메서드 구현 부분</span>
+<span class="kd">class</span> <span class="nc">ProductFactory</span> <span class="kd">extends</span> <span class="nc">Factory</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__CLASS__</span><span class="mf">.</span><span class="s2">"를 생성합니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">createProduct</span><span class="p">(</span><span class="nv">$model</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nv">$model</span> <span class="o">==</span> <span class="s2">"LG"</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nc">LgProduct</span><span class="p">();</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nv">$model</span> <span class="o">==</span> <span class="s2">"SAMSUNG"</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nc">SamsungProduct</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>생성되는 객체는 매개변수값에 의해 선택적으로 만들어집니다.</p>
+
+<p>예제 3-12 FactoryMethod/04/index.php</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 팩토리(Factory)</span>
+<span class="k">require</span> <span class="s2">"factory.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"LgProduct.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"SamsungProduct.php"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>102 1부 생성 패턴</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">require</span> <span class="s2">"ProductFactory.php"</span><span class="p">;</span>
+
+<span class="nv">$fac</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ProductFactory</span><span class="p">;</span>
+<span class="nv">$pro</span> <span class="o">=</span> <span class="nv">$fac</span><span class="o">-&gt;</span><span class="nf">create</span><span class="p">(</span><span class="s2">"LG"</span><span class="p">);</span>
+<span class="nv">$pro</span><span class="o">-&gt;</span><span class="nf">name</span><span class="p">();</span>
+
+<span class="k">echo</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+
+<span class="nv">$pro</span> <span class="o">=</span> <span class="nv">$fac</span><span class="o">-&gt;</span><span class="nf">create</span><span class="p">(</span><span class="s2">"SAMSUNG"</span><span class="p">);</span>
+<span class="nv">$pro</span><span class="o">-&gt;</span><span class="nf">name</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index.php
+ProductFactory를 생성합니다.
+LG Gram laptop
+Samsung Always laptop
+</code></pre></div></div>
+
+<p>이처럼 생성 패턴은 분산된 객체의 생성 처리가 한 곳에 집중되도록 개선합니다. 수정이 필요할 경우 하위 클래스만 변경하면 되므로 유지 보수가 쉽습니다.</p>
+
+<h3 id="354-오류-처리">3.5.4 오류 처리</h3>
+
+<p>매개변수를 이용하다 보면 객체 생성 과정에서 오류가 발생할 수 있는데, 그 이유는 매개변수값과 일치하지 않는 조건이 발생하기 때문입니다. new 키워드로 객체를 생성할 때 선언된 클래스 파일을 읽을 수 없는 경우도 있습니다. 이러한 오류를 방지하기 위해 생성 패턴에서 객체를 생성할 때 예상되는 오류들을 체크하는 코드를 삽입할 수 있습니다.</p>
+
+<h4 id="그림-3-7-오류-검사-패턴">그림 3-7 오류 검사 패턴</h4>
+
+<p><img src="./img/fig_3_7.svg" alt="그림 3-7" /></p>
+
+<p>3장 팩토리 메서드 패턴 103</p>
+
+<p>또한 객체를 생성할 때 예외 처리 코드를 추가하여 다양한 오류들을 방지할 수도 있습니다.</p>
+
+<h2 id="36-관련-패턴">3.6 관련 패턴</h2>
+
+<p>팩토리 메서드 패턴을 학습할 때 템플릿 메서드 패턴을 함께 학습하면 유용합니다. 팩토리 메서드 패턴은 템플릿 메서드 패턴을 함께 응용하기 때문입니다.</p>
+
+<h3 id="361-템플릿-메서드-패턴">3.6.1 템플릿 메서드 패턴</h3>
+
+<p>팩토리 메서드에서 골격과 생성을 분리할 때 템플릿 메서드 패턴을 응용하는 등, 템플릿 메서드 패턴(22장)과 팩토리 메서드 패턴은 매우 밀접한 관계에 있습니다.</p>
+
+<h3 id="362-싱글턴-패턴">3.6.2 싱글턴 패턴</h3>
+
+<p>팩토리 메서드 패턴은 보통 하나의 객체로 사용하는데, 이를 위해 싱글턴 패턴(2장) 방식이나 정적 클래스로 구현합니다. 구현부에서 실제 객체를 생성할 때 싱글턴 패턴을 응용해 중복 생성을 방지합니다.</p>
+
+<h3 id="363-복합체-패턴">3.6.3 복합체 패턴</h3>
+
+<p>복합체 패턴의 컴포넌트는 추상화되어 있습니다. 컴포넌트의 leaf와 composite는 다형성을 적용하여 구체적 행위가 하위 클래스로 위임됩니다. 또한 컴포넌트는 템플릿화되어 구현되지 않은 메서드를 호출해 사용할 수 있습니다. 추상화와 템플릿 처리 과정은 팩토리 템플릿과 유사한 구조로 되어 있습니다.</p>
+
+<h3 id="364-반복자-패턴">3.6.4 반복자 패턴</h3>
+
+<p>반복자 패턴은 메서드를 반복적으로 호출합니다. 반복해서 생성되는 객체가 있을 경우 팩토리 메서드 패턴을 함께 적용합니다.</p>
+
+<p>104 1부 생성 패턴</p>
+
+<p>메서드 패턴을 함께 적용합니다.</p>
+
+<h2 id="37-정리">3.7 정리</h2>
+
+<p>팩토리 메서드 패턴은 구조화를 통해 선언부와 실현 구현부를 서로 분리합니다. 팩토리 메서드는 프레임워크와 같은 응용 프로그램에서 많이 이용하는 패턴 중 하나입니다.</p>
+
+<p>팩토리 메서드 패턴을 이용하면 응용 프로그램에 클래스가 종속되지 않도록 관리할 수 있는데, 그 이유는 객체의 생성 과정을 캡슐화하고 이를 분리하여 관리할 수 있기 때문입니다. 이는 알고리즘을 처리할 때 프로세스별로 구별하여 구현하는 것과 비슷합니다.</p>
+
+<p>3장 팩토리 메서드 패턴 105</p>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1">
+      <p>팩토리 메서드 패턴은 팩토리 패턴과 템플릿 메서드 패턴이 결합된 구조이므로 디자인 패턴을 처음 학습할 때는 이해하기 어려울 수 있습니다. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+
+            <!-- 다음/이전 학습 페이지네이션 -->
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+    
+    
+
+<div class="d-flex justify-content-between align-items-center mt-5 mb-4 py-3 border-top border-bottom">
+  <div>
+    
+      <span class="text-muted small me-2">이전 학습</span>
+      <a href="/ch02/" class="text-decoration-none fw-semibold">
+        &laquo; CHAPTER 2 싱글턴 패턴
+      </a>
+    
+  </div>
+
+  <div class="text-end">
+    
+      <span class="text-muted small me-2">다음 학습</span>
+      <a href="/ch04/" class="text-decoration-none fw-semibold">
+        CHAPTER 4 추상 팩토리 패턴 &raquo;
+      </a>
+    
+  </div>
+</div>
+
+
+            <div class="mt-10">
+                <!-- 구글 에스센스 광고 -->
+                <script async
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3321560028329475"
+                    crossorigin="anonymous"></script>
+                <!-- jinydev-java -->
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3321560028329475"
+                    data-ad-slot="9323221865" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+
+        </div>
+
+        <div class="bd-toc mt-3 mb-5 my-lg-0 ps-xl-3 mb-lg-5 text-body-secondary">
+
+  <button class="btn btn-link p-md-0 mb-2 mb-md-0 text-decoration-none bd-toc-toggle d-md-none" type="button"
+    data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents">
+    서브목차
+    <svg class="bi d-md-none ms-2" aria-hidden="true">
+      <use xlink:href="#chevron-expand"></use>
+    </svg>
+  </button>
+
+  <strong class="d-none d-md-block h6 my-2">서브목차</strong>
+
+  <div class="collapse bd-toc-collapse" id="tocContents">
+    <nav id="TableOfContents">
+      <!--
+      <ul>
+        <li><a href="#quick-start">Quick start</a></li>
+        <li><a href="#cdn-links">CDN links</a></li>
+        <li><a href="#next-steps">Next steps</a></li>
+        <li><a href="#js-components">JS components</a></li>
+        <li><a href="#important-globals">Important globals</a>
+          <ul>
+            <li><a href="#html5-doctype">HTML5 doctype</a></li>
+            <li><a href="#responsive-meta-tag">Responsive meta tag</a></li>
+            <li><a href="#box-sizing">Box-sizing</a></li>
+            <li><a href="#reboot">Reboot</a></li>
+          </ul>
+        </li>
+        <li><a href="#community">Community</a></li>
+      </ul>
+      -->
+    </nav>
+  </div>
+</div>
+    </main>
+
+
+</div>
+
+  <footer class="container">
+  <hr class="mt-5 mb-3">
+  <div class="row align-items-center pb-3">
+    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+      <p class="mb-0 text-secondary">Copyright 2017~2026 JinyDev. All Rights Reserved.</p>
+    </div>
+    <div class="col-md-6 text-center text-md-end">
+      
+      <a href="https://datas.jiny.dev" class="text-decoration-none text-secondary ms-3">빅데이터</a>
+      
+      <a href="https://mysql.jiny.dev" class="text-decoration-none text-secondary ms-3">MySQL</a>
+      
+      <a href="https://php.jiny.dev" class="text-decoration-none text-secondary ms-3">PHP</a>
+      
+      <a href="https://java.jiny.dev" class="text-decoration-none text-secondary ms-3">자바</a>
+      
+      <a href="https://git.jiny.dev" class="text-decoration-none text-secondary ms-3">깃&깃허브</a>
+      
+      <a href="https://linux.jiny.dev" class="text-decoration-none text-secondary ms-3">리눅스</a>
+      
+    </div>
+  </div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+    window.addEventListener('load', async function () {
+      mermaid.initialize({ startOnLoad: false });
+
+      const mermaidCodes = document.querySelectorAll('pre code.language-mermaid');
+      const mermaidDivs = [];
+
+      mermaidCodes.forEach(codeBlock => {
+        const mermaidDefinition = codeBlock.textContent.trim();
+        const container = codeBlock.closest('div.highlighter-rouge');
+
+        const mermaidDiv = document.createElement('div');
+        mermaidDiv.className = 'mermaid';
+        mermaidDiv.textContent = mermaidDefinition;
+
+        if (container) {
+          container.replaceWith(mermaidDiv);
+        } else {
+          const pre = codeBlock.parentElement;
+          if (pre) pre.replaceWith(mermaidDiv);
+        }
+        mermaidDivs.push(mermaidDiv);
+      });
+
+      if (mermaidDivs.length > 0) {
+        await mermaid.run({ nodes: mermaidDivs });
+      }
+    });
+  </script>
+  <script src="/assets/js/toc.js"></script>
+  <script src="/assets/js/sidebar.js"></script>
+
+</body>
+
+</html>

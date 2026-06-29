@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 220" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Left Box: Caller/Client block -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="50" width="180" height="70" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    
+    <!-- Red dashed new statement -->
+    <rect x="60" y="70" width="140" height="30" rx="4" fill="#ffffff" stroke="#ef4444" stroke-dasharray="3,2" stroke-width="1.5" />
+    <text x="70" y="89" font-family="monospace" font-size="12" font-weight="bold" fill="#0f172a">new Config;</text>
+  </g>
+
+  <!-- Right Box: Config; class -->
+  <g filter="url(#shadow)">
+    <rect x="330" y="50" width="170" height="80" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="335" y="42" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#64748b">Config;</text>
+    
+    <!-- Public Constructor method representation -->
+    <rect x="345" y="75" width="140" height="35" rx="4" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" />
+    <text x="415" y="97" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#0284c7" text-anchor="middle">Public 생성자</text>
+  </g>
+
+  <!-- Orange 3D Box (Memory Object) -->
+  <g transform="translate(200, 140)" filter="url(#shadow)">
+    <polygon points="30,0 80,0 65,15 15,15" fill="#fb923c" />
+    <polygon points="15,15 65,15 65,55 15,55" fill="#ea580c" />
+    <polygon points="65,15 80,0 80,40 65,55" fill="#c2410c" />
+    <text x="40" y="40" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">객체</text>
+  </g>
+
+  <!-- Flow Arrows -->
+  <g>
+    <!-- Arrow 1: new Config; to Config class -->
+    <path d="M 220,85 L 320,85" fill="none" stroke="#94a3b8" stroke-width="1.5" />
+    <polygon points="320,81 328,85 320,89" fill="#94a3b8" />
+    <text x="270" y="74" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#475569" text-anchor="middle">① 객체 생성</text>
+
+    <!-- Arrow 2: Constructor calling/instantiating object -->
+    <path d="M 415,110 L 415,155 L 290,155" fill="none" stroke="#ea580c" stroke-width="1.5" />
+    <polygon points="290,159 282,155 290,151" fill="#ea580c" />
+    <text x="365" y="148" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#ea580c" text-anchor="middle">② 생성자 호출</text>
+  </g>
+</svg>

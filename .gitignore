@@ -1,0 +1,12 @@
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+node_modules/
+vendor/
+.DS_Store
+*.pdf
+source/
+
+# Custom Exclusions
+/books

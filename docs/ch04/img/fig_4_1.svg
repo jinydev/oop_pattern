@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 260" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Top horizontal bar: 개발 코드 -->
+  <g>
+    <rect x="50" y="20" width="440" height="6" fill="#cbd5e1" rx="3" />
+    <rect x="220" y="10" width="100" height="24" rx="12" fill="#475569" />
+    <text x="270" y="26" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">개발 코드</text>
+  </g>
+
+  <!-- Arrows from 개발 코드 bar to factories -->
+  <g>
+    <path d="M 110,26 L 110,50" fill="none" stroke="#94a3b8" stroke-width="1.5" />
+    <polygon points="106,50 110,58 114,50" fill="#94a3b8" />
+
+    <path d="M 230,26 L 230,50" fill="none" stroke="#94a3b8" stroke-width="1.5" />
+    <polygon points="226,50 230,58 234,50" fill="#94a3b8" />
+
+    <path d="M 390,26 L 390,50" fill="none" stroke="#94a3b8" stroke-width="1.5" />
+    <polygon points="386,50 390,58 394,50" fill="#94a3b8" />
+  </g>
+
+  <!-- Column 1: 팩토리 (Simple Factory) -->
+  <g filter="url(#shadow)">
+    <rect x="60" y="60" width="100" height="40" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="110" y="85" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#0f172a" text-anchor="middle">팩토리</text>
+
+    <!-- Arrow from 팩토리 to 클래스 -->
+    <path d="M 110,100 L 110,142" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="106,142 110,150 114,142" fill="#ef4444" />
+
+    <rect x="60" y="150" width="100" height="40" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="110" y="175" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#475569" text-anchor="middle">클래스</text>
+  </g>
+
+  <!-- Column 2: 팩토리 메서드 -->
+  <g filter="url(#shadow)">
+    <rect x="180" y="60" width="100" height="40" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="230" y="85" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#0f172a" text-anchor="middle">팩토리 메서드</text>
+
+    <!-- Arrow from 팩토리 메서드 to 하위 클래스 -->
+    <path d="M 230,100 L 230,112" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,2" />
+    <polygon points="226,112 230,120 234,112" fill="#ef4444" />
+
+    <rect x="180" y="120" width="100" height="40" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="230" y="145" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#475569" text-anchor="middle">하위 클래스</text>
+
+    <!-- Arrow from 하위 클래스 to 클래스 -->
+    <path d="M 230,160 L 230,182" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="226,182 230,190 234,182" fill="#ef4444" />
+
+    <rect x="180" y="190" width="100" height="40" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="230" y="215" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#64748b" text-anchor="middle">클래스</text>
+  </g>
+
+  <!-- Column 3: 추상 팩토리 -->
+  <g filter="url(#shadow)">
+    <rect x="330" y="60" width="120" height="40" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="390" y="85" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#0f172a" text-anchor="middle">추상 팩토리</text>
+
+    <!-- Branching arrows from 추상 팩토리 to 그룹1 and 그룹2 -->
+    <path d="M 390,100 L 390,110 L 340,110 L 340,120" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,2" />
+    <polygon points="336,120 340,128 344,120" fill="#ef4444" />
+
+    <path d="M 390,100 L 390,110 L 440,110 L 440,120" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,2" />
+    <polygon points="436,120 440,128 444,120" fill="#ef4444" />
+
+    <!-- 그룹1 & 그룹2 boxes -->
+    <rect x="295" y="128" width="90" height="40" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="340" y="153" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#475569" text-anchor="middle">그룹1</text>
+
+    <rect x="395" y="128" width="90" height="40" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="440" y="153" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#475569" text-anchor="middle">그룹2</text>
+
+    <!-- Arrow from 그룹1 to 클래스 -->
+    <path d="M 340,168 L 340,182" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="336,182 340,190 344,182" fill="#ef4444" />
+
+    <rect x="295" y="190" width="90" height="40" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="340" y="215" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#64748b" text-anchor="middle">클래스</text>
+
+    <!-- Arrow from 그룹2 to 클래스 -->
+    <path d="M 440,168 L 440,182" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="436,182 440,190 444,182" fill="#ef4444" />
+
+    <rect x="395" y="190" width="90" height="40" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="440" y="215" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#64748b" text-anchor="middle">클래스</text>
+  </g>
+</svg>

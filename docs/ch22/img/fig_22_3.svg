@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 220" width="100%" height="100%">
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Dotted Outer Boundary (make()) -->
+  <g transform="translate(140, 25)">
+    <rect x="-10" y="-10" width="160" height="180" fill="none" stroke="#475569" stroke-width="1.5" stroke-dasharray="4,3" />
+    <text x="70" y="-15" font-family="monospace" font-size="11" font-weight="bold" fill="#334155" text-anchor="middle">make()</text>
+
+    <!-- Bottom Bread -->
+    <path id="bottom-bread" d="M 10,130 Q 70,175 130,130 L 130,110 L 10,110 Z" fill="#fdba74" stroke="#f97316" stroke-width="1.5" />
+    
+    <!-- Middle Filling -->
+    <rect id="filling" x="0" y="80" width="140" height="24" rx="4" fill="#ea580c" stroke="#c2410c" stroke-width="1.5" />
+
+    <!-- Top Bread -->
+    <path id="top-bread" d="M 10,50 Q 70,5 130,50 L 130,70 L 10,70 Z" fill="#fdba74" stroke="#f97316" stroke-width="1.5" />
+  </g>
+
+  <!-- Left method label (bread()) -->
+  <g transform="translate(15, 95)">
+    <rect width="80" height="30" rx="4" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.2" />
+    <text x="40" y="19" font-family="monospace" font-size="10" font-weight="bold" fill="#1e3a8a" text-anchor="middle">bread()</text>
+    
+    <!-- Arrows to top and bottom bread -->
+    <path d="M 80,15 L 125,15 L 125,150 L 140,150" fill="none" stroke="#2563eb" stroke-width="1.2" />
+    <polygon points="140,147 147,150 140,153" fill="#2563eb" />
+
+    <path d="M 80,15 L 125,15 L 125,-40 L 140,-40" fill="none" stroke="#2563eb" stroke-width="1.2" />
+    <polygon points="140,-43 147,-40 140,-37" fill="#2563eb" />
+  </g>
+
+  <!-- Right method label (jam()) -->
+  <g transform="translate(325, 95)">
+    <rect width="80" height="30" rx="4" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.2" />
+    <text x="40" y="19" font-family="monospace" font-size="10" font-weight="bold" fill="#1e3a8a" text-anchor="middle">jam()</text>
+    
+    <!-- Arrow to middle filling -->
+    <path d="M 0,15 L -35,15" fill="none" stroke="#2563eb" stroke-width="1.2" />
+    <polygon points="-35,12 -42,15 -35,18" fill="#2563eb" />
+  </g>
+</svg>

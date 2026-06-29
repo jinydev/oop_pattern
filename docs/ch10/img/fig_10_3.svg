@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 140" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Client Access Text -->
+  <text x="35" y="74" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#0f172a">투명성을 이용한</text>
+  <text x="35" y="88" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#64748b">원본 객체 접근</text>
+
+  <!-- Extension/Decorator Object (Middle Box) -->
+  <g filter="url(#shadow)">
+    <rect x="180" y="45" width="110" height="50" rx="6" fill="#ffffff" stroke="#3b82f6" stroke-width="2" />
+    <text x="235" y="74" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#1e3a8a" text-anchor="middle">장식자 (확장 객체)</text>
+  </g>
+
+  <!-- Original Object (Right Box) -->
+  <g filter="url(#shadow)">
+    <rect x="370" y="45" width="110" height="50" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="425" y="74" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#475569" text-anchor="middle">원본 객체</text>
+  </g>
+
+  <!-- Flow Arrows -->
+  <g>
+    <!-- client to wrapper -->
+    <path d="M 140,70 L 172,70" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="172,66 180,70 172,74" fill="#ef4444" />
+
+    <!-- wrapper to original -->
+    <path d="M 290,70 L 362,70" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="362,66 370,70 362,74" fill="#ef4444" />
+  </g>
+</svg>

@@ -1,0 +1,1482 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- 기본 메타데이터 --><meta name="description" content="Jiny linux"><meta name="author" content="HojinLee"><!-- 제목 설정 --><title>CHAPTER 6 프로토타입 패턴</title>
+  <meta name="title" content="CHAPTER 6 프로토타입 패턴" /><!-- 키워드 설정 --><!-- Open Graph 메타데이터 --><meta property="og:title" content="CHAPTER 6 프로토타입 패턴"><meta property="og:description" content="Jiny linux"><meta property="og:type" content="website"><meta property="og:locale" content="ko">
+  <meta property="og:site_name" content="linux">
+  <meta property="og:url" content="http://0.0.0.0:4000/ch06/">
+  <!-- 대표 URL (캐노니컬) -->
+  <link rel="canonical" href="http://0.0.0.0:4000/ch06/">
+
+  <!-- Twitter 카드 메타데이터 --><meta name="twitter:card" content="summary"><meta property="twitter:title" content="CHAPTER 6 프로토타입 패턴"><!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="CHAPTER 6 프로토타입 패턴" />
+<meta name="author" content="Hojin" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="24가지 패턴으로 알아보는 객체지향의 원리" />
+<meta name="twitter:description" property="og:description" content="24가지 패턴으로 알아보는 객체지향의 원리" />
+<link rel="canonical" href="http://0.0.0.0:4000/ch06/" />
+<meta property="og:url" content="http://0.0.0.0:4000/ch06/" />
+<meta property="og:site_name" content="쉽게 배워 바로 써먹는 디자인 패턴" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="CHAPTER 6 프로토타입 패턴" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Hojin"},"description":"24가지 패턴으로 알아보는 객체지향의 원리","headline":"CHAPTER 6 프로토타입 패턴","url":"http://0.0.0.0:4000/ch06/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/assets/css/docs.css" rel="stylesheet" />
+  <link href="/assets/css/highlight.css" rel="stylesheet" />
+
+  <style>
+    blockquote {
+      border-left: solid 5px #dee2e6;
+      padding: 5px 10px;
+      background-color: #f8f9fa;
+    }
+  </style>
+
+  <style>
+    h1 a {
+      text-decoration: none;
+    }
+
+    h2 a {
+      text-decoration: none;
+    }
+
+    h3 a {
+      text-decoration: none;
+    }
+
+    h4 a {
+      text-decoration: none;
+    }
+
+    h5 a {
+      text-decoration: none;
+    }
+
+    h6 a {
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      vertical-align: top
+    }
+
+    strong a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* 스크롤바 커스텀 */
+    /* 임의의 영역 생성 */
+    .scrollBar {}
+
+    /* 아래의 모든 코드는 영역::코드로 사용 */
+    .scrollBar::-webkit-scrollbar {
+      width: 7px;
+      /* 스크롤바의 너비 */
+    }
+
+    .scrollBar::-webkit-scrollbar-thumb {
+      height: 30%;
+      /* 스크롤바의 길이 */
+      background: #cccccc;
+      /* 스크롤바의 색상 */
+
+      border-radius: 5px;
+    }
+
+    .scrollBar::-webkit-scrollbar-track {
+      background: rgba(33, 122, 244, .1);
+      /*스크롤바 뒷 배경 색상*/
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4VBPCT3CR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-R4VBPCT3CR');
+  </script>
+
+
+</head>
+
+<body>
+  <header class="navbar navbar-expand-lg bd-navbar sticky-top">
+    <nav class="container bd-gutter flex-wrap flex-lg-nowrap position-relative" aria-label="Main navigation">
+
+      <!-- Mobile: Left Toggle (Browse) -->
+      <div class="bd-navbar-toggle d-lg-none">
+        <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdSidebar"
+          aria-controls="bdSidebar" aria-label="Toggle docs navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="bi" fill="currentColor"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z">
+            </path>
+          </svg>
+          <span class="d-none fs-6 pe-1">Browse</span>
+        </button>
+      </div>
+
+      <!-- Brand: Desktop (Static), Mobile (Absolute Center) -->
+      <a class="navbar-brand p-0 me-0 me-lg-2 ms-lg-0 d-none d-lg-inline-block" href="/" aria-label="jinydev">
+        <svg width="32" height="26" viewBox="0 0 32 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M24.2746 5.33377C25.8486 7.33981 25.1183 11.1792 24.3961 13.0177C24.4028 13.0199 24.4094 13.0221 24.4161 13.0243L24.4013 13.0248L22.649 12.9082C22.649 12.9053 22.6488 12.9013 22.649 12.8993C22.9902 8.93373 22.5975 7.34575 22.2147 7.07677C17.6316 10.3896 13.5379 9.33658 12.2725 9.01111C11.928 8.9225 11.7932 8.88781 11.9152 9.00988C12.2872 9.38185 13.1336 9.82821 13.7371 10.1465H13.7372L13.7376 10.1467C13.8743 10.2188 13.9985 10.2843 14.1019 10.3409C9.12673 10.3984 7.12659 8.00279 6.53855 7.29846C6.47859 7.22664 6.4333 7.1724 6.40105 7.14015C6.11408 6.85318 4.49961 5.87252 3.99256 7.74227C3.50142 9.55335 3.81246 11.6775 3.97665 12.7988C3.99089 12.896 3.99257 12.8981 3.99257 12.9298L2.37635 13.0248L2.37213 13.0247C0.223493 8.05534 1.83854 5.26971 3.29536 4.2246C3.29536 1.78444 6.27428 -0.592359 10.0455 0.263262C14.8768 1.64043 16.3468 1.18409 18.0759 0.647278C18.774 0.430562 19.5143 0.200726 20.5351 0.073124C25.2219 -0.512739 26.7993 2.56612 27 4.16122C26.2141 3.70487 24.8556 4.73165 24.2746 5.33377ZM12.3374 1.5872C11.1225 1.16466 7.99257 0.717209 6.3478 2.41116C5.98397 2.78587 5.55554 3.48864 5.55554 3.48864C5.55554 3.48864 4.82665 4.81961 4.25622 4.24919C3.68579 3.67878 5.0168 1.96749 6.06259 1.46044C7.10838 0.953388 9.70703 0.0660505 12.3374 1.5872Z"
+            fill="currentColor" />
+          <path
+            d="M10.078 13.5002H3.10601C2.2309 13.5002 1.52148 14.2097 1.52148 15.0848V18.3172C1.52148 19.1923 2.2309 19.9018 3.10601 19.9018H10.078C10.9531 19.9018 11.6625 19.1923 11.6625 18.3172V15.0848C11.6625 14.2097 10.9531 13.5002 10.078 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M0.823513 14.6094H0.379847C0.187322 14.6094 0.03125 14.7654 0.03125 14.958V15.9721C0.03125 16.1646 0.187322 16.3207 0.379847 16.3207H0.823513C1.01604 16.3207 1.17211 16.1646 1.17211 15.9721V14.958C1.17211 14.7654 1.01604 14.6094 0.823513 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M16.7326 13.5002H23.7045C24.5796 13.5002 25.2891 14.2097 25.2891 15.0848V18.3172C25.2891 19.1923 24.5796 19.9018 23.7045 19.9018H16.7326C15.8575 19.9018 15.1481 19.1923 15.1481 18.3172V15.0848C15.1481 14.2097 15.8575 13.5002 16.7326 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M25.9861 14.6094H26.4297C26.6222 14.6094 26.7783 14.7654 26.7783 14.958V15.9721C26.7783 16.1646 26.6222 16.3207 26.4297 16.3207H25.9861C25.7935 16.3207 25.6375 16.1646 25.6375 15.9721V14.958C25.6375 14.7654 25.7935 14.6094 25.9861 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M12.2954 15.5601H14.5137C14.7062 15.5601 14.8623 15.7161 14.8623 15.9087V16.9228C14.8623 17.1153 14.7062 17.2713 14.5137 17.2713H12.2954C12.1028 17.2713 11.9468 17.1153 11.9468 16.9228V15.9087C11.9468 15.7161 12.1028 15.5601 12.2954 15.5601Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M9.93343 16.3937C9.93343 16.7087 9.76317 16.9641 9.55314 16.9641C9.34311 16.9641 9.17285 16.7087 9.17285 16.3937C9.17285 16.0786 9.34311 15.8232 9.55314 15.8232C9.76317 15.8232 9.93343 16.0786 9.93343 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M16.9688 16.3937C16.9688 16.7087 17.139 16.9641 17.3491 16.9641C17.5591 16.9641 17.7293 16.7087 17.7293 16.3937C17.7293 16.0786 17.5591 15.8232 17.3491 15.8232C17.139 15.8232 16.9688 16.0786 16.9688 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M14.2758 20.1016C13.642 20.6086 12.7863 20.3551 12.5645 20.1016C12.6278 20.4185 12.8687 20.8622 13.4518 20.8622C14.0349 20.8622 14.2441 20.3551 14.2758 20.1016Z"
+            fill="currentColor" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.1312 22.411C12.1575 22.2914 12.2759 22.2157 12.3956 22.2421L14.6347 22.735C14.7544 22.7614 14.83 22.8797 14.8036 22.9994C14.7773 23.119 14.659 23.1947 14.5393 23.1683L12.3002 22.6753C12.1805 22.649 12.1049 22.5307 12.1312 22.411Z"
+            fill="currentColor" />
+          <path
+            d="M13.4203 27.6754C9.00897 27.7261 5.77228 23.6613 4.70536 21.6225C4.54691 21.3197 4.42016 21.2739 4.32509 21.3373C4.17297 21.4387 4.28282 21.6437 4.32507 21.7493C4.85747 22.9916 5.58213 24.0416 5.87791 24.4113C4.83846 26.1353 4.49409 27.855 4.45183 28.4994C6.1758 26.8008 7.91668 26.8832 8.57162 27.1367C13.7055 29.7987 16.5577 27.929 18.1739 27.1367C19.4669 26.5029 21.4803 27.7388 22.3254 28.436C22.224 26.8642 21.3747 25.1402 20.9627 24.4747C21.6282 23.5873 22.1669 22.5099 22.4522 21.9711C22.6803 21.5401 22.6106 21.369 22.5472 21.3373C22.3951 21.2613 22.2092 21.4958 22.1353 21.6225C21.6599 22.4148 18.9345 27.6121 13.4203 27.6754Z"
+            fill="currentColor" />
+        </svg>
+      </a>
+      <a class="navbar-brand p-0 me-0 position-absolute top-50 start-50 translate-middle d-lg-none" href="/"
+        aria-label="jinydev">
+        <svg width="100" height="26" viewBox="0 0 112 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M24.2746 5.33377C25.8486 7.33981 25.1183 11.1792 24.3961 13.0177C24.4028 13.0199 24.4094 13.0221 24.4161 13.0243L24.4013 13.0248L22.649 12.9082C22.649 12.9053 22.6488 12.9013 22.649 12.8993C22.9902 8.93373 22.5975 7.34575 22.2147 7.07677C17.6316 10.3896 13.5379 9.33658 12.2725 9.01111C11.928 8.9225 11.7932 8.88781 11.9152 9.00988C12.2872 9.38185 13.1336 9.82821 13.7371 10.1465H13.7372L13.7376 10.1467C13.8743 10.2188 13.9985 10.2843 14.1019 10.3409C9.12673 10.3984 7.12659 8.00279 6.53855 7.29846C6.47859 7.22664 6.4333 7.1724 6.40105 7.14015C6.11408 6.85318 4.49961 5.87252 3.99256 7.74227C3.50142 9.55335 3.81246 11.6775 3.97665 12.7988C3.99089 12.896 3.99257 12.8981 3.99257 12.9298L2.37635 13.0248L2.37213 13.0247C0.223493 8.05534 1.83854 5.26971 3.29536 4.2246C3.29536 1.78444 6.27428 -0.592359 10.0455 0.263262C14.8768 1.64043 16.3468 1.18409 18.0759 0.647278C18.774 0.430562 19.5143 0.200726 20.5351 0.073124C25.2219 -0.512739 26.7993 2.56612 27 4.16122C26.2141 3.70487 24.8556 4.73165 24.2746 5.33377ZM12.3374 1.5872C11.1225 1.16466 7.99257 0.717209 6.3478 2.41116C5.98397 2.78587 5.55554 3.48864 5.55554 3.48864C5.55554 3.48864 4.82665 4.81961 4.25622 4.24919C3.68579 3.67878 5.0168 1.96749 6.06259 1.46044C7.10838 0.953388 9.70703 0.0660505 12.3374 1.5872Z"
+            fill="currentColor" />
+          <path
+            d="M10.078 13.5002H3.10601C2.2309 13.5002 1.52148 14.2097 1.52148 15.0848V18.3172C1.52148 19.1923 2.2309 19.9018 3.10601 19.9018H10.078C10.9531 19.9018 11.6625 19.1923 11.6625 18.3172V15.0848C11.6625 14.2097 10.9531 13.5002 10.078 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M0.823513 14.6094H0.379847C0.187322 14.6094 0.03125 14.7654 0.03125 14.958V15.9721C0.03125 16.1646 0.187322 16.3207 0.379847 16.3207H0.823513C1.01604 16.3207 1.17211 16.1646 1.17211 15.9721V14.958C1.17211 14.7654 1.01604 14.6094 0.823513 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M16.7326 13.5002H23.7045C24.5796 13.5002 25.2891 14.2097 25.2891 15.0848V18.3172C25.2891 19.1923 24.5796 19.9018 23.7045 19.9018H16.7326C15.8575 19.9018 15.1481 19.1923 15.1481 18.3172V15.0848C15.1481 14.2097 15.8575 13.5002 16.7326 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M25.9861 14.6094H26.4297C26.6222 14.6094 26.7783 14.7654 26.7783 14.958V15.9721C26.7783 16.1646 26.6222 16.3207 26.4297 16.3207H25.9861C25.7935 16.3207 25.6375 16.1646 25.6375 15.9721V14.958C25.6375 14.7654 25.7935 14.6094 25.9861 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M12.2954 15.5601H14.5137C14.7062 15.5601 14.8623 15.7161 14.8623 15.9087V16.9228C14.8623 17.1153 14.7062 17.2713 14.5137 17.2713H12.2954C12.1028 17.2713 11.9468 17.1153 11.9468 16.9228V15.9087C11.9468 15.7161 12.1028 15.5601 12.2954 15.5601Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M9.93343 16.3937C9.93343 16.7087 9.76317 16.9641 9.55314 16.9641C9.34311 16.9641 9.17285 16.7087 9.17285 16.3937C9.17285 16.0786 9.34311 15.8232 9.55314 15.8232C9.76317 15.8232 9.93343 16.0786 9.93343 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M16.9688 16.3937C16.9688 16.7087 17.139 16.9641 17.3491 16.9641C17.5591 16.9641 17.7293 16.7087 17.7293 16.3937C17.7293 16.0786 17.5591 15.8232 17.3491 15.8232C17.139 15.8232 16.9688 16.0786 16.9688 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M14.2758 20.1016C13.642 20.6086 12.7863 20.3551 12.5645 20.1016C12.6278 20.4185 12.8687 20.8622 13.4518 20.8622C14.0349 20.8622 14.2441 20.3551 14.2758 20.1016Z"
+            fill="currentColor" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.1312 22.411C12.1575 22.2914 12.2759 22.2157 12.3956 22.2421L14.6347 22.735C14.7544 22.7614 14.83 22.8797 14.8036 22.9994C14.7773 23.119 14.659 23.1947 14.5393 23.1683L12.3002 22.6753C12.1805 22.649 12.1049 22.5307 12.1312 22.411Z"
+            fill="currentColor" />
+          <path
+            d="M13.4203 27.6754C9.00897 27.7261 5.77228 23.6613 4.70536 21.6225C4.54691 21.3197 4.42016 21.2739 4.32509 21.3373C4.17297 21.4387 4.28282 21.6437 4.32507 21.7493C4.85747 22.9916 5.58213 24.0416 5.87791 24.4113C4.83846 26.1353 4.49409 27.855 4.45183 28.4994C6.1758 26.8008 7.91668 26.8832 8.57162 27.1367C13.7055 29.7987 16.5577 27.929 18.1739 27.1367C19.4669 26.5029 21.4803 27.7388 22.3254 28.436C22.224 26.8642 21.3747 25.1402 20.9627 24.4747C21.6282 23.5873 22.1669 22.5099 22.4522 21.9711C22.6803 21.5401 22.6106 21.369 22.5472 21.3373C22.3951 21.2613 22.2092 21.4958 22.1353 21.6225C21.6599 22.4148 18.9345 27.6121 13.4203 27.6754Z"
+            fill="currentColor" />
+          <text x="32" y="21" font-family="Arial, sans-serif" font-weight="bold" font-size="22"
+            fill="currentColor">Jiny</text>
+        </svg>
+      </a>
+
+      <!-- Mobile: Right Toggle (Menu) -->
+      <div class="d-flex d-lg-none ms-auto">
+        <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdNavbar"
+          aria-controls="bdNavbar" aria-label="Toggle navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid"
+            viewBox="0 0 16 16">
+            <path
+              d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- OffCanvas -->
+      <div class="offcanvas-lg offcanvas-end flex-grow-1" tabindex="-1" id="bdNavbar"
+        aria-labelledby="bdNavbarOffcanvasLabel" data-bs-scroll="true">
+        <!-- OffCanver Header -->
+        <div class="offcanvas-header px-4 pb-0">
+          <h5 class="offcanvas-title text-white" id="bdNavbarOffcanvasLabel">Jiny</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"
+            data-bs-target="#bdNavbar">
+          </button>
+        </div>
+
+        <!-- OffCanver Body -->
+        <div class="offcanvas-body p-4 pt-0 p-lg-0">
+          <hr class="d-lg-none text-white-50">
+
+          <ul class="navbar-nav flex-column flex-lg-row bd-navbar-nav">
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/ch00/">패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part01/">생성패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part02/">구조패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part03/">행동패턴</a>
+            </li>
+            
+          </ul>
+
+          <hr class="d-lg-none text-white-50">
+
+          <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
+            <li class="nav-item col-6 col-lg-auto">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://github.com/jinydev/datas" target="_blank"
+                rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
+                  viewBox="0 0 512 499.36" role="img">
+                  <title>GitHub</title>
+                  <path fill="currentColor" fill-rule="evenodd"
+                    d="M256 0C114.64 0 0 114.61 0 256c0 113.09 73.34 209 175.08 242.9 12.8 2.35 17.47-5.56 17.47-12.34 0-6.08-.22-22.18-.35-43.54-71.2 15.49-86.2-34.34-86.2-34.34-11.64-29.57-28.42-37.45-28.42-37.45-23.27-15.84 1.73-15.55 1.73-15.55 25.69 1.81 39.21 26.38 39.21 26.38 22.84 39.12 59.92 27.82 74.5 21.27 2.33-16.54 8.94-27.82 16.25-34.22-56.84-6.43-116.6-28.43-116.6-126.49 0-27.95 10-50.8 26.35-68.69-2.63-6.48-11.42-32.5 2.51-67.75 0 0 21.49-6.88 70.4 26.24a242.65 242.65 0 0 1 128.18 0c48.87-33.13 70.33-26.24 70.33-26.24 14 35.25 5.18 61.27 2.55 67.75 16.41 17.9 26.31 40.75 26.31 68.69 0 98.35-59.85 120-116.88 126.32 9.19 7.9 17.38 23.53 17.38 47.41 0 34.22-.31 61.83-.31 70.23 0 6.85 4.61 14.81 17.6 12.31C438.72 464.97 512 369.08 512 256.02 512 114.62 397.37 0 256 0z">
+                  </path>
+                </svg>
+                <small class="d-lg-none ms-2">GitHub</small>
+              </a>
+            </li>
+
+            <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+              <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+              <hr class="d-lg-none my-2 text-white-50">
+            </li>
+
+            <li class="nav-item col-6 col-lg-auto">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://jiny.dev" aria-label="Home">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
+                  viewBox="0 0 16 16" role="img">
+                  <title>Home</title>
+                  <path fill="currentColor"
+                    d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z" />
+                </svg>
+                <small class="d-lg-none ms-2">Home</small>
+              </a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container bd-gutter mt-3 my-md-4 bd-layout">
+    <aside class="bd-sidebar scrollBar">
+        <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="bdSidebar"
+            aria-labelledby="bdSidebarOffcanvasLabel">
+            <div class="offcanvas-header border-bottom">
+                <h5 class="offcanvas-title" id="bdSidebarOffcanvasLabel">학습목차</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"
+                    data-bs-target="#bdSidebar"></button>
+            </div>
+
+            <div class="offcanvas-body">
+                <!-- 네비게이션 -->
+                <nav class="bd-links w-100" id="bd-docs-nav" aria-label="Docs navigation">
+  <ul class="bd-links-nav list-unstyled mb-0 pb-3 pb-md-2 pe-lg-2">
+    <li class="bd-links-group py-2">
+      <strong class="bd-links-heading d-flex w-100 align-items-center fw-semibold">
+        디자인 패턴 목차
+      </strong>
+      <ul class="list-unstyled fw-normal pb-2 small">
+        
+        
+
+        
+        <li>
+          
+          <a href="/part01/"
+            class="bd-links-link d-inline-block rounded ">
+            Part 1 생성 패턴
+          </a>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-2"
+            aria-expanded="false">
+            CHAPTER 1 팩토리 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-2">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch01/#11-클래스와-객체지향"
+                  class="bd-links-link d-inline-block rounded">
+                  1.1 클래스와 객체지향
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch01/#12-의존성"
+                  class="bd-links-link d-inline-block rounded">
+                  1.2 의존성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch01/#13-의존성-주입"
+                  class="bd-links-link d-inline-block rounded">
+                  1.3 의존성 주입
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch01/#14-의존-관계의-문제점"
+                  class="bd-links-link d-inline-block rounded">
+                  1.4 의존 관계의 문제점
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch01/#15-팩토리-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  1.5 팩토리 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch01/#16-단순-팩토리"
+                  class="bd-links-link d-inline-block rounded">
+                  1.6 단순 팩토리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch01/#17-장점과-단점"
+                  class="bd-links-link d-inline-block rounded">
+                  1.7 장점과 단점
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch01/#18-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  1.8 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch01/#19-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  1.9 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-3"
+            aria-expanded="false">
+            CHAPTER 2 싱글턴 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-3">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch02/#21-객체-생성"
+                  class="bd-links-link d-inline-block rounded">
+                  2.1 객체 생성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch02/#22-유일한-객체"
+                  class="bd-links-link d-inline-block rounded">
+                  2.2 유일한 객체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch02/#23-싱글턴"
+                  class="bd-links-link d-inline-block rounded">
+                  2.3 싱글턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch02/#24-싱글턴-설계"
+                  class="bd-links-link d-inline-block rounded">
+                  2.4 싱글턴 설계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch02/#25-인스턴스-생성"
+                  class="bd-links-link d-inline-block rounded">
+                  2.5 인스턴스 생성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch02/#26-정적-클래스"
+                  class="bd-links-link d-inline-block rounded">
+                  2.6 정적 클래스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch02/#27-싱글턴-확장"
+                  class="bd-links-link d-inline-block rounded">
+                  2.7 싱글턴 확장
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch02/#28-자원-처리"
+                  class="bd-links-link d-inline-block rounded">
+                  2.8 자원 처리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch02/#29-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  2.9 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch02/#210-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  2.10 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-4"
+            aria-expanded="false">
+            CHAPTER 3 팩토리 메서드 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-4">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch03/#31-추상화"
+                  class="bd-links-link d-inline-block rounded">
+                  3.1 추상화
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch03/#32-패턴-확장"
+                  class="bd-links-link d-inline-block rounded">
+                  3.2 패턴 확장
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch03/#33-상위-클래스"
+                  class="bd-links-link d-inline-block rounded">
+                  3.3 상위 클래스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch03/#34-하위-클래스"
+                  class="bd-links-link d-inline-block rounded">
+                  3.4 하위 클래스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch03/#35-매개변수"
+                  class="bd-links-link d-inline-block rounded">
+                  3.5 매개변수
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch03/#36-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  3.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch03/#37-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  3.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-5"
+            aria-expanded="false">
+            CHAPTER 4 추상 팩토리 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-5">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch04/#41-팩토리-메서드"
+                  class="bd-links-link d-inline-block rounded">
+                  4.1 팩토리 메서드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch04/#42-그룹"
+                  class="bd-links-link d-inline-block rounded">
+                  4.2 그룹
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch04/#43-팩토리-그룹"
+                  class="bd-links-link d-inline-block rounded">
+                  4.3 팩토리 그룹
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch04/#44-공장-추가"
+                  class="bd-links-link d-inline-block rounded">
+                  4.4 공장 추가
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch04/#45-부품-추가-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  4.5 부품 추가 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch04/#46-패턴-결합"
+                  class="bd-links-link d-inline-block rounded">
+                  4.6 패턴 결합
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch04/#47-장점과-단점"
+                  class="bd-links-link d-inline-block rounded">
+                  4.7 장점과 단점
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch04/#48-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  4.8 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch04/#49-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  4.9 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-6"
+            aria-expanded="false">
+            CHAPTER 5 빌더 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-6">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch05/#51-건축물"
+                  class="bd-links-link d-inline-block rounded">
+                  5.1 건축물
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch05/#52-객체-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  5.2 객체 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch05/#53-빌더"
+                  class="bd-links-link d-inline-block rounded">
+                  5.3 빌더
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch05/#54-알고리즘"
+                  class="bd-links-link d-inline-block rounded">
+                  5.4 알고리즘
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch05/#55-생성-요청"
+                  class="bd-links-link d-inline-block rounded">
+                  5.5 생성 요청
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch05/#56-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  5.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch05/#57-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  5.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0  w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-7"
+            aria-expanded="true">
+            CHAPTER 6 프로토타입 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse show" id="collapse-7">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch06/#61-생성"
+                  class="bd-links-link d-inline-block rounded">
+                  6.1 생성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch06/#62-복사"
+                  class="bd-links-link d-inline-block rounded">
+                  6.2 복사
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch06/#63-프로토타입-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  6.3 프로토타입 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch06/#64-특징"
+                  class="bd-links-link d-inline-block rounded">
+                  6.4 특징
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch06/#65-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  6.5 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch06/#66-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  6.6 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+      </ul>
+    </li>
+  </ul>
+</nav>
+            </div>
+        </div>
+    </aside>
+
+    <main class="bd-main order-1">
+        <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        
+        
+        
+        
+        
+        
+        <li class="breadcrumb-item active" aria-current="page">CHAPTER 6 프로토타입 패턴</li>
+        
+        
+        
+    </ol>
+</nav>
+
+        <div class="bd-content ps-lg-2">
+            
+<h1 id="chapter-6-프로토타입-패턴">CHAPTER 6 프로토타입 패턴</h1>
+
+<p>객체를 생성하는 유일한 방법은 new 키워드를 사용하는 것이며, 앞에서 살펴본 5개의 생성 패턴도 new 키워드를 이용하여 객체를 생성했습니다. 하지만 객체를 생성할 수 있는 방법이 하나 더 있는데, 바로 기존에 생성된 객체를 복제하여 생성하는 것입니다. 프로토타입 패턴은 new 키워드를 사용하지 않고 객체를 복제해 생성하는 패턴입니다.</p>
+
+<h2 id="61-생성">6.1 생성</h2>
+
+<p>시스템은 새로운 객체를 생성할 때 자원을 할당합니다. 프로그래밍 언어에서 새로운 객체를 생성하고 자원을 할당하는 과정을 살펴봅시다.</p>
+
+<h3 id="611-객체-생성">6.1.1 객체 생성</h3>
+
+<p>객체를 생성하기 위해서는 먼저 클래스 선언이 필요하며 선언된 클래스를 기반으로 객체를 생성합니다. 객체는 선언한 클래스의 인스턴스화를 통해 생성되고 메모리에 적재됩니다. 다음 예제에서는 인사말을 출력하는 Hello 클래스를 선언합니다.</p>
+
+<p>6장 프로토타입 패턴 149</p>
+
+<p>예제 6-1 Prototype/01/hello.php</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Hello</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="nv">$message</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">(</span><span class="nv">$msg</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">message</span> <span class="o">=</span> <span class="nv">$msg</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">setMessage</span><span class="p">(</span><span class="nv">$msg</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">message</span> <span class="o">=</span> <span class="nv">$msg</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">getMessage</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">message</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>일반적으로 객체를 만드는 방법은 new 키워드가 유일하며, new 키워드는 인스턴스화 과정을 통해 객체를 생성합니다. 많은 개발 언어에서 객체를 생성하는 키워드로 new를 사용합니다. 다음 예제에서는 new 키워드를 이용하여 선언한 클래스의 객체를 생성합니다.</p>
+
+<p>예제 6-2 Prototype/01/index.php</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">include</span> <span class="s2">"hello.php"</span><span class="p">;</span>
+
+<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Hello</span><span class="p">(</span><span class="s2">"안녕하세요"</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">getMessage</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php index.php
+안녕하세요
+</code></pre></div></div>
+
+<p>new 키워드 다음에 클래스 이름을 지정합니다. 지정한 클래스의 선언에 따라 객체를 생성하고 메모리에 할당하는 과정을 수행합니다. 이처럼 객체지향에서 객체를 생성한다는 것은 시스템의 자원을 소모한다는 의미입니다.</p>
+
+<p>150 1부 생성 패턴</p>
+
+<p>메모리에 할당하는 과정을 수행합니다. 이처럼 객체지향에서 객체를 생성한다는 것은 시스템의 자원을 소모한다는 의미입니다.</p>
+
+<h4 id="그림-6-1-객체의-생성-자원-소모">그림 6-1 객체의 생성 자원 소모</h4>
+
+<p><img src="./img/fig_6_1.svg" alt="그림 6-1" /></p>
+
+<p>생성되는 객체가 많거나 크기가 클수록 시스템이 처리할 부하가 늘어납니다. 빌더 패턴과 같이 복잡한 구조인 객체는 더 많은 자원을 사용합니다.</p>
+
+<h3 id="612-객체의-상태값">6.1.2 객체의 상태값</h3>
+
+<p>캡슐화는 객체지향 개발 방법의 기본 개념으로, 행동과 데이터를 한 곳에 묶어서 관리합니다. 따라서 객체의 경우 행동만 가진 함수와 달리 상태값을 가진 데이터가 존재합니다. 앞의 예제에서 사용한 객체 생성 과정을 다시 한 번 살펴봅시다. hello 클래스 이름 뒤에 ‘( )’가 붙어 있습니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Hello</span><span class="p">(</span><span class="s2">"안녕하세요"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>new 키워드는 객체 생성 시 인자값을 전달합니다. 생성 시 전달된 인자값은 클래스의 생성자 메서드를 통해 전달받습니다. 다음은 클래스의 생성자 매직 메서드의 일부 예제입니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="nv">$message</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">(</span><span class="nv">$msg</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">message</span> <span class="o">=</span> <span class="nv">$msg</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>생성자 메서드는 객체가 new 키워드로 생성될 때 자동 호출됩니다. 생성자 메서드는 생성 시 전달받은 매개변수를 보존하기 위해 내부의 프로퍼티에 저장합니다.</p>
+
+<p>6장 프로토타입 패턴 151</p>
+
+<p>전달받은 매개변수를 보존하기 위해 내부의 프로퍼티에 저장합니다. 객체로 전달된 값을 유지하려면 프로퍼티와 같은 데이터 저장 영역이 필요합니다. 프로퍼티는 대표적으로 객체의 상태값을 저장하는 방법입니다.</p>
+
+<p>일반적인 클래스의 특징은 한 번의 선언으로 다수의 동일 객체를 생성할 수 있다는 것입니다. 다음과 같이 선언된 Hello 클래스를 이용해 2개를 생성할 수 있습니다. new 키워드는 객체를 생성할 때마다 메모리의 자원을 소모합니다. 프로그램에서 다수의 동일한 객체를 만드는 이유는 서로 다른 상태값을 가진 객체가 필요하기 때문입니다.</p>
+
+<p>예제 6-3 Prototype/01/index2.php</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">include</span> <span class="s2">"hello.php"</span><span class="p">;</span>
+
+<span class="nv">$ko</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Hello</span><span class="p">(</span><span class="s2">"안녕하세요"</span><span class="p">);</span>
+<span class="nv">$en</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Hello</span><span class="p">(</span><span class="s2">"hello world"</span><span class="p">);</span>
+
+<span class="k">echo</span> <span class="nv">$ko</span><span class="o">-&gt;</span><span class="nf">getMessage</span><span class="p">()</span><span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nv">$en</span><span class="o">-&gt;</span><span class="nf">getMessage</span><span class="p">()</span><span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php index2.php
+안녕하세요
+hello world
+</code></pre></div></div>
+
+<p>이 예제는 하나의 클래스로 동일한 2개의 객체를 생성합니다. $ko 객체와 $en 객체는 동일한 구조입니다. 두 객체의 차이점은 클래스 내부의 $message 프로퍼티값을 다르게 설정한 것입니다. 동일한 구조의 객체라도 사용 목적에 따라 서로 다른 프로퍼티값을 가질 수 있습니다.</p>
+
+<h4 id="그림-6-2-서로-다른-값을-가진-객체-생성">그림 6-2 서로 다른 값을 가진 객체 생성</h4>
+
+<p><img src="./img/fig_6_2.svg" alt="그림 6-2" /></p>
+
+<p>152 1부 생성 패턴</p>
+
+<blockquote>
+  <p>[!NOTE]
+객체의 상태값은 생성자를 통해 객체 생성 시 또는 프로그램 실행 중에 상태값을 변경하여 설정할 수 있습니다.</p>
+</blockquote>
+
+<h3 id="613-자원-소모">6.1.3 자원 소모</h3>
+
+<p>우리는 앞에서 5가지의 생성 패턴에 대해 살펴봤습니다. 생성 패턴을 도입하는 이유는 직접 new 키워드를 사용하여 객체를 생성할 때 객체와 객체 사이의 강한 결합도를 제거하기 위해서입니다. 그리고 목적과 용도에 따라 객체의 강력한 결합을 해결하는 패턴을 구분합니다.</p>
+
+<p>앞에서 학습한 모든 생성 패턴은 새로운 객체 생성을 중점적으로 해결합니다. 패턴에 따라 객체를 생성 처리하는 과정만 다를 뿐, new 키워드를 이용하여 새로운 객체를 생성하는 것은 동일합니다.</p>
+
+<h2 id="62-복사">6.2 복사</h2>
+
+<p>지금까지 새로운 객체를 생성하기 위해 new 키워드를 사용했습니다. 기본적으로 객체를 생성하는 방법은 new 키워드가 유일합니다. 하지만 기존의 객체를 복사하는 것도 새로운 객체를 생성하는 방법 중 하나입니다. 이번에는 객체 복사에 대해 알아봅시다.</p>
+
+<h3 id="621-복사의-종류">6.2.1 복사의 종류</h3>
+
+<p>생성된 객체는 변수에 할당하고 객체는 변수를 통해 접근하여 사용합니다. 변수에 담긴 객체는 또 다른 변수로 복제할 수 있습니다. 이때 변수의 복제는 기존 변수를 공유하는 얕은 복사와 새로운 자원을 할당받는 깊은 복사로 크게 구분됩니다.</p>
+
+<blockquote>
+  <p>[!NOTE]
+PHP 언어는 객체 타입이 정해지지 않으므로 타입 형식에 구속받지 않고 다양한 종류의 값을 저장합니다. 최근 프로그래밍 언어는 변수 선언 시 자체 기능을 사용해 자원을 효율적으로 관리합니다. 예를 들어 PHP는 중복된 변수와 메모리 자원을 관리합니다.</p>
+</blockquote>
+
+<p>6장 프로토타입 패턴 153</p>
+
+<h3 id="622-객체를-공유하는-얕은-복사">6.2.2 객체를 공유하는 얕은 복사</h3>
+
+<p>얕은 복사는 객체를 공유 방식으로 복사합니다. 공유 방식은 객체를 복사할 때 새로운 자원을 할당받지 않고 객체를 복사하는 것입니다. 예제 코드를 보면서 얕은 복사에 대해 알아봅시다.</p>
+
+<p>예제 6-4 Prototype/02/copy.php</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">include</span> <span class="s2">"hello.php"</span><span class="p">;</span>
+
+<span class="c1">// 객체를 생성합니다.</span>
+<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Hello</span><span class="p">(</span><span class="s2">"안녕하세요"</span><span class="p">);</span>
+<span class="k">echo</span> <span class="s2">"원본 내용="</span><span class="mf">.</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">getMessage</span><span class="p">()</span> <span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+
+<span class="c1">// 객체를 복사합니다.</span>
+<span class="nv">$obj2</span> <span class="o">=</span> <span class="nv">$obj</span><span class="p">;</span>
+<span class="nv">$obj2</span><span class="o">-&gt;</span><span class="nf">setMessage</span><span class="p">(</span><span class="s2">"Hello world"</span><span class="p">);</span>
+
+<span class="c1">// 원본 객체와 복제 객체의 메시지를 출력합니다</span>
+<span class="k">echo</span> <span class="s2">"obj2 ="</span><span class="mf">.</span> <span class="nv">$obj2</span><span class="o">-&gt;</span><span class="nf">getMessage</span><span class="p">()</span> <span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+
+<span class="k">echo</span> <span class="s2">"obj ="</span><span class="mf">.</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">getMessage</span><span class="p">()</span> <span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php copy.php
+원본 내용=안녕하세요
+obj2 =Hello world
+obj =Hello world
+</code></pre></div></div>
+
+<p>복제 코드와 동작 결과를 같이 살펴봅시다. 먼저 변수 $obj는 new 키워드를 사용하여 생성한 새로운 객체입니다. 새롭게 생성된 객체는 또 다른 메모리 자원을 할당받습니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//객체를 생성합니다.</span>
+<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Hello</span><span class="p">(</span><span class="s2">"안녕하세요"</span><span class="p">);</span>
+<span class="k">echo</span> <span class="s2">"원본 내용="</span><span class="mf">.</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">getMessage</span><span class="p">()</span> <span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>원본 내용=안녕하세요
+</code></pre></div></div>
+
+<p>154 1부 생성 패턴</p>
+
+<p>생성된 객체를 통해 결과 메시지를 출력합니다.</p>
+
+<p>두 번째는 변수 $obj 객체를 복사하여 객체를 생성합니다. 대입 연산자(=)를 통해 변수를 복사하며, 복제된 객체에 새로운 메시지를 설정합니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//객체를 복사합니다.</span>
+<span class="nv">$obj2</span> <span class="o">=</span> <span class="nv">$obj</span><span class="p">;</span>
+<span class="nv">$obj2</span><span class="o">-&gt;</span><span class="nf">setMessage</span><span class="p">(</span><span class="s2">"Hello world"</span><span class="p">);</span>
+
+<span class="c1">// 원본 객체와 복제 객체의 메시지를 출력합니다</span>
+<span class="k">echo</span> <span class="s2">"obj2 ="</span><span class="mf">.</span> <span class="nv">$obj2</span><span class="o">-&gt;</span><span class="nf">getMessage</span><span class="p">()</span> <span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>obj2 =Hello world
+</code></pre></div></div>
+
+<p>복제된 객체를 통해 결과 메시지를 출력합니다. 당연히 새로 설정된 값으로 출력됩니다. 여기 까지는 문제가 없어 보입니다. 그 다음 줄에 앞에서 생성한 원본 객체 $obj를 재출력해봅시다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">echo</span> <span class="s2">"obj ="</span><span class="mf">.</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">getMessage</span><span class="p">()</span> <span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>obj =Hello world
+</code></pre></div></div>
+
+<p>처음 생성 시 설정한 ‘안녕하세요’ 값은 없어지고, 복제된 $obj2의 설정값인 ‘Hello world’가 출력됩니다.</p>
+
+<h4 id="그림-6-3-하나의-객체를-가리키는-얕은-복사">그림 6-3 하나의 객체를 가리키는 얕은 복사</h4>
+
+<p><img src="./img/fig_6_3.svg" alt="그림 6-3" /></p>
+
+<p>6장 프로토타입 패턴 155</p>
+
+<p>[그림 6-3]은 객체를 복제하는 방식의 차이를 나타낸 것입니다. 두 번째 객체를 복제할 때는 대입 연산자(=)를 사용하는데, 이 연산자는 메모리에 담긴 실제 변수를 복사하지 않습니다. 변수 $obj2는 원본의 변수 $obj 객체를 가리키는 포인터일 뿐입니다. 이런 형태의 복사를 얕은 복사라고 합니다.</p>
+
+<h3 id="623-깊은-복사">6.2.3 깊은 복사</h3>
+
+<p>얕은 복사는 실제 변수를 복사하지 않습니다. 그렇다면 실제 객체는 어떻게 복사해야 할까요? 실제 변수 영역을 복사하기 위해서는 깊은 복사를 사용해야 합니다. 깊은 복사는 물리적으로 할당된 변수를 다른 물리적 변수로 복사하는 것입니다.</p>
+
+<p>일반적인 연산자(=)로는 깊은 복사를 처리할 수 없으며 좀 더 복잡한 과정이 필요합니다. 이를 쉽게 하기 위해 별도의 명령이나 클래스 등이 제공됩니다. 예를 들어 자바와 같은 언어에서는 실제 객체의 변수를 복사하기 위해 특별한 Cloneable 인터페이스를 제공합니다. PHP도 실제 객체를 복사할 수 있는 clone 키워드를 제공합니다.</p>
+
+<p>[예제 6-5]에서는 clone 키워드를 추가하여 복제합니다. 대입 연산자 대신 clone 키워드를 사용합니다.</p>
+
+<p>예제 6-5 Prototype/02/clone.php</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">include</span> <span class="s2">"hello.php"</span><span class="p">;</span>
+
+<span class="c1">// 객체를 생성합니다.</span>
+<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Hello</span><span class="p">(</span><span class="s2">"안녕하세요"</span><span class="p">);</span>
+<span class="k">echo</span> <span class="s2">"원본 내용="</span><span class="mf">.</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">getMessage</span><span class="p">()</span> <span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+
+<span class="c1">// 객체를 복제합니다.</span>
+<span class="nv">$obj2</span> <span class="o">=</span> <span class="k">clone</span> <span class="nv">$obj</span><span class="p">;</span>
+<span class="nv">$obj2</span><span class="o">-&gt;</span><span class="nf">setMessage</span><span class="p">(</span><span class="s2">"Hello world"</span><span class="p">);</span>
+
+<span class="c1">// 원본 객체와 복제 객체의 메시지를 출력합니다&lt;div class=""&gt;&lt;/div&gt;</span>
+<span class="k">echo</span> <span class="s2">"obj2 ="</span><span class="mf">.</span> <span class="nv">$obj2</span><span class="o">-&gt;</span><span class="nf">getMessage</span><span class="p">()</span> <span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+
+<span class="k">echo</span> <span class="s2">"obj ="</span><span class="mf">.</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">getMessage</span><span class="p">()</span> <span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>156 1부 생성 패턴</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php clone.php
+원본 내용=안녕하세요
+obj2 =Hello world
+obj =안녕하세요
+</code></pre></div></div>
+
+<p>실행 결과를 보면 예상대로 출력되었다는 것을 알 수 있습니다.</p>
+
+<h4 id="그림-6-4-실체-객체-복제">그림 6-4 실체 객체 복제</h4>
+
+<p><img src="./img/fig_6_4.svg" alt="그림 6-4" /></p>
+
+<p>생성된 $obj 객체는 clone 키워드를 이용하여 $obj2로 복제하고 Clone 키워드는 새로운 메모리 영역을 할당하여 실제 객체를 복제합니다. 이를 깊은 복사라고 합니다. 깊은 복사를 사용하면 메모리의 자원이 소모됩니다.</p>
+
+<blockquote>
+  <p>[!NOTE]
+객체 생성은 new 키워드를 사용하고, 객체 복제는 clone 키워드를 사용합니다.</p>
+</blockquote>
+
+<h2 id="63-프로토타입-패턴">6.3 프로토타입 패턴</h2>
+
+<p>프로토타입 패턴은 신규 객체를 생성하지 않고 유사한 기존 객체를 복제합니다. 기존 객체를 복제하면 신규 객체를 생성하는 것보다 자원이 절약됩니다.</p>
+
+<p>6장 프로토타입 패턴 157</p>
+
+<h3 id="631-원형">6.3.1 원형</h3>
+
+<p>프로토타입의 사전적 의미는 ‘원형’입니다. 객체를 복제하려면 먼저 생성된 객체가 있어야 합니다. 복제 대상인 객체가 존재하지 않으면 복제할 수 없으며, 복제 대상이 되는 원본 객체를 원형이라고 합니다. <sup id="fnref:1"><a href="#fn:1" class="footnote" rel="footnote" role="doc-noteref">1</a></sup></p>
+
+<h3 id="632-생성자-동작">6.3.2 생성자 동작</h3>
+
+<p>클래스의 생성자는 객체 생성 시 자동으로 호출되는 메서드입니다. 그리고 객체는 ‘인스턴스화’라는 과정을 통해 생성됩니다. 인스턴스화는 객체 생성 시 클래스에 선언된 생성자를 자동 호출합니다.</p>
+
+<p>PHP는 __construct() 매직 메서드로 생성자를 선언합니다. __construct() 메서드명은 PHP에서 사용하는 예약어입니다.</p>
+
+<p>[예제 6-6]은 [예제 6-5]를 변경하여 생성자 로직에 출력 메시지를 추가한 것입니다.</p>
+
+<p>예제 6-6 Prototype/03/hello.php</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Hello</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="nv">$message</span><span class="p">;</span>
+
+    <span class="c1">// 생성자</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">(</span><span class="nv">$msg</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__CLASS__</span><span class="mf">.</span><span class="s2">"를 생성합니다. = 생성자 로직 동작 </span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">message</span> <span class="o">=</span> <span class="nv">$msg</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">setMessage</span><span class="p">(</span><span class="nv">$msg</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">message</span> <span class="o">=</span> <span class="nv">$msg</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">getMessage</span><span class="p">()</span>
+    <span class="p">{</span>
+</code></pre></div></div>
+
+<p>158 1부 생성 패턴</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">message</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php clone.php
+Hello를 생성합니다. = 생성자 로직 동작
+원본 내용=안녕하세요
+obj2 =Hello world
+obj =안녕하세요
+</code></pre></div></div>
+
+<p>생성자 메서드에 추가한 코드가 이와 같이 실행된다는 것을 확인할 수 있습니다. 코드의 동작 내용을 좀 더 살펴봅시다. new 키워드를 이용해서 객체를 생성하면 생성 시 __construct() 생성자 메서드가 같이 호출됩니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//객체를 생성합니다.</span>
+<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Hello</span><span class="p">(</span><span class="s2">"안녕하세요"</span><span class="p">);</span>
+<span class="k">echo</span> <span class="s2">"원본 내용="</span><span class="mf">.</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">getMessage</span><span class="p">()</span> <span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Hello를 생성합니다. = 생성자 로직 동작
+원본 내용=안녕하세요
+</code></pre></div></div>
+
+<p>앞에서 생성한 객체 $obj를 clone 키워드로 복제합니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//객체를 복사합니다.</span>
+<span class="nv">$obj2</span> <span class="o">=</span> <span class="k">clone</span> <span class="nv">$obj</span><span class="p">;</span>
+<span class="nv">$obj2</span><span class="o">-&gt;</span><span class="nf">setMessage</span><span class="p">(</span><span class="s2">"Hello world"</span><span class="p">);</span>
+
+<span class="c1">// 원본 객체와 복제 객체의 메시지를 출력합니다&lt;div class=""&gt;&lt;/div&gt;</span>
+<span class="k">echo</span> <span class="s2">"obj2 ="</span><span class="mf">.</span> <span class="nv">$obj2</span><span class="o">-&gt;</span><span class="nf">getMessage</span><span class="p">()</span> <span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>obj2 =Hello world
+</code></pre></div></div>
+
+<p>객체를 복제할 때는 생성자가 호출되지 않습니다. 이처럼 클래스의 객체를 직접 생성할 수도 있지만, 기존의 객체를 복제하여 생성할 수도 있습니다.</p>
+
+<p>6장 프로토타입 패턴 159</p>
+
+<h3 id="633-복제-처리">6.3.3 복제 처리</h3>
+
+<p>new 키워드는 새로운 객체를 생성할 때 시스템의 자원을 소모합니다. 자원 소모란 CPU가 객체를 생성하기 위해 인스턴스화 과정의 역할을 수행한다는 것입니다. 객체를 생성하는 유일한 방법은 new를 사용하는 것입니다. 하지만 동일한 클래스 선언으로 여러 개의 유사한 객체가 필요할 때는 어떻게 해야 할까요? 매번 객체가 필요할 때마다 new 키워드로 새로운 객체를 만드는 것은 중복된 자원 소모가 발생하므로 좋은 방법이 아닙니다. 클래스 선언으로 생성된 객체는 변수에 저장됩니다. 변수에 저장된 객체는 다른 변수로 복제할 수 있습니다. 생성되는 객체가 동일한 클래스라면 매번 인스턴스화 과정을 통해 새로운 객체를 생성하지 않고 변수를 복제하여 객체를 생성할 수도 있습니다.</p>
+
+<p>기존의 동일한 객체가 있다면 새롭게 생성하는 것보다 기존 객체를 복제하는 것이 좋은데, 그 이유는 이미 생성된 객체를 복제할 경우 인스턴스화 과정이 생략되기 때문입니다. 객체를 복제하면 생성 로직에 소모되는 처리 시간과 자원을 절약할 수 있습니다.</p>
+
+<h3 id="634-자원-절약">6.3.4 자원 절약</h3>
+
+<p>객체 생성에 프로토타입 패턴을 사용하면 자원 소모를 줄일 수 있습니다. 특히 프로토타입 패턴은 복잡한 과정으로 생성된 객체를 복제할 때 더 유용합니다. 복잡한 객체 생성은 일반 객체 생성보다 많은 시간과 자원을 소모하지만, 객체 복제는 적은 자원으로 동일한 객체를 추가 생성할 수 있습니다.</p>
+
+<h4 id="그림-6-5-복제를-통한-자원-절약">그림 6-5 복제를 통한 자원 절약</h4>
+
+<p><img src="./img/fig_6_5.svg" alt="그림 6-5" /></p>
+
+<p>160 1부 생성 패턴</p>
+
+<p>객체는 상태값을 가집니다. 상태값은 객체 생성 시 초깃값을 통해 설정되며, 객체를 생성한 후 상태값을 설정할 수도 있습니다. 특히 빌더 패턴과 같은 복합 객체의 상태값을 설정하는 것은 쉽지 않습니다. 빌더 패턴은 객체가 실행되면서 상태값을 설정하는 경우도 있는데, 새로운 객체의 상태값을 설정하기 위해 메서드를 호출하거나 또 다른 객체를 실행해야 하기 때문입니다.</p>
+
+<p>프로토타입 패턴을 적용하면 매번 객체를 만드는 과정과 초기화 작업을 반복하지 않아도 됩니다. 객체 생성 시 많은 자원을 소모하는 경우, 새로운 객체를 생성하는 것보다 기존 객체를 복제하는 것이 더 효율적입니다. 객체가 복제될 때는 생성자 로직이 동작하지 않습니다. 또한 복잡한 객체도 상태값을 설정하기 위해 별도의 객체를 실행하거나 메서드를 호출할 필요가 없습니다. 공통된 상태값은 유지한 채 필요한 값만 변경해서 사용하면 됩니다.</p>
+
+<h3 id="635-주의-사항">6.3.5 주의 사항</h3>
+
+<p>복제는 새로운 객체를 생성하지 않습니다. 기존 객체에서 상태값만 다른 또 다른 객체를 만드는 것입니다. 원형을 복제하면 객체 내의 상태값도 같이 복제되고, 객체가 복제된 후에는 객체에 접근하거나 메서드를 통해 새로운 값으로 변경합니다. 프로토타입 패턴은 객체의 상태값을 변경할 수 있도록 접근을 허용하거나 관련 메서드를 미리 만들어야 합니다.</p>
+
+<p>다수의 원형을 만들어 복제에 사용할 때는 별도로 원형 관리자(prototype manager)를 도입하는 것도 좋은 방법입니다.</p>
+
+<h2 id="64-특징">6.4 특징</h2>
+
+<p>프로토타입은 적은 리소스로 많은 객체를 생성하는 데 유용합니다.</p>
+
+<h3 id="641-생성-패턴">6.4.1 생성 패턴</h3>
+
+<p>디자인 패턴은 객체의 생성을 패턴화합니다. 앞에서 배운 팩토리 패턴, 싱글턴 패턴, 빌더 패턴 모두 생성 패턴입니다. 생성 패턴은 객체 생성을 별도의 독립 클래스로 분리하여 처리합니다. 또한 생성 패턴은 과정을 분리하기 위해서 별도의 생성 코드를 필요로 합니다. 패턴을 통해</p>
+
+<p>6장 프로토타입 패턴 161</p>
+
+<p>객체를 생성하면 패턴이 추가된 코드를 같이 실행하므로 객체를 보다 편리하게 생성할 수 있습니다.</p>
+
+<p>프로토타입 패턴은 객체를 직접 생성하지 않고 복제를 통해 생성자의 동작 처리를 배제합니다. 하지만 객체를 생성하는 과정에 생성자만 존재하는 것은 아닙니다. 생성자의 코드와 생성 패턴에서 추가한 코드 실행도 같이 배제할 수 있습니다. 프로토타입은 기존 객체를 복제함으로써 코드의 양과 새로운 객체를 생성하는 처리 로직 수행 과정을 줄입니다.</p>
+
+<h3 id="642-대량-생산">6.4.2 대량 생산</h3>
+
+<p>클래스 선언은 객체를 생성하기 위한 설계도이며, 하나의 클래스 선언으로 다수의 객체를 생성할 수 있습니다. 또한 많은 수의 객체를 한 번에 만들어야 하는 경우도 있습니다.</p>
+
+<p>만일 new 키워드를 이용해 모든 객체를 생성한다면 필요한 객체 수만큼 인스턴스화 작업이 필요합니다. 객체를 효율적으로 생성하기 위해서는 중복된 인스턴스화 작업을 하지 않는 것이 좋습니다.</p>
+
+<p>프로토타입 패턴을 응용하면 적은 자원 소모로 많은 객체를 생성할 수 있습니다.</p>
+
+<h3 id="643-유사-객체">6.4.3 유사 객체</h3>
+
+<p>프로토타입 패턴을 이용하면 런타임 시 새로운 객체를 복제하고 삭제할 수 있습니다. 사실 원형을 복제하는 것은 클래스 객체를 생성하는 것과 같습니다.</p>
+
+<p>클래스는 복수의 객체 생성과 재사용을 위해 선언됩니다. 다양한 종류의 클래스를 가지고 있는 것보다는 기존에 생성한 클래스를 재사용할 수 있도록 유사하게 설계하는 것이 중요합니다. 유사한 구조의 클래스를 갖고 있으면 새로운 클래스 선언과 객체 생성 없이도 객체 생성을 유연하게 관리할 수 있습니다.</p>
+
+<p>여러 개의 동작 객체가 필요할 경우 프로토타입 패턴으로 객체를 복제하고 상태값만 변경해서 사용하는 것이 더 유용합니다. 프로토타입 패턴을 사용하면 객체 생성을 위한 클래스의 수를 줄일 수 있습니다.</p>
+
+<p>162 1부 생성 패턴</p>
+
+<h3 id="644-객체-생성이-어려운-경우">6.4.4 객체 생성이 어려운 경우</h3>
+
+<p>객체의 동작을 분리하거나 기존 객체를 수정할 때 객체 생성 과정을 모르는 경우도 있습니다. 또 클래스에서 직접 객체를 생성하기 어려울 때도 있습니다.</p>
+
+<p>프로토타입 패턴을 활용하면 기존의 객체 생성 방법을 몰라도 새로운 객체를 생성할 수 있습니다. 객체를 복제해서 사용하면 실제 객체의 구체적인 형식을 몰라도 객체를 생성할 수 있습니다.</p>
+
+<h2 id="65-관련-패턴">6.5 관련 패턴</h2>
+
+<p>프로토타입 패턴은 여러 패턴과 연관시켜 응용할 수 있습니다.</p>
+
+<h3 id="651-플라이웨이트-패턴">6.5.1 플라이웨이트 패턴</h3>
+
+<p>객체를 공유하거나 동일한 상태의 객체를 별도로 생성할 때 프로토타입 패턴을 같이 사용할 수 있습니다(12장).</p>
+
+<h3 id="652-메멘토-패턴">6.5.2 메멘토 패턴</h3>
+
+<p>메멘토 패턴은 객체를 저장하는 역할을 수행합니다. 객체 저장 시 프로토타입 패턴을 같이 응용할 수 있습니다(21장).</p>
+
+<h3 id="653-복합체-패턴-장식자-패턴">6.5.3 복합체 패턴, 장식자 패턴</h3>
+
+<p>객체가 동적으로 생성될 때 프로토타입 패턴을 사용할 수 있습니다.</p>
+
+<h3 id="654-명령-패턴">6.5.4 명령 패턴</h3>
+
+<p>명령을 복제할 때 프로토타입을 사용할 수 있습니다.</p>
+
+<p>6장 프로토타입 패턴 163</p>
+
+<h2 id="66-정리">6.6 정리</h2>
+
+<p>프로토타입 패턴은 최근 인터프리터 방식의 언어에서 자주 응용됩니다. 인터프리터 언어는 컴파일 언어와 달리 실행 단계에서 객체를 생성하고 메모리 자원에 할당합니다. 추상 팩토리 패턴은 프로토타입 패턴의 집합을 저장하는 상태에서, 필요한 경우 기존 객체를 복제해 객체를 반환할 수 있습니다. 프로토타입 패턴을 이용해 유사한 명령을 복제하고 명령 패턴에도 적용할 수 있습니다. 그리고 프로토타입 패턴을 적용해 기존의 객체를 복제하고 새로운 메모리 영역을 할당합니다.</p>
+
+<p>164 1부 생성 패턴</p>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1">
+      <p>프로토타입 패턴을 원형 패턴이라고도 부릅니다. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+
+            <!-- 다음/이전 학습 페이지네이션 -->
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+
+<div class="d-flex justify-content-between align-items-center mt-5 mb-4 py-3 border-top border-bottom">
+  <div>
+    
+      <span class="text-muted small me-2">이전 학습</span>
+      <a href="/ch05/" class="text-decoration-none fw-semibold">
+        &laquo; CHAPTER 5 빌더 패턴
+      </a>
+    
+  </div>
+
+  <div class="text-end">
+    
+  </div>
+</div>
+
+
+            <div class="mt-10">
+                <!-- 구글 에스센스 광고 -->
+                <script async
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3321560028329475"
+                    crossorigin="anonymous"></script>
+                <!-- jinydev-java -->
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3321560028329475"
+                    data-ad-slot="9323221865" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+
+        </div>
+
+        <div class="bd-toc mt-3 mb-5 my-lg-0 ps-xl-3 mb-lg-5 text-body-secondary">
+
+  <button class="btn btn-link p-md-0 mb-2 mb-md-0 text-decoration-none bd-toc-toggle d-md-none" type="button"
+    data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents">
+    서브목차
+    <svg class="bi d-md-none ms-2" aria-hidden="true">
+      <use xlink:href="#chevron-expand"></use>
+    </svg>
+  </button>
+
+  <strong class="d-none d-md-block h6 my-2">서브목차</strong>
+
+  <div class="collapse bd-toc-collapse" id="tocContents">
+    <nav id="TableOfContents">
+      <!--
+      <ul>
+        <li><a href="#quick-start">Quick start</a></li>
+        <li><a href="#cdn-links">CDN links</a></li>
+        <li><a href="#next-steps">Next steps</a></li>
+        <li><a href="#js-components">JS components</a></li>
+        <li><a href="#important-globals">Important globals</a>
+          <ul>
+            <li><a href="#html5-doctype">HTML5 doctype</a></li>
+            <li><a href="#responsive-meta-tag">Responsive meta tag</a></li>
+            <li><a href="#box-sizing">Box-sizing</a></li>
+            <li><a href="#reboot">Reboot</a></li>
+          </ul>
+        </li>
+        <li><a href="#community">Community</a></li>
+      </ul>
+      -->
+    </nav>
+  </div>
+</div>
+    </main>
+
+
+</div>
+
+  <footer class="container">
+  <hr class="mt-5 mb-3">
+  <div class="row align-items-center pb-3">
+    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+      <p class="mb-0 text-secondary">Copyright 2017~2026 JinyDev. All Rights Reserved.</p>
+    </div>
+    <div class="col-md-6 text-center text-md-end">
+      
+      <a href="https://datas.jiny.dev" class="text-decoration-none text-secondary ms-3">빅데이터</a>
+      
+      <a href="https://mysql.jiny.dev" class="text-decoration-none text-secondary ms-3">MySQL</a>
+      
+      <a href="https://php.jiny.dev" class="text-decoration-none text-secondary ms-3">PHP</a>
+      
+      <a href="https://java.jiny.dev" class="text-decoration-none text-secondary ms-3">자바</a>
+      
+      <a href="https://git.jiny.dev" class="text-decoration-none text-secondary ms-3">깃&깃허브</a>
+      
+      <a href="https://linux.jiny.dev" class="text-decoration-none text-secondary ms-3">리눅스</a>
+      
+    </div>
+  </div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+    window.addEventListener('load', async function () {
+      mermaid.initialize({ startOnLoad: false });
+
+      const mermaidCodes = document.querySelectorAll('pre code.language-mermaid');
+      const mermaidDivs = [];
+
+      mermaidCodes.forEach(codeBlock => {
+        const mermaidDefinition = codeBlock.textContent.trim();
+        const container = codeBlock.closest('div.highlighter-rouge');
+
+        const mermaidDiv = document.createElement('div');
+        mermaidDiv.className = 'mermaid';
+        mermaidDiv.textContent = mermaidDefinition;
+
+        if (container) {
+          container.replaceWith(mermaidDiv);
+        } else {
+          const pre = codeBlock.parentElement;
+          if (pre) pre.replaceWith(mermaidDiv);
+        }
+        mermaidDivs.push(mermaidDiv);
+      });
+
+      if (mermaidDivs.length > 0) {
+        await mermaid.run({ nodes: mermaidDivs });
+      }
+    });
+  </script>
+  <script src="/assets/js/toc.js"></script>
+  <script src="/assets/js/sidebar.js"></script>
+
+</body>
+
+</html>

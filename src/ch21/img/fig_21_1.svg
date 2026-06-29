@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 200" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Object Circle -->
+  <g transform="translate(40, 20)">
+    <circle cx="150" cy="80" r="75" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5" />
+    <text x="150" y="25" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#1e3a8a" text-anchor="middle">객체 (Object)</text>
+
+    <!-- State Value (Inside Circle) -->
+    <g transform="translate(100, 35)" filter="url(#shadow)">
+      <rect width="100" height="30" rx="4" fill="#ea580c" stroke="#c2410c" stroke-width="1.5" />
+      <text x="50" y="19" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">상태값 (State)</text>
+    </g>
+
+    <!-- Setter (Inside Circle) -->
+    <g transform="translate(45, 95)" filter="url(#shadow)">
+      <rect width="90" height="30" rx="4" fill="#f1f5f9" stroke="#64748b" stroke-width="1.2" />
+      <text x="45" y="19" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#475569" text-anchor="middle">setMessage()</text>
+    </g>
+
+    <!-- Getter (Inside Circle) -->
+    <g transform="translate(165, 95)" filter="url(#shadow)">
+      <rect width="90" height="30" rx="4" fill="#f1f5f9" stroke="#64748b" stroke-width="1.2" />
+      <text x="45" y="19" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#475569" text-anchor="middle">getMessage()</text>
+    </g>
+
+    <!-- Flow Arrows -->
+    <!-- Setter -> State -->
+    <path d="M 90,95 L 90,75 L 120,75" fill="none" stroke="#2563eb" stroke-width="1.5" />
+    <polygon points="120,71 128,75 120,79" fill="#2563eb" />
+
+    <!-- State -> Getter -->
+    <path d="M 180,65 L 210,65 L 210,95" fill="none" stroke="#2563eb" stroke-width="1.5" />
+    <polygon points="206,95 210,103 214,95" fill="#2563eb" />
+  </g>
+</svg>

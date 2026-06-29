@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 180" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Condition Diamond (Left) -->
+  <g filter="url(#shadow)">
+    <polygon points="120,40 190,85 120,130 50,85" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" />
+    <text x="120" y="89" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#1e3a8a" text-anchor="middle">상태값 검사</text>
+  </g>
+
+  <!-- Code Logic Block 1 (Exit branch) -->
+  <g transform="translate(250, 70)" filter="url(#shadow)">
+    <rect width="100" height="30" rx="4" fill="#ffffff" stroke="#64748b" stroke-width="1.5" />
+    <text x="50" y="19" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#334155" text-anchor="middle">코드 로직1</text>
+  </g>
+
+  <!-- Loop back arrow (Infinite Loop) -->
+  <g>
+    <!-- Loop path -->
+    <path d="M 120,130 C 120,165 40,165 40,85 C 40,40 80,25 110,38" fill="none" stroke="#ea580c" stroke-width="1.5" stroke-dasharray="3,1" />
+    <polygon points="107,34 117,41 110,44" fill="#ea580c" />
+    <text x="75" y="155" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#ea580c" text-anchor="middle">참일 때까지 반복 (루프)</text>
+  </g>
+
+  <!-- Exit path -->
+  <g>
+    <path d="M 190,85 L 242,85" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="242,81 250,85 242,89" fill="#ef4444" />
+    <text x="215" y="75" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#ef4444" text-anchor="middle">참</text>
+  </g>
+</svg>

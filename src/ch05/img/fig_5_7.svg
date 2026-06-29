@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 220" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Builder (Abstract Class) -->
+  <g filter="url(#shadow)">
+    <rect x="200" y="30" width="130" height="50" rx="6" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5" />
+    <text x="265" y="52" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#64748b" text-anchor="middle">추상 클래스</text>
+    <text x="265" y="66" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#0f172a" text-anchor="middle">Builder</text>
+  </g>
+
+  <!-- ConcreteBuilder (Concrete Class) -->
+  <g filter="url(#shadow)">
+    <rect x="200" y="130" width="130" height="50" rx="6" fill="#ffffff" stroke="#3b82f6" stroke-width="2" />
+    <text x="265" y="152" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#3b82f6" text-anchor="middle">ConcreteBuilder</text>
+    <text x="265" y="166" font-family="'Inter', sans-serif" font-size="9" fill="#64748b" text-anchor="middle">...지정</text>
+  </g>
+
+  <!-- Left: 개발 코드 -->
+  <text x="40" y="150" font-family="'Inter', sans-serif" font-size="13" font-weight="bold" fill="#0f172a">개발 코드</text>
+
+  <!-- Right: [알고리즘] (Algorithm Class) -->
+  <g filter="url(#shadow)">
+    <rect x="385" y="130" width="115" height="50" rx="6" fill="#ffffff" stroke="#ea580c" stroke-width="2" />
+    <text x="442" y="153" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#ea580c" text-anchor="middle">알고리즘 객체</text>
+    <text x="442" y="167" font-family="'Inter', sans-serif" font-size="9" fill="#ea580c" text-anchor="middle">(구체적인 생성 수행)</text>
+  </g>
+
+  <!-- Arrows -->
+  <g>
+    <!-- inheritance arrow: Builder -> ConcreteBuilder -->
+    <path d="M 265,80 L 265,122" fill="none" stroke="#64748b" stroke-width="1.5" />
+    <polygon points="261,122 265,130 269,122" fill="#64748b" />
+    <text x="280" y="105" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#64748b">상속</text>
+
+    <!-- Request arrow: 개발 코드 -> ConcreteBuilder -->
+    <path d="M 105,155 L 192,155" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="192,151 200,155 192,159" fill="#ef4444" />
+    <text x="148" y="138" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#ef4444" text-anchor="middle">① 복합 객체</text>
+    <text x="148" y="149" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#ef4444" text-anchor="middle">생성 요청</text>
+
+    <!-- Call arrow: ConcreteBuilder -> 알고리즘 객체 -->
+    <path d="M 330,155 L 377,155" fill="none" stroke="#ea580c" stroke-width="1.5" />
+    <polygon points="377,151 385,155 377,159" fill="#ea580c" />
+  </g>
+</svg>

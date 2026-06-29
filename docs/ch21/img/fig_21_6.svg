@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 220" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Client / Target Object (Left) -->
+  <g transform="translate(20, 50)">
+    <circle cx="45" cy="55" r="40" fill="#ffffff" stroke="#3b82f6" stroke-width="2" />
+    <text x="45" y="40" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#1e3a8a" text-anchor="middle">객체</text>
+    
+    <!-- Memento Token Reference inside object -->
+    <g transform="translate(15, 55)" filter="url(#shadow)">
+      <rect width="60" height="22" rx="3" fill="#ea580c" stroke="#c2410c" stroke-width="1.2" />
+      <text x="30" y="14" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#ffffff" text-anchor="middle">참조</text>
+    </g>
+  </g>
+
+  <!-- Originator Class Box (Middle) -->
+  <g transform="translate(170, 20)" filter="url(#shadow)">
+    <rect width="140" height="170" rx="6" fill="#ffffff" stroke="#475569" stroke-width="1.5" />
+    <path d="M 0,6 A 6,6 0 0 1 6,0 L 134,0 A 6,6 0 0 1 140,6 L 140,25 L 0,25 Z" fill="#475569" />
+    <text x="70" y="16" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">원조본 (Originator)</text>
+    
+    <!-- methods -->
+    <g transform="translate(15, 45)">
+      <rect width="110" height="32" rx="4" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2" />
+      <text x="55" y="20" font-family="monospace" font-size="10" font-weight="bold" fill="#334155" text-anchor="middle">create()</text>
+    </g>
+
+    <g transform="translate(15, 105)">
+      <rect width="110" height="32" rx="4" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2" />
+      <text x="55" y="20" font-family="monospace" font-size="10" font-weight="bold" fill="#334155" text-anchor="middle">restore()</text>
+    </g>
+  </g>
+
+  <!-- Memento (Right) -->
+  <g transform="translate(350, 80)" filter="url(#shadow)">
+    <rect width="90" height="50" rx="4" fill="#ffedd5" stroke="#f97316" stroke-width="1.5" />
+    <text x="45" y="24" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#c2410c" text-anchor="middle">메멘토</text>
+    <text x="45" y="36" font-family="monospace" font-size="8" fill="#ea580c" text-anchor="middle">(Memento)</text>
+  </g>
+
+  <!-- Sequence Arrows and labels -->
+  <g>
+    <!-- 1. Save (객체 -> create) -->
+    <path d="M 105,75 Q 130,60 162,60" fill="none" stroke="#2563eb" stroke-dasharray="2,2" stroke-width="1.2" />
+    <polygon points="160,56 168,60 160,64" fill="#2563eb" />
+    <text x="135" y="52" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#2563eb" text-anchor="middle">① 저장</text>
+
+    <!-- 2. Create Memento (create -> Memento) -->
+    <path d="M 295,65 Q 355,50 380,75" fill="none" stroke="#ea580c" stroke-width="1.2" />
+    <polygon points="377,77 383,80 383,72" fill="#ea580c" />
+    <text x="345" y="58" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#ea580c" text-anchor="middle">② 생성</text>
+
+    <!-- 3. Return Memento Reference (create -> 객체.참조) -->
+    <path d="M 175,78 L 98,110" fill="none" stroke="#ea580c" stroke-width="1.2" />
+    <polygon points="101,114 93,112 97,106" fill="#ea580c" />
+    <text x="145" y="103" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#ea580c" text-anchor="middle">③ Memento</text>
+
+    <!-- 4. Undo Request (객체 -> restore) -->
+    <path d="M 105,135 Q 130,140 162,140" fill="none" stroke="#2563eb" stroke-dasharray="2,2" stroke-width="1.2" />
+    <polygon points="160,136 168,140 160,144" fill="#2563eb" />
+    <text x="135" y="152" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#2563eb" text-anchor="middle">④ undo 요청</text>
+
+    <!-- 5. Read State (Memento -> restore) -->
+    <path d="M 360,135 Q 340,155 305,150" fill="none" stroke="#ea580c" stroke-width="1.2" />
+    <polygon points="307,146 299,149 306,154" fill="#ea580c" />
+    <text x="340" y="160" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#ea580c" text-anchor="middle">⑤ 상태 읽기</text>
+
+    <!-- 6. Restore Done (restore -> 객체) -->
+    <path d="M 175,160 Q 120,185 85,145" fill="none" stroke="#2563eb" stroke-dasharray="2,2" stroke-width="1.2" />
+    <polygon points="88,142 80,140 82,148" fill="#2563eb" />
+    <text x="115" y="185" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#2563eb" text-anchor="middle">⑥ 복원</text>
+  </g>
+</svg>

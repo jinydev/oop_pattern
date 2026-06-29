@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 240" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Regions/Grouping Boxes first to stay in background -->
+  <!-- 팩토리 메서드 region: Solid black/slate border -->
+  <rect x="50" y="20" width="110" height="180" fill="none" stroke="#475569" stroke-width="1.5" rx="6" />
+  <text x="105" y="215" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#475569" text-anchor="middle">팩토리 메서드</text>
+
+  <!-- 추상 팩토리 region: Dashed red border -->
+  <rect x="60" y="110" width="370" height="80" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,3" rx="6" />
+  <text x="245" y="215" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#ef4444" text-anchor="middle">추상 팩토리</text>
+
+  <!-- Top Circle: 추상 클래스 -->
+  <g filter="url(#shadow)">
+    <circle cx="105" cy="65" r="28" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+    <text x="105" y="62" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#334155" text-anchor="middle">추상</text>
+    <text x="105" y="74" font-family="'Inter', sans-serif" font-size="9" fill="#64748b" text-anchor="middle">클래스</text>
+  </g>
+
+  <!-- Bottom Circles -->
+  <!-- 그룹1 -->
+  <g filter="url(#shadow)">
+    <circle cx="105" cy="150" r="26" fill="#ffffff" stroke="#475569" stroke-width="1.5" />
+    <text x="105" y="154" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#334155" text-anchor="middle">그룹1</text>
+  </g>
+
+  <!-- 그룹2 -->
+  <g filter="url(#shadow)">
+    <circle cx="230" cy="150" r="26" fill="#ffffff" stroke="#475569" stroke-width="1.5" />
+    <text x="230" y="154" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#334155" text-anchor="middle">그룹2</text>
+  </g>
+
+  <!-- 그룹3 -->
+  <g filter="url(#shadow)">
+    <circle cx="355" cy="150" r="26" fill="#ffffff" stroke="#475569" stroke-width="1.5" />
+    <text x="355" y="154" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#334155" text-anchor="middle">그룹3</text>
+  </g>
+
+  <!-- Arrows -->
+  <g>
+    <!-- Solid arrow: 추상 클래스 -> 그룹1 -->
+    <path d="M 105,93 L 105,124" fill="none" stroke="#475569" stroke-width="1.5" />
+    <polygon points="101,124 105,130 109,124" fill="#475569" />
+
+    <!-- Dotted red arrow: 추상 클래스 -> 그룹2 -->
+    <path d="M 125,83 L 210,128" fill="none" stroke="#ef4444" stroke-width="1.2" stroke-dasharray="3,3" />
+    <polygon points="207,131 216,131 212,123" fill="#ef4444" />
+
+    <!-- Dotted red arrow: 추상 클래스 -> 그룹3 -->
+    <path d="M 130,75 L 332,130" fill="none" stroke="#ef4444" stroke-width="1.2" stroke-dasharray="3,3" />
+    <polygon points="329,133 338,131 332,125" fill="#ef4444" />
+  </g>
+</svg>

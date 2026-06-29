@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 220" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Square Grid of Objects -->
+  <g transform="translate(70, 30)">
+    <!-- Top-Left -->
+    <g filter="url(#shadow)" transform="translate(0, 0)">
+      <circle cx="30" cy="30" r="25" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5" />
+      <text x="30" y="34" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#334155" text-anchor="middle">객체 A</text>
+    </g>
+
+    <!-- Top-Right -->
+    <g filter="url(#shadow)" transform="translate(180, 0)">
+      <circle cx="30" cy="30" r="25" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5" />
+      <text x="30" y="34" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#334155" text-anchor="middle">객체 B</text>
+    </g>
+
+    <!-- Bottom-Left -->
+    <g filter="url(#shadow)" transform="translate(0, 100)">
+      <circle cx="30" cy="30" r="25" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5" />
+      <text x="30" y="34" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#334155" text-anchor="middle">객체 C</text>
+    </g>
+
+    <!-- Bottom-Right -->
+    <g filter="url(#shadow)" transform="translate(180, 100)">
+      <circle cx="30" cy="30" r="25" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5" />
+      <text x="30" y="34" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#334155" text-anchor="middle">객체 D</text>
+    </g>
+
+    <!-- Tight Coupling/Spaghetti Arrows -->
+    <g>
+      <!-- A <-> B -->
+      <path d="M 58,25 L 178,25" fill="none" stroke="#ef4444" stroke-width="1" />
+      <polygon points="178,22 183,25 178,28" fill="#ef4444" />
+      <path d="M 182,35 L 62,35" fill="none" stroke="#ef4444" stroke-width="1" />
+      <polygon points="62,38 57,35 62,32" fill="#ef4444" />
+
+      <!-- C <-> D -->
+      <path d="M 58,125 L 178,125" fill="none" stroke="#ef4444" stroke-width="1" />
+      <polygon points="178,122 183,125 178,128" fill="#ef4444" />
+      <path d="M 182,135 L 62,135" fill="none" stroke="#ef4444" stroke-width="1" />
+      <polygon points="62,138 57,135 62,132" fill="#ef4444" />
+
+      <!-- A <-> C -->
+      <path d="M 25,58 L 25,122" fill="none" stroke="#ef4444" stroke-width="1" />
+      <polygon points="21,122 25,127 29,122" fill="#ef4444" />
+      <path d="M 35,122 L 35,58" fill="none" stroke="#ef4444" stroke-width="1" />
+      <polygon points="39,58 35,53 31,58" fill="#ef4444" />
+
+      <!-- B <-> D -->
+      <path d="M 205,58 L 205,122" fill="none" stroke="#ef4444" stroke-width="1" />
+      <polygon points="201,122 205,127 209,122" fill="#ef4444" />
+      <path d="M 215,122 L 215,58" fill="none" stroke="#ef4444" stroke-width="1" />
+      <polygon points="219,58 215,53 211,58" fill="#ef4444" />
+
+      <!-- A <-> D (Diagonal) -->
+      <path d="M 50,48 L 190,112" fill="none" stroke="#ef4444" stroke-width="1" />
+      <polygon points="185,112 193,113 189,105" fill="#ef4444" />
+
+      <!-- B <-> C (Diagonal) -->
+      <path d="M 190,48 L 50,112" fill="none" stroke="#ef4444" stroke-width="1" />
+      <polygon points="51,105 47,113 55,112" fill="#ef4444" />
+    </g>
+  </g>
+</svg>

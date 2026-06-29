@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 200" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Left: 개발 코드 -->
+  <text x="50" y="105" font-family="'Inter', sans-serif" font-size="14" font-weight="bold" fill="#475569">개발 코드</text>
+
+  <!-- Middle Box: 추상 클래스 & 선언 -->
+  <g filter="url(#shadow)">
+    <rect x="220" y="65" width="130" height="60" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="225" y="57" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#64748b">추상 클래스</text>
+    <!-- Inner dashed rect for 선언 -->
+    <rect x="240" y="80" width="90" height="30" rx="4" fill="none" stroke="#94a3b8" stroke-dasharray="3,3" stroke-width="1" />
+    <text x="285" y="99" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#0f172a" text-anchor="middle">선언</text>
+  </g>
+
+  <!-- Arrow from 개발 코드 to 선언: 동일한 인터페이스 -->
+  <g>
+    <path d="M 120,105 L 232,105" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="232,101 240,105 232,109" fill="#ef4444" />
+    <text x="180" y="91" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#b91c1c" text-anchor="middle">동일한 인터페이스</text>
+  </g>
+
+  <!-- Right: 목적1 & 목적2 -->
+  <g filter="url(#shadow)">
+    <circle cx="430" cy="65" r="24" fill="#ffffff" stroke="#ea580c" stroke-width="2" />
+    <text x="430" y="69" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#ea580c" text-anchor="middle">목적1</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <circle cx="430" cy="145" r="24" fill="#ffffff" stroke="#ea580c" stroke-width="2" />
+    <text x="430" y="149" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#ea580c" text-anchor="middle">목적2</text>
+  </g>
+
+  <!-- Dotted red branching arrows from 선언 to 목적1 & 목적2 -->
+  <g>
+    <path d="M 330,95 L 375,95 L 375,65 L 398,65" fill="none" stroke="#ef4444" stroke-width="1.2" stroke-dasharray="3,3" />
+    <polygon points="398,61 406,65 398,69" fill="#ef4444" />
+
+    <path d="M 330,95 L 375,95 L 375,145 L 398,145" fill="none" stroke="#ef4444" stroke-width="1.2" stroke-dasharray="3,3" />
+    <polygon points="398,141 406,145 398,149" fill="#ef4444" />
+  </g>
+</svg>

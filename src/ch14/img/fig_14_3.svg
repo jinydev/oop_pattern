@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 180" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Collection Container (Left) -->
+  <g filter="url(#shadow)">
+    <circle cx="100" cy="90" r="54" fill="#ffffff" stroke="#0f172a" stroke-width="2" />
+    <text x="100" y="55" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#0f172a" text-anchor="middle">컬렉션</text>
+
+    <!-- Internal slots representing appended elements -->
+    <rect x="75" y="70" width="50" height="18" rx="3" fill="#ea580c" />
+    <rect x="75" y="98" width="50" height="18" rx="3" fill="#ea580c" />
+  </g>
+
+  <!-- Elements to append (Right) -->
+  <!-- Banana -->
+  <g filter="url(#shadow)">
+    <circle cx="280" cy="55" r="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="280" y="59" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#475569" text-anchor="middle">banana</text>
+  </g>
+
+  <!-- Apple -->
+  <g filter="url(#shadow)">
+    <circle cx="280" cy="125" r="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="280" y="129" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#475569" text-anchor="middle">apple</text>
+  </g>
+
+  <!-- Appending Arrows -->
+  <g>
+    <!-- Banana -> Collection Slot 1 -->
+    <path d="M 256,55 L 200,55 L 132,74" fill="none" stroke="#64748b" stroke-width="1.2" />
+    <polygon points="135,77 127,76 133,70" fill="#64748b" />
+    <text x="180" y="47" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#64748b" text-anchor="middle">append</text>
+
+    <!-- Apple -> Collection Slot 2 -->
+    <path d="M 256,125 L 200,125 L 132,109" fill="none" stroke="#64748b" stroke-width="1.2" />
+    <polygon points="133,113 127,108 135,106" fill="#64748b" />
+    <text x="180" y="137" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#64748b" text-anchor="middle">append</text>
+  </g>
+</svg>

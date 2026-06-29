@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 220" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Left Orange 3D Box: Original Object -->
+  <g transform="translate(60, 90)" filter="url(#shadow)">
+    <polygon points="30,0 80,0 65,15 15,15" fill="#fb923c" />
+    <polygon points="15,15 65,15 65,55 15,55" fill="#ea580c" />
+    <polygon points="65,15 80,0 80,40 65,55" fill="#c2410c" />
+    <text x="40" y="40" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">객체</text>
+  </g>
+
+  <!-- Right Orange 3D Box: Cloned Object -->
+  <g transform="translate(360, 90)" filter="url(#shadow)">
+    <polygon points="30,0 80,0 65,15 15,15" fill="#fb923c" />
+    <polygon points="15,15 65,15 65,55 15,55" fill="#ea580c" />
+    <polygon points="65,15 80,0 80,40 65,55" fill="#c2410c" />
+    <text x="40" y="40" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">객체</text>
+  </g>
+
+  <!-- Flow Arrows -->
+  <g>
+    <!-- Clone Operation line -->
+    <path d="M 110,90 L 110,40 L 390,40 L 390,80" fill="none" stroke="#ea580c" stroke-width="1.5" />
+    <polygon points="386,80 390,88 394,80" fill="#ea580c" />
+    
+    <text x="75" y="32" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#ea580c">① clone</text>
+    <text x="250" y="55" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#475569" text-anchor="middle">복제 동작</text>
+
+    <!-- Magic method trigger line -->
+    <path d="M 250,60 L 250,160 L 350,160" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,3" />
+    <polygon points="350,156 358,160 350,164" fill="#94a3b8" />
+    <text x="365" y="164" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#475569">② 매직 메서드 실행</text>
+  </g>
+</svg>

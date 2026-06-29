@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 160" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- 클래스A -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="25" width="90" height="40" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="85" y="49" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#475569" text-anchor="middle">클래스 A</text>
+  </g>
+
+  <!-- 클래스B -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="95" width="90" height="40" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="85" y="119" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#475569" text-anchor="middle">클래스 B</text>
+  </g>
+
+  <!-- 하위 클래스 -->
+  <g filter="url(#shadow)">
+    <rect x="220" y="60" width="90" height="40" rx="4" fill="#ffffff" stroke="#3b82f6" stroke-width="2" />
+    <text x="265" y="84" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#1e3a8a" text-anchor="middle">클래스</text>
+  </g>
+
+  <!-- Merge Arrows -->
+  <g>
+    <!-- class A -> child -->
+    <path d="M 130,45 L 180,45 L 180,80 L 212,80" fill="none" stroke="#64748b" stroke-width="1.5" />
+    <polygon points="212,76 220,80 212,84" fill="#64748b" />
+
+    <!-- class B -> child -->
+    <path d="M 130,115 L 180,115 L 180,80 L 212,80" fill="none" stroke="#64748b" stroke-width="1.5" />
+  </g>
+</svg>

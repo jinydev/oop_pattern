@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 260" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Code Logic Block 1 -->
+  <g transform="translate(140, 20)" filter="url(#shadow)">
+    <rect width="100" height="30" rx="4" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5" />
+    <text x="50" y="19" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#1e3a8a" text-anchor="middle">코드 로직1</text>
+  </g>
+
+  <!-- Code Logic Block 2 -->
+  <g transform="translate(140, 70)" filter="url(#shadow)">
+    <rect width="100" height="30" rx="4" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5" />
+    <text x="50" y="19" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#1e3a8a" text-anchor="middle">코드 로직2</text>
+  </g>
+
+  <!-- Code Logic Block 3 -->
+  <g transform="translate(140, 120)" filter="url(#shadow)">
+    <rect width="100" height="30" rx="4" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5" />
+    <text x="50" y="19" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#1e3a8a" text-anchor="middle">코드 로직3</text>
+  </g>
+
+  <!-- Condition Diamond -->
+  <g filter="url(#shadow)">
+    <polygon points="190,170 250,195 190,220 130,195" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5" />
+    <text x="190" y="199" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#1e3a8a" text-anchor="middle">값 검사</text>
+  </g>
+
+  <!-- Code Logic Block 4 (Branch Left) -->
+  <g transform="translate(40, 210)" filter="url(#shadow)">
+    <rect width="90" height="30" rx="4" fill="#ffffff" stroke="#64748b" stroke-width="1" />
+    <text x="45" y="19" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#334155" text-anchor="middle">코드 로직4</text>
+  </g>
+
+  <!-- Code Logic Block 5 (Branch Right) -->
+  <g transform="translate(250, 210)" filter="url(#shadow)">
+    <rect width="90" height="30" rx="4" fill="#ffffff" stroke="#64748b" stroke-width="1" />
+    <text x="45" y="19" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#334155" text-anchor="middle">코드 로직5</text>
+  </g>
+
+  <!-- Sequential Arrows -->
+  <g>
+    <!-- 1 -> 2 -->
+    <path d="M 190,50 L 190,70" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="186,70 190,77 194,70" fill="#ef4444" />
+
+    <!-- 2 -> 3 -->
+    <path d="M 190,100 L 190,120" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="186,120 190,127 194,120" fill="#ef4444" />
+
+    <!-- 3 -> Diamond -->
+    <path d="M 190,150 L 190,170" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="186,170 190,177 194,170" fill="#ef4444" />
+
+    <!-- Diamond -> 4 -->
+    <path d="M 130,195 C 100,195 85,200 85,210" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="81,208 85,217 89,208" fill="#ef4444" />
+
+    <!-- Diamond -> 5 -->
+    <path d="M 250,195 C 280,195 295,200 295,210" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="291,208 295,217 299,208" fill="#ef4444" />
+  </g>
+</svg>

@@ -1,0 +1,1683 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- 기본 메타데이터 --><meta name="description" content="Jiny linux"><meta name="author" content="HojinLee"><!-- 제목 설정 --><title>CHAPTER 8 브리지 패턴</title>
+  <meta name="title" content="CHAPTER 8 브리지 패턴" /><!-- 키워드 설정 --><!-- Open Graph 메타데이터 --><meta property="og:title" content="CHAPTER 8 브리지 패턴"><meta property="og:description" content="Jiny linux"><meta property="og:type" content="website"><meta property="og:locale" content="ko">
+  <meta property="og:site_name" content="linux">
+  <meta property="og:url" content="http://0.0.0.0:4000/ch08/">
+  <!-- 대표 URL (캐노니컬) -->
+  <link rel="canonical" href="http://0.0.0.0:4000/ch08/">
+
+  <!-- Twitter 카드 메타데이터 --><meta name="twitter:card" content="summary"><meta property="twitter:title" content="CHAPTER 8 브리지 패턴"><!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="CHAPTER 8 브리지 패턴" />
+<meta name="author" content="Hojin" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="24가지 패턴으로 알아보는 객체지향의 원리" />
+<meta name="twitter:description" property="og:description" content="24가지 패턴으로 알아보는 객체지향의 원리" />
+<link rel="canonical" href="http://0.0.0.0:4000/ch08/" />
+<meta property="og:url" content="http://0.0.0.0:4000/ch08/" />
+<meta property="og:site_name" content="쉽게 배워 바로 써먹는 디자인 패턴" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="CHAPTER 8 브리지 패턴" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Hojin"},"description":"24가지 패턴으로 알아보는 객체지향의 원리","headline":"CHAPTER 8 브리지 패턴","url":"http://0.0.0.0:4000/ch08/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/assets/css/docs.css" rel="stylesheet" />
+  <link href="/assets/css/highlight.css" rel="stylesheet" />
+
+  <style>
+    blockquote {
+      border-left: solid 5px #dee2e6;
+      padding: 5px 10px;
+      background-color: #f8f9fa;
+    }
+  </style>
+
+  <style>
+    h1 a {
+      text-decoration: none;
+    }
+
+    h2 a {
+      text-decoration: none;
+    }
+
+    h3 a {
+      text-decoration: none;
+    }
+
+    h4 a {
+      text-decoration: none;
+    }
+
+    h5 a {
+      text-decoration: none;
+    }
+
+    h6 a {
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      vertical-align: top
+    }
+
+    strong a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* 스크롤바 커스텀 */
+    /* 임의의 영역 생성 */
+    .scrollBar {}
+
+    /* 아래의 모든 코드는 영역::코드로 사용 */
+    .scrollBar::-webkit-scrollbar {
+      width: 7px;
+      /* 스크롤바의 너비 */
+    }
+
+    .scrollBar::-webkit-scrollbar-thumb {
+      height: 30%;
+      /* 스크롤바의 길이 */
+      background: #cccccc;
+      /* 스크롤바의 색상 */
+
+      border-radius: 5px;
+    }
+
+    .scrollBar::-webkit-scrollbar-track {
+      background: rgba(33, 122, 244, .1);
+      /*스크롤바 뒷 배경 색상*/
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4VBPCT3CR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-R4VBPCT3CR');
+  </script>
+
+
+</head>
+
+<body>
+  <header class="navbar navbar-expand-lg bd-navbar sticky-top">
+    <nav class="container bd-gutter flex-wrap flex-lg-nowrap position-relative" aria-label="Main navigation">
+
+      <!-- Mobile: Left Toggle (Browse) -->
+      <div class="bd-navbar-toggle d-lg-none">
+        <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdSidebar"
+          aria-controls="bdSidebar" aria-label="Toggle docs navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="bi" fill="currentColor"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z">
+            </path>
+          </svg>
+          <span class="d-none fs-6 pe-1">Browse</span>
+        </button>
+      </div>
+
+      <!-- Brand: Desktop (Static), Mobile (Absolute Center) -->
+      <a class="navbar-brand p-0 me-0 me-lg-2 ms-lg-0 d-none d-lg-inline-block" href="/" aria-label="jinydev">
+        <svg width="32" height="26" viewBox="0 0 32 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M24.2746 5.33377C25.8486 7.33981 25.1183 11.1792 24.3961 13.0177C24.4028 13.0199 24.4094 13.0221 24.4161 13.0243L24.4013 13.0248L22.649 12.9082C22.649 12.9053 22.6488 12.9013 22.649 12.8993C22.9902 8.93373 22.5975 7.34575 22.2147 7.07677C17.6316 10.3896 13.5379 9.33658 12.2725 9.01111C11.928 8.9225 11.7932 8.88781 11.9152 9.00988C12.2872 9.38185 13.1336 9.82821 13.7371 10.1465H13.7372L13.7376 10.1467C13.8743 10.2188 13.9985 10.2843 14.1019 10.3409C9.12673 10.3984 7.12659 8.00279 6.53855 7.29846C6.47859 7.22664 6.4333 7.1724 6.40105 7.14015C6.11408 6.85318 4.49961 5.87252 3.99256 7.74227C3.50142 9.55335 3.81246 11.6775 3.97665 12.7988C3.99089 12.896 3.99257 12.8981 3.99257 12.9298L2.37635 13.0248L2.37213 13.0247C0.223493 8.05534 1.83854 5.26971 3.29536 4.2246C3.29536 1.78444 6.27428 -0.592359 10.0455 0.263262C14.8768 1.64043 16.3468 1.18409 18.0759 0.647278C18.774 0.430562 19.5143 0.200726 20.5351 0.073124C25.2219 -0.512739 26.7993 2.56612 27 4.16122C26.2141 3.70487 24.8556 4.73165 24.2746 5.33377ZM12.3374 1.5872C11.1225 1.16466 7.99257 0.717209 6.3478 2.41116C5.98397 2.78587 5.55554 3.48864 5.55554 3.48864C5.55554 3.48864 4.82665 4.81961 4.25622 4.24919C3.68579 3.67878 5.0168 1.96749 6.06259 1.46044C7.10838 0.953388 9.70703 0.0660505 12.3374 1.5872Z"
+            fill="currentColor" />
+          <path
+            d="M10.078 13.5002H3.10601C2.2309 13.5002 1.52148 14.2097 1.52148 15.0848V18.3172C1.52148 19.1923 2.2309 19.9018 3.10601 19.9018H10.078C10.9531 19.9018 11.6625 19.1923 11.6625 18.3172V15.0848C11.6625 14.2097 10.9531 13.5002 10.078 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M0.823513 14.6094H0.379847C0.187322 14.6094 0.03125 14.7654 0.03125 14.958V15.9721C0.03125 16.1646 0.187322 16.3207 0.379847 16.3207H0.823513C1.01604 16.3207 1.17211 16.1646 1.17211 15.9721V14.958C1.17211 14.7654 1.01604 14.6094 0.823513 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M16.7326 13.5002H23.7045C24.5796 13.5002 25.2891 14.2097 25.2891 15.0848V18.3172C25.2891 19.1923 24.5796 19.9018 23.7045 19.9018H16.7326C15.8575 19.9018 15.1481 19.1923 15.1481 18.3172V15.0848C15.1481 14.2097 15.8575 13.5002 16.7326 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M25.9861 14.6094H26.4297C26.6222 14.6094 26.7783 14.7654 26.7783 14.958V15.9721C26.7783 16.1646 26.6222 16.3207 26.4297 16.3207H25.9861C25.7935 16.3207 25.6375 16.1646 25.6375 15.9721V14.958C25.6375 14.7654 25.7935 14.6094 25.9861 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M12.2954 15.5601H14.5137C14.7062 15.5601 14.8623 15.7161 14.8623 15.9087V16.9228C14.8623 17.1153 14.7062 17.2713 14.5137 17.2713H12.2954C12.1028 17.2713 11.9468 17.1153 11.9468 16.9228V15.9087C11.9468 15.7161 12.1028 15.5601 12.2954 15.5601Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M9.93343 16.3937C9.93343 16.7087 9.76317 16.9641 9.55314 16.9641C9.34311 16.9641 9.17285 16.7087 9.17285 16.3937C9.17285 16.0786 9.34311 15.8232 9.55314 15.8232C9.76317 15.8232 9.93343 16.0786 9.93343 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M16.9688 16.3937C16.9688 16.7087 17.139 16.9641 17.3491 16.9641C17.5591 16.9641 17.7293 16.7087 17.7293 16.3937C17.7293 16.0786 17.5591 15.8232 17.3491 15.8232C17.139 15.8232 16.9688 16.0786 16.9688 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M14.2758 20.1016C13.642 20.6086 12.7863 20.3551 12.5645 20.1016C12.6278 20.4185 12.8687 20.8622 13.4518 20.8622C14.0349 20.8622 14.2441 20.3551 14.2758 20.1016Z"
+            fill="currentColor" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.1312 22.411C12.1575 22.2914 12.2759 22.2157 12.3956 22.2421L14.6347 22.735C14.7544 22.7614 14.83 22.8797 14.8036 22.9994C14.7773 23.119 14.659 23.1947 14.5393 23.1683L12.3002 22.6753C12.1805 22.649 12.1049 22.5307 12.1312 22.411Z"
+            fill="currentColor" />
+          <path
+            d="M13.4203 27.6754C9.00897 27.7261 5.77228 23.6613 4.70536 21.6225C4.54691 21.3197 4.42016 21.2739 4.32509 21.3373C4.17297 21.4387 4.28282 21.6437 4.32507 21.7493C4.85747 22.9916 5.58213 24.0416 5.87791 24.4113C4.83846 26.1353 4.49409 27.855 4.45183 28.4994C6.1758 26.8008 7.91668 26.8832 8.57162 27.1367C13.7055 29.7987 16.5577 27.929 18.1739 27.1367C19.4669 26.5029 21.4803 27.7388 22.3254 28.436C22.224 26.8642 21.3747 25.1402 20.9627 24.4747C21.6282 23.5873 22.1669 22.5099 22.4522 21.9711C22.6803 21.5401 22.6106 21.369 22.5472 21.3373C22.3951 21.2613 22.2092 21.4958 22.1353 21.6225C21.6599 22.4148 18.9345 27.6121 13.4203 27.6754Z"
+            fill="currentColor" />
+        </svg>
+      </a>
+      <a class="navbar-brand p-0 me-0 position-absolute top-50 start-50 translate-middle d-lg-none" href="/"
+        aria-label="jinydev">
+        <svg width="100" height="26" viewBox="0 0 112 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M24.2746 5.33377C25.8486 7.33981 25.1183 11.1792 24.3961 13.0177C24.4028 13.0199 24.4094 13.0221 24.4161 13.0243L24.4013 13.0248L22.649 12.9082C22.649 12.9053 22.6488 12.9013 22.649 12.8993C22.9902 8.93373 22.5975 7.34575 22.2147 7.07677C17.6316 10.3896 13.5379 9.33658 12.2725 9.01111C11.928 8.9225 11.7932 8.88781 11.9152 9.00988C12.2872 9.38185 13.1336 9.82821 13.7371 10.1465H13.7372L13.7376 10.1467C13.8743 10.2188 13.9985 10.2843 14.1019 10.3409C9.12673 10.3984 7.12659 8.00279 6.53855 7.29846C6.47859 7.22664 6.4333 7.1724 6.40105 7.14015C6.11408 6.85318 4.49961 5.87252 3.99256 7.74227C3.50142 9.55335 3.81246 11.6775 3.97665 12.7988C3.99089 12.896 3.99257 12.8981 3.99257 12.9298L2.37635 13.0248L2.37213 13.0247C0.223493 8.05534 1.83854 5.26971 3.29536 4.2246C3.29536 1.78444 6.27428 -0.592359 10.0455 0.263262C14.8768 1.64043 16.3468 1.18409 18.0759 0.647278C18.774 0.430562 19.5143 0.200726 20.5351 0.073124C25.2219 -0.512739 26.7993 2.56612 27 4.16122C26.2141 3.70487 24.8556 4.73165 24.2746 5.33377ZM12.3374 1.5872C11.1225 1.16466 7.99257 0.717209 6.3478 2.41116C5.98397 2.78587 5.55554 3.48864 5.55554 3.48864C5.55554 3.48864 4.82665 4.81961 4.25622 4.24919C3.68579 3.67878 5.0168 1.96749 6.06259 1.46044C7.10838 0.953388 9.70703 0.0660505 12.3374 1.5872Z"
+            fill="currentColor" />
+          <path
+            d="M10.078 13.5002H3.10601C2.2309 13.5002 1.52148 14.2097 1.52148 15.0848V18.3172C1.52148 19.1923 2.2309 19.9018 3.10601 19.9018H10.078C10.9531 19.9018 11.6625 19.1923 11.6625 18.3172V15.0848C11.6625 14.2097 10.9531 13.5002 10.078 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M0.823513 14.6094H0.379847C0.187322 14.6094 0.03125 14.7654 0.03125 14.958V15.9721C0.03125 16.1646 0.187322 16.3207 0.379847 16.3207H0.823513C1.01604 16.3207 1.17211 16.1646 1.17211 15.9721V14.958C1.17211 14.7654 1.01604 14.6094 0.823513 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M16.7326 13.5002H23.7045C24.5796 13.5002 25.2891 14.2097 25.2891 15.0848V18.3172C25.2891 19.1923 24.5796 19.9018 23.7045 19.9018H16.7326C15.8575 19.9018 15.1481 19.1923 15.1481 18.3172V15.0848C15.1481 14.2097 15.8575 13.5002 16.7326 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M25.9861 14.6094H26.4297C26.6222 14.6094 26.7783 14.7654 26.7783 14.958V15.9721C26.7783 16.1646 26.6222 16.3207 26.4297 16.3207H25.9861C25.7935 16.3207 25.6375 16.1646 25.6375 15.9721V14.958C25.6375 14.7654 25.7935 14.6094 25.9861 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M12.2954 15.5601H14.5137C14.7062 15.5601 14.8623 15.7161 14.8623 15.9087V16.9228C14.8623 17.1153 14.7062 17.2713 14.5137 17.2713H12.2954C12.1028 17.2713 11.9468 17.1153 11.9468 16.9228V15.9087C11.9468 15.7161 12.1028 15.5601 12.2954 15.5601Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M9.93343 16.3937C9.93343 16.7087 9.76317 16.9641 9.55314 16.9641C9.34311 16.9641 9.17285 16.7087 9.17285 16.3937C9.17285 16.0786 9.34311 15.8232 9.55314 15.8232C9.76317 15.8232 9.93343 16.0786 9.93343 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M16.9688 16.3937C16.9688 16.7087 17.139 16.9641 17.3491 16.9641C17.5591 16.9641 17.7293 16.7087 17.7293 16.3937C17.7293 16.0786 17.5591 15.8232 17.3491 15.8232C17.139 15.8232 16.9688 16.0786 16.9688 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M14.2758 20.1016C13.642 20.6086 12.7863 20.3551 12.5645 20.1016C12.6278 20.4185 12.8687 20.8622 13.4518 20.8622C14.0349 20.8622 14.2441 20.3551 14.2758 20.1016Z"
+            fill="currentColor" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.1312 22.411C12.1575 22.2914 12.2759 22.2157 12.3956 22.2421L14.6347 22.735C14.7544 22.7614 14.83 22.8797 14.8036 22.9994C14.7773 23.119 14.659 23.1947 14.5393 23.1683L12.3002 22.6753C12.1805 22.649 12.1049 22.5307 12.1312 22.411Z"
+            fill="currentColor" />
+          <path
+            d="M13.4203 27.6754C9.00897 27.7261 5.77228 23.6613 4.70536 21.6225C4.54691 21.3197 4.42016 21.2739 4.32509 21.3373C4.17297 21.4387 4.28282 21.6437 4.32507 21.7493C4.85747 22.9916 5.58213 24.0416 5.87791 24.4113C4.83846 26.1353 4.49409 27.855 4.45183 28.4994C6.1758 26.8008 7.91668 26.8832 8.57162 27.1367C13.7055 29.7987 16.5577 27.929 18.1739 27.1367C19.4669 26.5029 21.4803 27.7388 22.3254 28.436C22.224 26.8642 21.3747 25.1402 20.9627 24.4747C21.6282 23.5873 22.1669 22.5099 22.4522 21.9711C22.6803 21.5401 22.6106 21.369 22.5472 21.3373C22.3951 21.2613 22.2092 21.4958 22.1353 21.6225C21.6599 22.4148 18.9345 27.6121 13.4203 27.6754Z"
+            fill="currentColor" />
+          <text x="32" y="21" font-family="Arial, sans-serif" font-weight="bold" font-size="22"
+            fill="currentColor">Jiny</text>
+        </svg>
+      </a>
+
+      <!-- Mobile: Right Toggle (Menu) -->
+      <div class="d-flex d-lg-none ms-auto">
+        <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdNavbar"
+          aria-controls="bdNavbar" aria-label="Toggle navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid"
+            viewBox="0 0 16 16">
+            <path
+              d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- OffCanvas -->
+      <div class="offcanvas-lg offcanvas-end flex-grow-1" tabindex="-1" id="bdNavbar"
+        aria-labelledby="bdNavbarOffcanvasLabel" data-bs-scroll="true">
+        <!-- OffCanver Header -->
+        <div class="offcanvas-header px-4 pb-0">
+          <h5 class="offcanvas-title text-white" id="bdNavbarOffcanvasLabel">Jiny</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"
+            data-bs-target="#bdNavbar">
+          </button>
+        </div>
+
+        <!-- OffCanver Body -->
+        <div class="offcanvas-body p-4 pt-0 p-lg-0">
+          <hr class="d-lg-none text-white-50">
+
+          <ul class="navbar-nav flex-column flex-lg-row bd-navbar-nav">
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/ch00/">패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part01/">생성패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part02/">구조패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part03/">행동패턴</a>
+            </li>
+            
+          </ul>
+
+          <hr class="d-lg-none text-white-50">
+
+          <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
+            <li class="nav-item col-6 col-lg-auto">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://github.com/jinydev/datas" target="_blank"
+                rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
+                  viewBox="0 0 512 499.36" role="img">
+                  <title>GitHub</title>
+                  <path fill="currentColor" fill-rule="evenodd"
+                    d="M256 0C114.64 0 0 114.61 0 256c0 113.09 73.34 209 175.08 242.9 12.8 2.35 17.47-5.56 17.47-12.34 0-6.08-.22-22.18-.35-43.54-71.2 15.49-86.2-34.34-86.2-34.34-11.64-29.57-28.42-37.45-28.42-37.45-23.27-15.84 1.73-15.55 1.73-15.55 25.69 1.81 39.21 26.38 39.21 26.38 22.84 39.12 59.92 27.82 74.5 21.27 2.33-16.54 8.94-27.82 16.25-34.22-56.84-6.43-116.6-28.43-116.6-126.49 0-27.95 10-50.8 26.35-68.69-2.63-6.48-11.42-32.5 2.51-67.75 0 0 21.49-6.88 70.4 26.24a242.65 242.65 0 0 1 128.18 0c48.87-33.13 70.33-26.24 70.33-26.24 14 35.25 5.18 61.27 2.55 67.75 16.41 17.9 26.31 40.75 26.31 68.69 0 98.35-59.85 120-116.88 126.32 9.19 7.9 17.38 23.53 17.38 47.41 0 34.22-.31 61.83-.31 70.23 0 6.85 4.61 14.81 17.6 12.31C438.72 464.97 512 369.08 512 256.02 512 114.62 397.37 0 256 0z">
+                  </path>
+                </svg>
+                <small class="d-lg-none ms-2">GitHub</small>
+              </a>
+            </li>
+
+            <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+              <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+              <hr class="d-lg-none my-2 text-white-50">
+            </li>
+
+            <li class="nav-item col-6 col-lg-auto">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://jiny.dev" aria-label="Home">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
+                  viewBox="0 0 16 16" role="img">
+                  <title>Home</title>
+                  <path fill="currentColor"
+                    d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z" />
+                </svg>
+                <small class="d-lg-none ms-2">Home</small>
+              </a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container bd-gutter mt-3 my-md-4 bd-layout">
+    <aside class="bd-sidebar scrollBar">
+        <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="bdSidebar"
+            aria-labelledby="bdSidebarOffcanvasLabel">
+            <div class="offcanvas-header border-bottom">
+                <h5 class="offcanvas-title" id="bdSidebarOffcanvasLabel">학습목차</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"
+                    data-bs-target="#bdSidebar"></button>
+            </div>
+
+            <div class="offcanvas-body">
+                <!-- 네비게이션 -->
+                <nav class="bd-links w-100" id="bd-docs-nav" aria-label="Docs navigation">
+  <ul class="bd-links-nav list-unstyled mb-0 pb-3 pb-md-2 pe-lg-2">
+    <li class="bd-links-group py-2">
+      <strong class="bd-links-heading d-flex w-100 align-items-center fw-semibold">
+        디자인 패턴 목차
+      </strong>
+      <ul class="list-unstyled fw-normal pb-2 small">
+        
+        
+
+        
+        <li>
+          
+          <a href="/part02/"
+            class="bd-links-link d-inline-block rounded ">
+            Part 2 구조 패턴
+          </a>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-2"
+            aria-expanded="false">
+            CHAPTER 7 어댑터 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-2">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch07/#71-오래된-코드"
+                  class="bd-links-link d-inline-block rounded">
+                  7.1 오래된 코드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#72-잘못된-코드"
+                  class="bd-links-link d-inline-block rounded">
+                  7.2 잘못된 코드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#73-어댑터"
+                  class="bd-links-link d-inline-block rounded">
+                  7.3 어댑터
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#74-클래스-어댑터"
+                  class="bd-links-link d-inline-block rounded">
+                  7.4 클래스 어댑터
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#75-객체-어댑터"
+                  class="bd-links-link d-inline-block rounded">
+                  7.5 객체 어댑터
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#76-설계"
+                  class="bd-links-link d-inline-block rounded">
+                  7.6 설계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#77-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  7.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#78-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  7.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0  w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-3"
+            aria-expanded="true">
+            CHAPTER 8 브리지 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse show" id="collapse-3">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch08/#81-복잡한-코드"
+                  class="bd-links-link d-inline-block rounded">
+                  8.1 복잡한 코드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch08/#82-상속"
+                  class="bd-links-link d-inline-block rounded">
+                  8.2 상속
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch08/#83-패턴-설계-1"
+                  class="bd-links-link d-inline-block rounded">
+                  8.3 패턴 설계 1
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch08/#84-패턴-설계-2"
+                  class="bd-links-link d-inline-block rounded">
+                  8.4 패턴 설계 2
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch08/#85-장점과-단점"
+                  class="bd-links-link d-inline-block rounded">
+                  8.5 장점과 단점
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch08/#86-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  8.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch08/#87-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  8.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-4"
+            aria-expanded="false">
+            CHAPTER 9 복합체 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-4">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch09/#91-객체를-포함하는-객체"
+                  class="bd-links-link d-inline-block rounded">
+                  9.1 객체를 포함하는 객체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#92-복합체의-구조적-특징"
+                  class="bd-links-link d-inline-block rounded">
+                  9.2 복합체의 구조적 특징
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#93-투명성을-활용한-동일한-설계"
+                  class="bd-links-link d-inline-block rounded">
+                  9.3 투명성을 활용한 동일한 설계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#94-추상화를-통한-일반화-작업"
+                  class="bd-links-link d-inline-block rounded">
+                  9.4 추상화를 통한 일반화 작업
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#95-leaf"
+                  class="bd-links-link d-inline-block rounded">
+                  9.5 Leaf
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#96-composite"
+                  class="bd-links-link d-inline-block rounded">
+                  9.6 Composite
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#97-패턴-결합"
+                  class="bd-links-link d-inline-block rounded">
+                  9.7 패턴 결합
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#98-적용-사례-1"
+                  class="bd-links-link d-inline-block rounded">
+                  9.8 적용 사례 1
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#99-적용-사례-2"
+                  class="bd-links-link d-inline-block rounded">
+                  9.9 적용 사례 2
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#910-적용-사례-3"
+                  class="bd-links-link d-inline-block rounded">
+                  9.10 적용 사례 3
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#911-장단점-및-결과"
+                  class="bd-links-link d-inline-block rounded">
+                  9.11 장단점 및 결과
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#912-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  9.12 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#913-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  9.13 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-5"
+            aria-expanded="false">
+            CHAPTER 10 장식자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-5">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch10/#101-기능-추가"
+                  class="bd-links-link d-inline-block rounded">
+                  10.1 기능 추가
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#102-조건-추가"
+                  class="bd-links-link d-inline-block rounded">
+                  10.2 조건 추가
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#103-확장"
+                  class="bd-links-link d-inline-block rounded">
+                  10.3 확장
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#104-객체에-추가-장식하기"
+                  class="bd-links-link d-inline-block rounded">
+                  10.4 객체에 추가 장식하기
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#105-기본-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  10.5 기본 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#106-장단점-및-결과"
+                  class="bd-links-link d-inline-block rounded">
+                  10.6 장단점 및 결과
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#107-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  10.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#108-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  10.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-6"
+            aria-expanded="false">
+            CHAPTER 11 파사드 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-6">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch11/#111-협업을-위한-분리-작업"
+                  class="bd-links-link d-inline-block rounded">
+                  11.1 협업을 위한 분리 작업
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#112-파사드-패턴을-응용한-api"
+                  class="bd-links-link d-inline-block rounded">
+                  11.2 파사드 패턴을 응용한 API
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#113-파사드를-이용한-단순화"
+                  class="bd-links-link d-inline-block rounded">
+                  11.3 파사드를 이용한 단순화
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#114-최소-지식-원칙"
+                  class="bd-links-link d-inline-block rounded">
+                  11.4 최소 지식 원칙
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#115-기본-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  11.5 기본 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#116-파사드-패턴의-효과"
+                  class="bd-links-link d-inline-block rounded">
+                  11.6 파사드 패턴의 효과
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#117-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  11.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#118-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  11.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-7"
+            aria-expanded="false">
+            CHAPTER 12 플라이웨이트 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-7">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch12/#121-메모리-자원"
+                  class="bd-links-link d-inline-block rounded">
+                  12.1 메모리 자원
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch12/#122-자원-공유"
+                  class="bd-links-link d-inline-block rounded">
+                  12.2 자원 공유
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch12/#123-상태-구분"
+                  class="bd-links-link d-inline-block rounded">
+                  12.3 상태 구분
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch12/#124-패턴-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  12.4 패턴 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch12/#125-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  12.5 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch12/#126-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  12.6 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-8"
+            aria-expanded="false">
+            CHAPTER 13 프록시 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-8">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch13/#131-객체를-대행하는-프록시"
+                  class="bd-links-link d-inline-block rounded">
+                  13.1 객체를 대행하는 프록시
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#132-객체-가로채기"
+                  class="bd-links-link d-inline-block rounded">
+                  13.2 객체 가로채기
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#133-객체-분리"
+                  class="bd-links-link d-inline-block rounded">
+                  13.3 객체 분리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#134-프록시-생성"
+                  class="bd-links-link d-inline-block rounded">
+                  13.4 프록시 생성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#135-행위를-처리하는-핸들러"
+                  class="bd-links-link d-inline-block rounded">
+                  13.5 행위를 처리하는 핸들러
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#136-동적-프록시"
+                  class="bd-links-link d-inline-block rounded">
+                  13.6 동적 프록시
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#137-원격-프록시"
+                  class="bd-links-link d-inline-block rounded">
+                  13.7 원격 프록시
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#138-가상-프록시"
+                  class="bd-links-link d-inline-block rounded">
+                  13.8 가상 프록시
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#139-보호용-프록시"
+                  class="bd-links-link d-inline-block rounded">
+                  13.9 보호용 프록시
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#1310-스마트-참조자"
+                  class="bd-links-link d-inline-block rounded">
+                  13.10 스마트 참조자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#1311-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  13.11 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+      </ul>
+    </li>
+  </ul>
+</nav>
+            </div>
+        </div>
+    </aside>
+
+    <main class="bd-main order-1">
+        <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        
+        
+        
+        
+        
+        
+        <li class="breadcrumb-item active" aria-current="page">CHAPTER 8 브리지 패턴</li>
+        
+        
+        
+    </ol>
+</nav>
+
+        <div class="bd-content ps-lg-2">
+            
+<h1 id="chapter-8-브리지-패턴">CHAPTER 8 브리지 패턴</h1>
+
+<p>브리지 패턴은 객체의 확장성을 향상하기 위한 패턴으로, 객체에서 동작을 처리하는 구현부^body 와 확장을 위한 추상부를 분리합니다. 다른 용어로는 핸들 패턴^handle pattern 또는 구현부 패턴이라고도 합니다.</p>
+
+<h2 id="81-복잡한-코드">8.1 복잡한 코드</h2>
+
+<p>프로그램을 개발하려면 업무의 도메인 지식이 필요하며 정리된 도메인 지식으로 프로그램의 기능을 설계합니다.</p>
+
+<h3 id="811-유지-보수">8.1.1 유지 보수</h3>
+
+<p>세상에 완벽한 프로그램은 없습니다. 완성된 프로그램도 실제 현장에서 사용하다 보면 다양한 문제가 발생합니다. 또 초기 도메인 지식에서 발견하지 못한 기능을 추가하거나 새로운 업무를 추가하는 작업도 필요하며 고객의 성향과 행동은 예측하기 어렵습니다.</p>
+
+<p>추가 요청에 의해 기존에 완성된 코드를 변경 작업하는 것을 유지 보수라고 합니다. 생성한 코드를 지속해서 유지하는 것은 쉽지 않습니다.</p>
+
+<p>8장 브리지 패턴 185</p>
+
+<p>다음은 간단한 인사말을 출력하는 코드입니다.</p>
+
+<p>예제 8-1 Bridge/hello/01/hello.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 최초 설계 인사말</span>
+<span class="kd">class</span> <span class="nc">Hello</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">greeting</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">"Hello"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>다음은 선언한 Hello 클래스를 통해 인사말 객체를 생성/호출합니다.</p>
+
+<p>예제 8-2 Bridge/hello/01/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require</span> <span class="s2">"hello.php"</span><span class="p">;</span>
+
+<span class="c1">// 인사말 출력</span>
+<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Hello</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">greeting</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>이 예제 동작을 그림으로 표현하면 다음과 같습니다.</p>
+
+<h4 id="그림-8-1-인사말">그림 8-1 인사말</h4>
+
+<p><img src="./img/fig_8_1.svg" alt="그림 8-1" /></p>
+
+<p>다음은 콘솔에서 실행한 결과입니다.</p>
+
+<p>186 2부 구조 패턴</p>
+
+<p>$ php index.php
+Hello</p>
+
+<p>이 코드는 영어로 간단한 인사말을 출력합니다. 하지만 미국과 같은 다민족 국가의 경우 영어만 사용하는 것이 아닙니다. 다른 언어로도 인사말을 제공할 필요가 생겼다고 가정해봅시다. 즉 새로운 고객의 요청이 발생했습니다.</p>
+
+<h3 id="812-코드의-변질">8.1.2 코드의 변질</h3>
+
+<p>새로운 변경 사항이 발생하면 기존 코드를 수정해야 합니다. 원본 코드는 처음부터 다국어를 처리하기 위해 설계된 모형이 아닙니다.</p>
+
+<p>고객의 요구 사항인 한국어 인사말을 추가한다고 가정해봅시다.</p>
+
+<p>예제 8-3 Bridge/hello/02/hello.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 최초 설계 인사말</span>
+<span class="kd">class</span> <span class="nc">Hello</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">greeting</span><span class="p">(</span><span class="nv">$lang</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$lang</span> <span class="o">==</span> <span class="s2">"Korean"</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="s2">"안녕하세요"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="s2">"Hello"</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>예상치 않았던 작업을 원본 코드에 추가하여 기존에 없던 매개변수 인자값이 추가됐습니다. 외부로부터 전달받은 매개변수값으로 처리 로직을 분기합니다.</p>
+
+<p>원본 객체는 매개변수 추가로 인해 인터페이스와 동작 코드가 변경됐습니다. 설계 변경으로 인터페이스가 변경되면, 이를 호출 실행하는 다른 코드도 같이 변경돼야 합니다. 다음은 변경된 호출 코드입니다.</p>
+
+<p>8장 브리지 패턴 187</p>
+
+<p>예제 8-4 Bridge/hello/02/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require</span> <span class="s2">"hello.php"</span><span class="p">;</span>
+
+<span class="c1">// 인사말 출력</span>
+<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Hello</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">greeting</span><span class="p">(</span><span class="s2">"Korean"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>이처럼 하나의 코드를 수정하면 영향을 미치는 다른 코드도 수정해야 합니다. 조건으로 분기된 객체를 그림으로 설명하면 다음과 같습니다.</p>
+
+<h4 id="그림-8-2-조건-분기">그림 8-2 조건 분기</h4>
+
+<p><img src="./img/fig_8_2.svg" alt="그림 8-2" /></p>
+
+<p>콘솔에서 실행한 결과는 다음과 같습니다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index.php
+안녕하세요
+</code></pre></div></div>
+
+<p>새로운 코드를 추가하는 것은 기존의 설계 모델을 변형하는 것입니다. 처음에 깔끔했던 코드가 잦은 요구 사항으로 인해 지저분하게 변질됩니다. 코드는 점점 가독성이 떨어지고 유지 보수를 위한 코드 분석 시간이 늘어납니다.</p>
+
+<h2 id="82-상속">8.2 상속</h2>
+
+<p>객체지향은 요구되는 행위를 객체화하여 처리합니다. 다양한 행위를 위해 클래스는 다른 클래스를 포함하고 상속을 통해 기능을 확장합니다.</p>
+
+<p>188 2부 구조 패턴</p>
+
+<h3 id="821-상속-확장">8.2.1 상속 확장</h3>
+
+<p>객체지향에서 상속은 부모와 자식 형태의 관계로 설명합니다. 이렇게 유전적인 형태로는 정확한 상속의 의미를 알기 어렵습니다.</p>
+
+<p>유전적인 형태로 상속을 설명하면 상위 클래스의 속성(기능)을 포함하는 서브 객체로 이해할 수 있습니다. 하지만 상속은 기존의 모든 기능을 갖고 있으며 새로운 기능을 추가하는 확장 개념으로 생각하는 것이 더 좋습니다.</p>
+
+<p>다국어 인사말의 요청 사항을 상속 확장 형태로 다시 만들어봅시다.</p>
+
+<p>예제 8-5 Bridge/hello/03/hello.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 최초 설계 인사말</span>
+<span class="kd">class</span> <span class="nc">Hello</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">greeting</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">"hello"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Hello 클래스는 수정하지 않습니다. Hello 클래스를 상속하는 새로운 Greeting 클래스를 생성합니다.</p>
+
+<p>예제 8-6 Bridge/hello/03/Greeting.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 최초 인사말을 상속 받습니다.</span>
+<span class="c1">// 새로운 인사말 기능을 추가합니다.</span>
+<span class="kd">class</span> <span class="nc">Greeting</span> <span class="kd">extends</span> <span class="nc">Hello</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">ko</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">"안녕하세요"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>8장 브리지 패턴 189</p>
+
+<p>Hello 클래스를 상속하면서 추가 메서드를 하나 더 만듭니다. Greeting 클래스는 Hello 클래스의 메서드와 추가로 작성한 메서드를 모두 갖고 있습니다. 상속은 기존 클래스의 행위를 확장합니다.</p>
+
+<h4 id="그림-8-3-상속을-통한-확장">그림 8-3 상속을 통한 확장</h4>
+
+<p><img src="./img/fig_8_3.svg" alt="그림 8-3" /></p>
+
+<p>상속 클래스를 이용해 인사말을 출력합니다.</p>
+
+<p>예제 8-7 Bridge/hello/03/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 계층 클래스 로딩</span>
+<span class="k">require</span> <span class="s2">"hello.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"Greeting.php"</span><span class="p">;</span>
+
+<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Greeting</span><span class="p">;</span>
+
+<span class="k">echo</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">ko</span><span class="p">()</span><span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">greeting</span><span class="p">()</span><span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index.php
+안녕하세요
+Hello
+</code></pre></div></div>
+
+<p>하위 클래스가 상위 클래스를 상속받으면 하위 클래스는 상위 클래스의 모든 메서드와 프로퍼티를 사용할 수 있습니다.</p>
+
+<p>원본 클래스를 수정하지 않고도 새로운 추가 기능을 상속으로 구현할 수 있습니다. 이처럼 상속을 이용하면 적은 코드로 다양한 요구 사항을 유지 보수할 수 있습니다.</p>
+
+<p>190 2부 구조 패턴</p>
+
+<h3 id="822-계층">8.2.2 계층</h3>
+
+<p>우리는 변경된 기능을 구현하기 위해 클래스를 상속했습니다. 상속은 클래스를 통한 객체의 확장입니다. 클래스가 또 다른 클래스를 상속받는다는 의미는 클래스 간 계층을 만든다는 것입니다.</p>
+
+<h4 id="그림-8-4-상속-계층">그림 8-4 상속 계층</h4>
+
+<p><img src="./img/fig_8_4.svg" alt="그림 8-4" /></p>
+
+<p>상속 받은 클래스에 추가 메서드를 하나 추가 선언합니다. 상속된 클래스 계층은 기존 클래스의 모든 기능을 포함하여 새로운 객체를 생성합니다. 상속은 계층적 특성과 함께 기존 클래스의 책임을 포함하는 상하 관계를 갖게 됩니다.</p>
+
+<p>상속을 옆에서 보면 위아래 계층으로 볼 수 있는데, 위에서 보면 클래스가 깊은 구조로 확장되는 것처럼 보입니다.</p>
+
+<h3 id="823-상속의-문제점">8.2.3 상속의 문제점</h3>
+
+<p>상속은 객체지향에서 중요한 개념이며 코드를 재사용하고 확장하기에 매우 유용합니다. 하지만 상속에는 한 가지 문제점이 있습니다.</p>
+
+<p>클래스를 상속하면 구현과 추상 개념이 영구적으로 결합됩니다. 이 경우 향후 상속된 클래스를 수정하거나 확장하기 어렵습니다. 물론 상위 클래스의 메서드를 오버라이드하여 재정의할 수는 있지만, 오버라이드돼도 상위 객체의 메서드를 모두 포함합니다.</p>
+
+<p>즉, 기능을 상속으로 확장하면 최종 클래스가 무거워집니다.</p>
+
+<p>8장 브리지 패턴 191</p>
+
+<h2 id="83-패턴-설계-1">8.3 패턴 설계 1</h2>
+
+<p>상속은 클래스의 계층을 분리하고 기능을 확장하지만 강력한 결합 관계와 불필요한 메서드도 상속에 같이 포함된다는 단점을 갖고 있습니다.</p>
+
+<p>이러한 상속의 문제점은 브리지 패턴을 응용하여 해결합니다. 브리지 패턴을 적용하려면 4개의 구성 요소가 필요합니다.</p>
+
+<ul>
+  <li>Implementor</li>
+  <li>ConcreateImplementor</li>
+  <li>Abstract</li>
+  <li>refinedAbstract</li>
+</ul>
+
+<p>앞에서 살펴본 예에서 Implementor에 해당하는 Hello 클래스와 ConcreateImplemetor 부분에 해당하는 Greeting 클래스를 만들었습니다. 패턴 설계 2(8.4절)에서는 Abstract와 refinedAbstract를 만들어보겠습니다.</p>
+
+<h3 id="831-종속">8.3.1 종속</h3>
+
+<p>상속을 이용해 확장할 경우 상위 클래스와 하위 클래스 사이에 강력한 결합 관계가 발생합니다. 강력한 결합 구조는 종속화되며, 강력한 결합 구조로 인해 종속된 코드는 다른 시스템으로 이식하기 어렵습니다.</p>
+
+<p>작성한 코드를 다양하게 사용하기 위해서는 독립적인 확장이 가능하도록 설계해야 합니다. 먼저 강력한 결합 관계를 줄이고 느슨한 결합 관계로 변경합니다.</p>
+
+<p>느슨한 결합 관계로 변경하는 방법 중 대표적인 것이 위임^delegate 입니다. 위임을 통해 객체의 구성을 복합 객체 구조로 리팩터링합니다.</p>
+
+<h3 id="832-계층-분리">8.3.2 계층 분리</h3>
+
+<p>유지 보수가 많아진 코드는 객체 내에 구현과 추상이 복잡하게 섞여 있습니다. 따라서 여러 군데에 흩어진 기능과 구현을 정리해야 합니다.</p>
+
+<p>192 2부 구조 패턴</p>
+
+<p>클래스의 계층을 설계할 때는 새로운 기능을 생성하기 위한 것인지, 역할 분담을 위한 것인지 판단해야 합니다. 잘 설계된 계층은 클래스의 동작을 쉽게 이해하고 동작 수행을 예측하는 데 수월합니다.</p>
+
+<p>다음에는 상속으로 나뉜 인사말 기능을 분리합니다. 기존 Hello 클래스를 인터페이스로 변경합니다.</p>
+
+<p>예제 8-8 Bridge/hello/04/hello.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 공통 인터페이스</span>
+<span class="kd">interface</span> <span class="nc">Hello</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">greeting</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>인터페이스를 이용하여 계층화된 클래스를 분리합니다. 분리된 객체가 동일한 호출 명령을 할 수 있도록 인터페이스를 각각의 클래스에 적용합니다.</p>
+
+<h4 id="그림-8-5-인터페이스-적용">그림 8-5 인터페이스 적용</h4>
+
+<p><img src="./img/fig_8_5.svg" alt="그림 8-5" /></p>
+
+<p>다음은 브리지 패턴의 설계 요소 중 구현(Implementor) 부분입니다. 인터페이스를 적용해 하위 클래스(ConcreateImplementor)를 설계합니다.</p>
+
+<p>예제 8-9 Bridge/hello/04/English.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 영어 인사말</span>
+<span class="kd">class</span> <span class="nc">English</span> <span class="kd">implements</span> <span class="nc">Hello</span>
+<span class="p">{</span>
+
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">greeting</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">"hello."</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>영어 인사말 클래스를 설계하고 인터페이스를 이용해 한글 인사말 클래스를 설계합니다.</p>
+
+<p>예제 8-10 Bridge/hello/04/Korean.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 한글 인사말</span>
+<span class="kd">class</span> <span class="nc">Korean</span> <span class="kd">implements</span> <span class="nc">Hello</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">greeting</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">"안녕하세요."</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>재설계한 인사말을 출력하고 각각의 객체를 생성합니다.</p>
+
+<p>예제 8-11 Bridge/hello/04/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require</span> <span class="s2">"hello.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"Korean.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"English.php"</span><span class="p">;</span>
+
+<span class="nv">$obj1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Korean</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nv">$obj1</span><span class="o">-&gt;</span><span class="nf">greeting</span><span class="p">()</span><span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+
+<span class="nv">$obj2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">English</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nv">$obj2</span><span class="o">-&gt;</span><span class="nf">greeting</span><span class="p">()</span><span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index.php
+안녕하세요.
+hello.
+</code></pre></div></div>
+
+<p>194 2부 구조 패턴</p>
+
+<p>인터페이스를 적용하여 구현 부분을 각각의 클래스로 분리했습니다.</p>
+
+<h3 id="833-복합-구조">8.3.3 복합 구조</h3>
+
+<p>앞에서 실습한 구조를 좀 더 개선해보겠습니다. 복합 객체를 통해 분리된 2개의 구현 클래스를 연결합니다. 연결은 위임을 사용합니다.</p>
+
+<p>예제 8-12 Bridge/hello/04/Language.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Language</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nv">$english</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$korean</span><span class="p">;</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">setEnglish</span><span class="p">(</span><span class="nv">$obj</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">english</span> <span class="o">=</span> <span class="nv">$obj</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">setKorean</span><span class="p">(</span><span class="nv">$obj</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">korean</span> <span class="o">=</span> <span class="nv">$obj</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="그림-8-6-패턴1-구성-변경">그림 8-6 패턴1 구성 변경</h4>
+
+<p><img src="./img/fig_8_6.svg" alt="그림 8-6" /></p>
+
+<p>복합 객체인 Language는 구현 클래스의 객체를 프로퍼티^변수 에 담고 있으며 프로퍼티를 설정할 수 있는 setter 메서드도 갖고 있습니다.</p>
+
+<p>다음에는 구성을 통해 동일한 인사말을 출력합니다.</p>
+
+<p>8장 브리지 패턴 195</p>
+
+<p>예제 8-13 Bridge/hello/04/index2.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require</span> <span class="s2">"hello.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"Korean.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"English.php"</span><span class="p">;</span>
+
+<span class="k">require</span> <span class="s2">"Language.php"</span><span class="p">;</span>
+
+<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Language</span><span class="p">;</span>
+
+<span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">setEnglish</span><span class="p">(</span><span class="k">new</span> <span class="nc">English</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="n">english</span><span class="o">-&gt;</span><span class="nf">greeting</span><span class="p">()</span><span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+
+<span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">setKorean</span><span class="p">(</span><span class="k">new</span> <span class="nc">Korean</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="n">korean</span><span class="o">-&gt;</span><span class="nf">greeting</span><span class="p">()</span><span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index2.php
+hello.
+안녕하세요.
+</code></pre></div></div>
+
+<h2 id="84-패턴-설계-2">8.4 패턴 설계 2</h2>
+
+<p>패턴 설계 1(8.3절)에서는 결합된 클래스를 상속으로 분리하며 분리된 2개의 클래스를 구성 방식으로 결합하는 단계를 학습했습니다. 이번에는 패턴 설계 1을 기반으로 실제적인 브리지 패턴을 설계합니다.</p>
+
+<h3 id="841-추상-계층">8.4.1 추상 계층</h3>
+
+<p>패턴 설계 1(8.3절)에서 구현부는 하나의 계층으로 설계했습니다. 하나의 계층만으로 설계된 복합 객체는 브리지 패턴이라고 하지 않습니다.</p>
+
+<p>브리지 패턴은 복합 객체를 다시 재정의하여 추상 계층화된 구조입니다. 구성 클래스의 연결 부분을 추상 계층으로 변경합니다. 추상화 변경을 실행하는 이유는 각각의 계층이 독립적으로</p>
+
+<p>196 2부 구조 패턴</p>
+
+<p>확장/변경 가능하도록 하기 위해서입니다.</p>
+
+<h4 id="그림-8-7-추상-계층">그림 8-7 추상 계층</h4>
+
+<p><img src="./img/fig_8_7.svg" alt="그림 8-7" /></p>
+
+<p>브리지 패턴은 기능을 처리하는 클래스와 구현을 담당하는 추상 클래스로 구별합니다. 구현뿐 아니라 추상화도 독립적 변경이 필요할 때 브리지 패턴을 사용합니다.</p>
+
+<h3 id="842-계층-연결">8.4.2 계층 연결</h3>
+
+<p>브리지(bridge)는 구현 계층과 추상 계층 두 곳을 연결하는 다리라는 의미입니다. 브리지 패턴을 적용하기 위해서는 계층을 잘 분리하는 것이 중요합니다. 그리고 분리된 추상적 개념과 구현 계층을 연결합니다.</p>
+
+<p>클래스를 확장하는 방법은 상속에 의한 방식과 구현에 의한 방식이 있습니다. 브리지는 상속 대신 구현을 이용해 분리된 객체를 연결합니다. 연결은 구성을 위한 위임입니다. 구현을 통해 객체를 연결하면 객체 간 종속 관계를 제거할 수 있습니다.</p>
+
+<p>이처럼 브리지 패턴에서 기능과 구현을 분리하는 목적은 확장을 보다 쉽게 하기 위해서입니다. 분리된 계층은 독립적으로 확장 가능합니다.</p>
+
+<h3 id="843-추상-재설계">8.4.3 추상 재설계</h3>
+
+<p>브리지 패턴은 추상된 부분도 변경 확장이 가능합니다. 예제 코드를 통해 브리지 패턴의 동작을 이해해봅시다. 구현 부분의 코드는 동일합니다.</p>
+
+<p>예제 8-14 Bridge/hello/05/hello.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">interface</span> <span class="nc">Hello</span>
+</code></pre></div></div>
+
+<p>8장 브리지 패턴 197</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">greeting</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>예제 8-15 Bridge/hello/05/English.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">English</span> <span class="kd">implements</span> <span class="nc">Hello</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">greeting</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">"hello."</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>예제 8-16 Bridge/hello/05/Korean.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Korean</span> <span class="kd">implements</span> <span class="nc">Hello</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">greeting</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">"안녕하세요."</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>추상 계층을 재설계합니다. Language 클래스를 추상화하는데, 추상 클래스는 구성을 연결할 수 있는 프로퍼티와 인터페이스의 추상 메서드만 선언되어 있습니다.</p>
+
+<p>다음은 브리지 패턴의 설계 요소 중 abstract 부분입니다.</p>
+
+<p>예제 8-17 Bridge/hello/05/Language.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">abstract</span> <span class="kd">class</span> <span class="nc">Language</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nv">$language</span><span class="p">;</span>
+
+    <span class="k">abstract</span> <span class="k">public</span> <span class="k">function</span> <span class="n">greeting</span><span class="p">();</span> <span class="c1">// 추상 메서드</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>198 2부 구조 패턴</p>
+
+<p>변경된 추상 클래스를 상속합니다. 추상 클래스는 인터페이스만 선언하고, 실제 메서드는 하위 구현 클래스에서 만듭니다. 하위 클래스는 브리지 패턴의 설계 요소 중 refinedAbstract 부분입니다.</p>
+
+<p>예제 8-18 Bridge/hello/05/Message.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Message</span> <span class="kd">extends</span> <span class="nc">Language</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">(</span><span class="nv">$lang</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">language</span> <span class="o">=</span> <span class="nv">$lang</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">greeting</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// 브리지 구현</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">language</span><span class="o">-&gt;</span><span class="nf">greeting</span><span class="p">();</span> <span class="c1">// 분리된 역할 분담</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>추상 클래스는 상위 클래스와 하위 클래스 사이에서 역할을 분담합니다. 이렇게 추상화를 통해 역할을 분담할 때도 계층이 구별됩니다.</p>
+
+<p>역할을 분담하는 추상 클래스의 계층은 새로운 기능을 생성하는 것이 아니라 기존의 기능을 분리하여 계층화합니다.</p>
+
+<p>다음 예제에서는 분리된 계층을 연결하여 인사말을 출력합니다. 실제 인사말의 객체는 의존성 주입하며 주입된 객체는 생성자를 통해 설정됩니다.</p>
+
+<p>예제 8-19 Bridge/hello/05/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 계층</span>
+<span class="k">require</span> <span class="s2">"hello.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"Korean.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"English.php"</span><span class="p">;</span>
+
+<span class="c1">// 계층</span>
+<span class="k">require</span> <span class="s2">"Language.php"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>8장 브리지 패턴 199</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">require</span> <span class="s2">"Message.php"</span><span class="p">;</span>
+
+<span class="k">if</span><span class="p">(</span><span class="k">isset</span><span class="p">(</span><span class="nv">$language</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nv">$language</span> <span class="o">==</span> <span class="s2">"Korean"</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Message</span><span class="p">(</span> <span class="k">new</span> <span class="nc">Korean</span> <span class="p">);</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Message</span><span class="p">(</span> <span class="k">new</span> <span class="nc">English</span> <span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">echo</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">greeting</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index.php
+hello.
+</code></pre></div></div>
+
+<p>선택한 언어에 따라서 인사말이 변경됩니다.</p>
+
+<h3 id="844-브리지-의미">8.4.4 브리지 의미</h3>
+
+<p>상속은 새로운 기능이 추가될 때마다 메서드를 추가하고 호출하는 인터페이스도 계속 변경됩니다. 코드의 규모가 커질수록 특정 기능의 인터페이스 변경으로 인해 많은 관련 코드가 수정돼야 합니다. 디자인 패턴의 고전인 ‘GoF(Gang of Four)’는 브리지 패턴을 다음과 같이 정의합니다.</p>
+
+<p>‘2개의 객체는 추상화를 구현에서 분리하여 매우 독립적으로 사용할 수 있어야 한다.’</p>
+
+<p>이 정의와 같이 브리지 패턴은 동작하고자 하는 기능을 구현부와 추상화 형태로 분리하며, 새로운 기능을 확장으로 처리하지 않고 위임(delegate)으로 처리합니다. 그리고 이렇게 분리된 기능과 구현을 브리지화 형태로 결합해 동작하는 패턴이라고 설명합니다. 브리지 패턴은 추상 레벨 간의 연결을 처리합니다.</p>
+
+<h2 id="85-장점과-단점">8.5 장점과 단점</h2>
+
+<p>브리지 패턴은 기존 시스템에 부수적인 새로운 기능들을 지속적으로 추가할 때 사용하면 유용</p>
+
+<p>200 2부 구조 패턴</p>
+
+<p>한 패턴입니다. 브리지 패턴은 새로운 인터페이스를 정의하여 기존 프로그램의 변경 없이 기능을 확장할 수 있습니다.</p>
+
+<h3 id="851-장점">8.5.1 장점</h3>
+
+<p>클래스 계층을 분리할 때는 완전한 인터페이스로 결합하지 않습니다. 이런 점을 이용해 클래스에서 구현과 추상 부분을 2개의 계층으로 분리할 수 있으며, 분리된 2개의 추상 계층과 구현 계층은 독립적인 확장이 가능합니다.</p>
+
+<p>브리지 패턴을 사용하는 클라이언트 코드에서는 추상 계층과 연결된 구현 클래스를 변경해도 영향 없이 사용할 수 있습니다. 브리지 패턴은 다중 플랫폼을 지원하는 코드를 개발할 때 매우 유용합니다.</p>
+
+<h3 id="852-단점">8.5.2 단점</h3>
+
+<p>브리지 패턴은 하나의 클래스가 추상 계층과 구현 계층으로 분리됩니다. 추상화를 통해 코드를 분리할 경우 코드 디자인 설계가 복잡해진다는 단점이 있습니다.</p>
+
+<h2 id="86-관련-패턴">8.6 관련 패턴</h2>
+
+<p>브리지 패턴은 다음 패턴과도 연관시켜 응용할 수 있습니다.</p>
+
+<h3 id="861-템플릿-메서드-패턴">8.6.1 템플릿 메서드 패턴</h3>
+
+<p>템플릿 메서드 패턴은 추상화를 통해 구현 계층을 분리하여 사용합니다. 상위 추상 클래스에서는 선언 작업을 하며, 상속받은 하위 클래스에서는 실제 구현 작업을 합니다. 분리된 추상 계층은 템플릿 메서드 패턴과 유사합니다.</p>
+
+<p>8장 브리지 패턴 201</p>
+
+<h3 id="862-추상-팩토리-패턴">8.6.2 추상 팩토리 패턴</h3>
+
+<p>브리지 패턴을 생성하고 복합화될 때 추상 팩토리 패턴이 같이 적용됩니다.</p>
+
+<h3 id="863-어댑터-패턴">8.6.3 어댑터 패턴</h3>
+
+<p>어댑터 패턴과 브리지 패턴이 유사해 보이기도 합니다. 어댑터 패턴이 완성된 코드를 통합하고 결합할 때 사용되는 패턴이라면, 브리지 패턴은 처음 설계 단계에서 추상화 및 구현을 위해 확장을 고려한 패턴이라고 할 수 있습니다.</p>
+
+<h2 id="87-정리">8.7 정리</h2>
+
+<p>브리지 패턴은 적용 사례가 많지 않기 때문에 대부분의 책에서 각각 다른 방식으로 설명하고 있어 혼동되는 부분이 많습니다.</p>
+
+<p>하지만 브리지 패턴의 원리를 곰곰이 생각해보면 더 다양한 곳에 적용할 수 있습니다. 예제에서는 간단하게 다국어 인사말을 응용하여 처리하는 코드를 살펴보았습니다. 이와 유사하게 다양한 구현 계층과 연결 처리 계층을 분리하여 응용할 수 있는 사례를 찾아 적용해볼 수도 있습니다.</p>
+
+<p>브리지 패턴은 구현부와 추상부를 계층화하여 독립적으로 확장할 수 있도록 하는 패턴입니다. 자신의 코드가 유지 보수로 인해 많이 변경된다면 미리 예측해서 계층을 분리하는 것도 좋은 방안입니다.</p>
+
+<p>브리지 패턴을 사용하면 런타임 실행 시점에 어떠한 방식으로 기능을 구현할지 선택할 수 있습니다. 또한 기능을 독립적으로 확장할 수 있다면 상세한 기능을 외부로부터 숨길 수 있는 은닉 효과도 얻을 수 있습니다.</p>
+
+<p>202 2부 구조 패턴</p>
+
+
+
+            <!-- 다음/이전 학습 페이지네이션 -->
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+    
+    
+
+<div class="d-flex justify-content-between align-items-center mt-5 mb-4 py-3 border-top border-bottom">
+  <div>
+    
+      <span class="text-muted small me-2">이전 학습</span>
+      <a href="/ch07/" class="text-decoration-none fw-semibold">
+        &laquo; CHAPTER 7 어댑터 패턴
+      </a>
+    
+  </div>
+
+  <div class="text-end">
+    
+      <span class="text-muted small me-2">다음 학습</span>
+      <a href="/ch09/" class="text-decoration-none fw-semibold">
+        CHAPTER 9 복합체 패턴 &raquo;
+      </a>
+    
+  </div>
+</div>
+
+
+            <div class="mt-10">
+                <!-- 구글 에스센스 광고 -->
+                <script async
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3321560028329475"
+                    crossorigin="anonymous"></script>
+                <!-- jinydev-java -->
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3321560028329475"
+                    data-ad-slot="9323221865" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+
+        </div>
+
+        <div class="bd-toc mt-3 mb-5 my-lg-0 ps-xl-3 mb-lg-5 text-body-secondary">
+
+  <button class="btn btn-link p-md-0 mb-2 mb-md-0 text-decoration-none bd-toc-toggle d-md-none" type="button"
+    data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents">
+    서브목차
+    <svg class="bi d-md-none ms-2" aria-hidden="true">
+      <use xlink:href="#chevron-expand"></use>
+    </svg>
+  </button>
+
+  <strong class="d-none d-md-block h6 my-2">서브목차</strong>
+
+  <div class="collapse bd-toc-collapse" id="tocContents">
+    <nav id="TableOfContents">
+      <!--
+      <ul>
+        <li><a href="#quick-start">Quick start</a></li>
+        <li><a href="#cdn-links">CDN links</a></li>
+        <li><a href="#next-steps">Next steps</a></li>
+        <li><a href="#js-components">JS components</a></li>
+        <li><a href="#important-globals">Important globals</a>
+          <ul>
+            <li><a href="#html5-doctype">HTML5 doctype</a></li>
+            <li><a href="#responsive-meta-tag">Responsive meta tag</a></li>
+            <li><a href="#box-sizing">Box-sizing</a></li>
+            <li><a href="#reboot">Reboot</a></li>
+          </ul>
+        </li>
+        <li><a href="#community">Community</a></li>
+      </ul>
+      -->
+    </nav>
+  </div>
+</div>
+    </main>
+
+
+</div>
+
+  <footer class="container">
+  <hr class="mt-5 mb-3">
+  <div class="row align-items-center pb-3">
+    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+      <p class="mb-0 text-secondary">Copyright 2017~2026 JinyDev. All Rights Reserved.</p>
+    </div>
+    <div class="col-md-6 text-center text-md-end">
+      
+      <a href="https://datas.jiny.dev" class="text-decoration-none text-secondary ms-3">빅데이터</a>
+      
+      <a href="https://mysql.jiny.dev" class="text-decoration-none text-secondary ms-3">MySQL</a>
+      
+      <a href="https://php.jiny.dev" class="text-decoration-none text-secondary ms-3">PHP</a>
+      
+      <a href="https://java.jiny.dev" class="text-decoration-none text-secondary ms-3">자바</a>
+      
+      <a href="https://git.jiny.dev" class="text-decoration-none text-secondary ms-3">깃&깃허브</a>
+      
+      <a href="https://linux.jiny.dev" class="text-decoration-none text-secondary ms-3">리눅스</a>
+      
+    </div>
+  </div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+    window.addEventListener('load', async function () {
+      mermaid.initialize({ startOnLoad: false });
+
+      const mermaidCodes = document.querySelectorAll('pre code.language-mermaid');
+      const mermaidDivs = [];
+
+      mermaidCodes.forEach(codeBlock => {
+        const mermaidDefinition = codeBlock.textContent.trim();
+        const container = codeBlock.closest('div.highlighter-rouge');
+
+        const mermaidDiv = document.createElement('div');
+        mermaidDiv.className = 'mermaid';
+        mermaidDiv.textContent = mermaidDefinition;
+
+        if (container) {
+          container.replaceWith(mermaidDiv);
+        } else {
+          const pre = codeBlock.parentElement;
+          if (pre) pre.replaceWith(mermaidDiv);
+        }
+        mermaidDivs.push(mermaidDiv);
+      });
+
+      if (mermaidDivs.length > 0) {
+        await mermaid.run({ nodes: mermaidDivs });
+      }
+    });
+  </script>
+  <script src="/assets/js/toc.js"></script>
+  <script src="/assets/js/sidebar.js"></script>
+
+</body>
+
+</html>

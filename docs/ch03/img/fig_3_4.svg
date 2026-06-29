@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 200" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Top Box: 추상 클래스 / 선언 -->
+  <g filter="url(#shadow)">
+    <rect x="200" y="30" width="140" height="50" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1.5" />
+    <text x="270" y="22" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#64748b" text-anchor="middle">추상 클래스</text>
+    <text x="270" y="60" font-family="'Inter', sans-serif" font-size="13" font-weight="bold" fill="#475569" text-anchor="middle">선언</text>
+  </g>
+
+  <!-- Left text label: 일반 클래스 -->
+  <text x="50" y="145" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#64748b">일반 클래스</text>
+
+  <!-- Bottom Boxes: 방법1, 방법2, 방법3 -->
+  <g filter="url(#shadow)">
+    <!-- 방법1 -->
+    <rect x="130" y="120" width="90" height="40" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="175" y="144" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#0f172a" text-anchor="middle">방법1</text>
+
+    <!-- 방법2 -->
+    <rect x="250" y="120" width="90" height="40" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="295" y="144" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#0f172a" text-anchor="middle">방법2</text>
+
+    <!-- 방법3 -->
+    <rect x="370" y="120" width="90" height="40" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="415" y="144" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#0f172a" text-anchor="middle">방법3</text>
+  </g>
+
+  <!-- Dotted red paths from 선언 to 방법1, 방법2, 방법3 -->
+  <g>
+    <!-- Path to 방법1 -->
+    <path d="M 270,80 L 270,95 L 175,95 L 175,115" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" />
+    <polygon points="171,115 175,120 179,115" fill="#ef4444" />
+
+    <!-- Path to 방법2 -->
+    <path d="M 270,80 L 270,115" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" />
+    <polygon points="266,115 270,120 274,115" fill="#ef4444" />
+
+    <!-- Path to 방법3 -->
+    <path d="M 270,80 L 270,95 L 415,95 L 415,115" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" />
+    <polygon points="411,115 415,120 419,115" fill="#ef4444" />
+
+    <!-- Right text label: 다형성 오버라이드 -->
+    <text x="445" y="55" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#ea580c">다형성</text>
+    <text x="445" y="70" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#ea580c">오버라이드</text>
+  </g>
+</svg>

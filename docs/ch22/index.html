@@ -1,0 +1,2030 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- 기본 메타데이터 --><meta name="description" content="Jiny linux"><meta name="author" content="HojinLee"><!-- 제목 설정 --><title>CHAPTER 22 템플릿 메서드 패턴</title>
+  <meta name="title" content="CHAPTER 22 템플릿 메서드 패턴" /><!-- 키워드 설정 --><!-- Open Graph 메타데이터 --><meta property="og:title" content="CHAPTER 22 템플릿 메서드 패턴"><meta property="og:description" content="Jiny linux"><meta property="og:type" content="website"><meta property="og:locale" content="ko">
+  <meta property="og:site_name" content="linux">
+  <meta property="og:url" content="http://0.0.0.0:4000/ch22/">
+  <!-- 대표 URL (캐노니컬) -->
+  <link rel="canonical" href="http://0.0.0.0:4000/ch22/">
+
+  <!-- Twitter 카드 메타데이터 --><meta name="twitter:card" content="summary"><meta property="twitter:title" content="CHAPTER 22 템플릿 메서드 패턴"><!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="CHAPTER 22 템플릿 메서드 패턴" />
+<meta name="author" content="Hojin" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="24가지 패턴으로 알아보는 객체지향의 원리" />
+<meta name="twitter:description" property="og:description" content="24가지 패턴으로 알아보는 객체지향의 원리" />
+<link rel="canonical" href="http://0.0.0.0:4000/ch22/" />
+<meta property="og:url" content="http://0.0.0.0:4000/ch22/" />
+<meta property="og:site_name" content="쉽게 배워 바로 써먹는 디자인 패턴" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="CHAPTER 22 템플릿 메서드 패턴" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Hojin"},"description":"24가지 패턴으로 알아보는 객체지향의 원리","headline":"CHAPTER 22 템플릿 메서드 패턴","url":"http://0.0.0.0:4000/ch22/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/assets/css/docs.css" rel="stylesheet" />
+  <link href="/assets/css/highlight.css" rel="stylesheet" />
+
+  <style>
+    blockquote {
+      border-left: solid 5px #dee2e6;
+      padding: 5px 10px;
+      background-color: #f8f9fa;
+    }
+  </style>
+
+  <style>
+    h1 a {
+      text-decoration: none;
+    }
+
+    h2 a {
+      text-decoration: none;
+    }
+
+    h3 a {
+      text-decoration: none;
+    }
+
+    h4 a {
+      text-decoration: none;
+    }
+
+    h5 a {
+      text-decoration: none;
+    }
+
+    h6 a {
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      vertical-align: top
+    }
+
+    strong a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* 스크롤바 커스텀 */
+    /* 임의의 영역 생성 */
+    .scrollBar {}
+
+    /* 아래의 모든 코드는 영역::코드로 사용 */
+    .scrollBar::-webkit-scrollbar {
+      width: 7px;
+      /* 스크롤바의 너비 */
+    }
+
+    .scrollBar::-webkit-scrollbar-thumb {
+      height: 30%;
+      /* 스크롤바의 길이 */
+      background: #cccccc;
+      /* 스크롤바의 색상 */
+
+      border-radius: 5px;
+    }
+
+    .scrollBar::-webkit-scrollbar-track {
+      background: rgba(33, 122, 244, .1);
+      /*스크롤바 뒷 배경 색상*/
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4VBPCT3CR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-R4VBPCT3CR');
+  </script>
+
+
+</head>
+
+<body>
+  <header class="navbar navbar-expand-lg bd-navbar sticky-top">
+    <nav class="container bd-gutter flex-wrap flex-lg-nowrap position-relative" aria-label="Main navigation">
+
+      <!-- Mobile: Left Toggle (Browse) -->
+      <div class="bd-navbar-toggle d-lg-none">
+        <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdSidebar"
+          aria-controls="bdSidebar" aria-label="Toggle docs navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="bi" fill="currentColor"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z">
+            </path>
+          </svg>
+          <span class="d-none fs-6 pe-1">Browse</span>
+        </button>
+      </div>
+
+      <!-- Brand: Desktop (Static), Mobile (Absolute Center) -->
+      <a class="navbar-brand p-0 me-0 me-lg-2 ms-lg-0 d-none d-lg-inline-block" href="/" aria-label="jinydev">
+        <svg width="32" height="26" viewBox="0 0 32 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M24.2746 5.33377C25.8486 7.33981 25.1183 11.1792 24.3961 13.0177C24.4028 13.0199 24.4094 13.0221 24.4161 13.0243L24.4013 13.0248L22.649 12.9082C22.649 12.9053 22.6488 12.9013 22.649 12.8993C22.9902 8.93373 22.5975 7.34575 22.2147 7.07677C17.6316 10.3896 13.5379 9.33658 12.2725 9.01111C11.928 8.9225 11.7932 8.88781 11.9152 9.00988C12.2872 9.38185 13.1336 9.82821 13.7371 10.1465H13.7372L13.7376 10.1467C13.8743 10.2188 13.9985 10.2843 14.1019 10.3409C9.12673 10.3984 7.12659 8.00279 6.53855 7.29846C6.47859 7.22664 6.4333 7.1724 6.40105 7.14015C6.11408 6.85318 4.49961 5.87252 3.99256 7.74227C3.50142 9.55335 3.81246 11.6775 3.97665 12.7988C3.99089 12.896 3.99257 12.8981 3.99257 12.9298L2.37635 13.0248L2.37213 13.0247C0.223493 8.05534 1.83854 5.26971 3.29536 4.2246C3.29536 1.78444 6.27428 -0.592359 10.0455 0.263262C14.8768 1.64043 16.3468 1.18409 18.0759 0.647278C18.774 0.430562 19.5143 0.200726 20.5351 0.073124C25.2219 -0.512739 26.7993 2.56612 27 4.16122C26.2141 3.70487 24.8556 4.73165 24.2746 5.33377ZM12.3374 1.5872C11.1225 1.16466 7.99257 0.717209 6.3478 2.41116C5.98397 2.78587 5.55554 3.48864 5.55554 3.48864C5.55554 3.48864 4.82665 4.81961 4.25622 4.24919C3.68579 3.67878 5.0168 1.96749 6.06259 1.46044C7.10838 0.953388 9.70703 0.0660505 12.3374 1.5872Z"
+            fill="currentColor" />
+          <path
+            d="M10.078 13.5002H3.10601C2.2309 13.5002 1.52148 14.2097 1.52148 15.0848V18.3172C1.52148 19.1923 2.2309 19.9018 3.10601 19.9018H10.078C10.9531 19.9018 11.6625 19.1923 11.6625 18.3172V15.0848C11.6625 14.2097 10.9531 13.5002 10.078 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M0.823513 14.6094H0.379847C0.187322 14.6094 0.03125 14.7654 0.03125 14.958V15.9721C0.03125 16.1646 0.187322 16.3207 0.379847 16.3207H0.823513C1.01604 16.3207 1.17211 16.1646 1.17211 15.9721V14.958C1.17211 14.7654 1.01604 14.6094 0.823513 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M16.7326 13.5002H23.7045C24.5796 13.5002 25.2891 14.2097 25.2891 15.0848V18.3172C25.2891 19.1923 24.5796 19.9018 23.7045 19.9018H16.7326C15.8575 19.9018 15.1481 19.1923 15.1481 18.3172V15.0848C15.1481 14.2097 15.8575 13.5002 16.7326 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M25.9861 14.6094H26.4297C26.6222 14.6094 26.7783 14.7654 26.7783 14.958V15.9721C26.7783 16.1646 26.6222 16.3207 26.4297 16.3207H25.9861C25.7935 16.3207 25.6375 16.1646 25.6375 15.9721V14.958C25.6375 14.7654 25.7935 14.6094 25.9861 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M12.2954 15.5601H14.5137C14.7062 15.5601 14.8623 15.7161 14.8623 15.9087V16.9228C14.8623 17.1153 14.7062 17.2713 14.5137 17.2713H12.2954C12.1028 17.2713 11.9468 17.1153 11.9468 16.9228V15.9087C11.9468 15.7161 12.1028 15.5601 12.2954 15.5601Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M9.93343 16.3937C9.93343 16.7087 9.76317 16.9641 9.55314 16.9641C9.34311 16.9641 9.17285 16.7087 9.17285 16.3937C9.17285 16.0786 9.34311 15.8232 9.55314 15.8232C9.76317 15.8232 9.93343 16.0786 9.93343 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M16.9688 16.3937C16.9688 16.7087 17.139 16.9641 17.3491 16.9641C17.5591 16.9641 17.7293 16.7087 17.7293 16.3937C17.7293 16.0786 17.5591 15.8232 17.3491 15.8232C17.139 15.8232 16.9688 16.0786 16.9688 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M14.2758 20.1016C13.642 20.6086 12.7863 20.3551 12.5645 20.1016C12.6278 20.4185 12.8687 20.8622 13.4518 20.8622C14.0349 20.8622 14.2441 20.3551 14.2758 20.1016Z"
+            fill="currentColor" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.1312 22.411C12.1575 22.2914 12.2759 22.2157 12.3956 22.2421L14.6347 22.735C14.7544 22.7614 14.83 22.8797 14.8036 22.9994C14.7773 23.119 14.659 23.1947 14.5393 23.1683L12.3002 22.6753C12.1805 22.649 12.1049 22.5307 12.1312 22.411Z"
+            fill="currentColor" />
+          <path
+            d="M13.4203 27.6754C9.00897 27.7261 5.77228 23.6613 4.70536 21.6225C4.54691 21.3197 4.42016 21.2739 4.32509 21.3373C4.17297 21.4387 4.28282 21.6437 4.32507 21.7493C4.85747 22.9916 5.58213 24.0416 5.87791 24.4113C4.83846 26.1353 4.49409 27.855 4.45183 28.4994C6.1758 26.8008 7.91668 26.8832 8.57162 27.1367C13.7055 29.7987 16.5577 27.929 18.1739 27.1367C19.4669 26.5029 21.4803 27.7388 22.3254 28.436C22.224 26.8642 21.3747 25.1402 20.9627 24.4747C21.6282 23.5873 22.1669 22.5099 22.4522 21.9711C22.6803 21.5401 22.6106 21.369 22.5472 21.3373C22.3951 21.2613 22.2092 21.4958 22.1353 21.6225C21.6599 22.4148 18.9345 27.6121 13.4203 27.6754Z"
+            fill="currentColor" />
+        </svg>
+      </a>
+      <a class="navbar-brand p-0 me-0 position-absolute top-50 start-50 translate-middle d-lg-none" href="/"
+        aria-label="jinydev">
+        <svg width="100" height="26" viewBox="0 0 112 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M24.2746 5.33377C25.8486 7.33981 25.1183 11.1792 24.3961 13.0177C24.4028 13.0199 24.4094 13.0221 24.4161 13.0243L24.4013 13.0248L22.649 12.9082C22.649 12.9053 22.6488 12.9013 22.649 12.8993C22.9902 8.93373 22.5975 7.34575 22.2147 7.07677C17.6316 10.3896 13.5379 9.33658 12.2725 9.01111C11.928 8.9225 11.7932 8.88781 11.9152 9.00988C12.2872 9.38185 13.1336 9.82821 13.7371 10.1465H13.7372L13.7376 10.1467C13.8743 10.2188 13.9985 10.2843 14.1019 10.3409C9.12673 10.3984 7.12659 8.00279 6.53855 7.29846C6.47859 7.22664 6.4333 7.1724 6.40105 7.14015C6.11408 6.85318 4.49961 5.87252 3.99256 7.74227C3.50142 9.55335 3.81246 11.6775 3.97665 12.7988C3.99089 12.896 3.99257 12.8981 3.99257 12.9298L2.37635 13.0248L2.37213 13.0247C0.223493 8.05534 1.83854 5.26971 3.29536 4.2246C3.29536 1.78444 6.27428 -0.592359 10.0455 0.263262C14.8768 1.64043 16.3468 1.18409 18.0759 0.647278C18.774 0.430562 19.5143 0.200726 20.5351 0.073124C25.2219 -0.512739 26.7993 2.56612 27 4.16122C26.2141 3.70487 24.8556 4.73165 24.2746 5.33377ZM12.3374 1.5872C11.1225 1.16466 7.99257 0.717209 6.3478 2.41116C5.98397 2.78587 5.55554 3.48864 5.55554 3.48864C5.55554 3.48864 4.82665 4.81961 4.25622 4.24919C3.68579 3.67878 5.0168 1.96749 6.06259 1.46044C7.10838 0.953388 9.70703 0.0660505 12.3374 1.5872Z"
+            fill="currentColor" />
+          <path
+            d="M10.078 13.5002H3.10601C2.2309 13.5002 1.52148 14.2097 1.52148 15.0848V18.3172C1.52148 19.1923 2.2309 19.9018 3.10601 19.9018H10.078C10.9531 19.9018 11.6625 19.1923 11.6625 18.3172V15.0848C11.6625 14.2097 10.9531 13.5002 10.078 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M0.823513 14.6094H0.379847C0.187322 14.6094 0.03125 14.7654 0.03125 14.958V15.9721C0.03125 16.1646 0.187322 16.3207 0.379847 16.3207H0.823513C1.01604 16.3207 1.17211 16.1646 1.17211 15.9721V14.958C1.17211 14.7654 1.01604 14.6094 0.823513 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M16.7326 13.5002H23.7045C24.5796 13.5002 25.2891 14.2097 25.2891 15.0848V18.3172C25.2891 19.1923 24.5796 19.9018 23.7045 19.9018H16.7326C15.8575 19.9018 15.1481 19.1923 15.1481 18.3172V15.0848C15.1481 14.2097 15.8575 13.5002 16.7326 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M25.9861 14.6094H26.4297C26.6222 14.6094 26.7783 14.7654 26.7783 14.958V15.9721C26.7783 16.1646 26.6222 16.3207 26.4297 16.3207H25.9861C25.7935 16.3207 25.6375 16.1646 25.6375 15.9721V14.958C25.6375 14.7654 25.7935 14.6094 25.9861 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M12.2954 15.5601H14.5137C14.7062 15.5601 14.8623 15.7161 14.8623 15.9087V16.9228C14.8623 17.1153 14.7062 17.2713 14.5137 17.2713H12.2954C12.1028 17.2713 11.9468 17.1153 11.9468 16.9228V15.9087C11.9468 15.7161 12.1028 15.5601 12.2954 15.5601Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M9.93343 16.3937C9.93343 16.7087 9.76317 16.9641 9.55314 16.9641C9.34311 16.9641 9.17285 16.7087 9.17285 16.3937C9.17285 16.0786 9.34311 15.8232 9.55314 15.8232C9.76317 15.8232 9.93343 16.0786 9.93343 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M16.9688 16.3937C16.9688 16.7087 17.139 16.9641 17.3491 16.9641C17.5591 16.9641 17.7293 16.7087 17.7293 16.3937C17.7293 16.0786 17.5591 15.8232 17.3491 15.8232C17.139 15.8232 16.9688 16.0786 16.9688 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M14.2758 20.1016C13.642 20.6086 12.7863 20.3551 12.5645 20.1016C12.6278 20.4185 12.8687 20.8622 13.4518 20.8622C14.0349 20.8622 14.2441 20.3551 14.2758 20.1016Z"
+            fill="currentColor" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.1312 22.411C12.1575 22.2914 12.2759 22.2157 12.3956 22.2421L14.6347 22.735C14.7544 22.7614 14.83 22.8797 14.8036 22.9994C14.7773 23.119 14.659 23.1947 14.5393 23.1683L12.3002 22.6753C12.1805 22.649 12.1049 22.5307 12.1312 22.411Z"
+            fill="currentColor" />
+          <path
+            d="M13.4203 27.6754C9.00897 27.7261 5.77228 23.6613 4.70536 21.6225C4.54691 21.3197 4.42016 21.2739 4.32509 21.3373C4.17297 21.4387 4.28282 21.6437 4.32507 21.7493C4.85747 22.9916 5.58213 24.0416 5.87791 24.4113C4.83846 26.1353 4.49409 27.855 4.45183 28.4994C6.1758 26.8008 7.91668 26.8832 8.57162 27.1367C13.7055 29.7987 16.5577 27.929 18.1739 27.1367C19.4669 26.5029 21.4803 27.7388 22.3254 28.436C22.224 26.8642 21.3747 25.1402 20.9627 24.4747C21.6282 23.5873 22.1669 22.5099 22.4522 21.9711C22.6803 21.5401 22.6106 21.369 22.5472 21.3373C22.3951 21.2613 22.2092 21.4958 22.1353 21.6225C21.6599 22.4148 18.9345 27.6121 13.4203 27.6754Z"
+            fill="currentColor" />
+          <text x="32" y="21" font-family="Arial, sans-serif" font-weight="bold" font-size="22"
+            fill="currentColor">Jiny</text>
+        </svg>
+      </a>
+
+      <!-- Mobile: Right Toggle (Menu) -->
+      <div class="d-flex d-lg-none ms-auto">
+        <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdNavbar"
+          aria-controls="bdNavbar" aria-label="Toggle navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid"
+            viewBox="0 0 16 16">
+            <path
+              d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- OffCanvas -->
+      <div class="offcanvas-lg offcanvas-end flex-grow-1" tabindex="-1" id="bdNavbar"
+        aria-labelledby="bdNavbarOffcanvasLabel" data-bs-scroll="true">
+        <!-- OffCanver Header -->
+        <div class="offcanvas-header px-4 pb-0">
+          <h5 class="offcanvas-title text-white" id="bdNavbarOffcanvasLabel">Jiny</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"
+            data-bs-target="#bdNavbar">
+          </button>
+        </div>
+
+        <!-- OffCanver Body -->
+        <div class="offcanvas-body p-4 pt-0 p-lg-0">
+          <hr class="d-lg-none text-white-50">
+
+          <ul class="navbar-nav flex-column flex-lg-row bd-navbar-nav">
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/ch00/">패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part01/">생성패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part02/">구조패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part03/">행동패턴</a>
+            </li>
+            
+          </ul>
+
+          <hr class="d-lg-none text-white-50">
+
+          <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
+            <li class="nav-item col-6 col-lg-auto">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://github.com/jinydev/datas" target="_blank"
+                rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
+                  viewBox="0 0 512 499.36" role="img">
+                  <title>GitHub</title>
+                  <path fill="currentColor" fill-rule="evenodd"
+                    d="M256 0C114.64 0 0 114.61 0 256c0 113.09 73.34 209 175.08 242.9 12.8 2.35 17.47-5.56 17.47-12.34 0-6.08-.22-22.18-.35-43.54-71.2 15.49-86.2-34.34-86.2-34.34-11.64-29.57-28.42-37.45-28.42-37.45-23.27-15.84 1.73-15.55 1.73-15.55 25.69 1.81 39.21 26.38 39.21 26.38 22.84 39.12 59.92 27.82 74.5 21.27 2.33-16.54 8.94-27.82 16.25-34.22-56.84-6.43-116.6-28.43-116.6-126.49 0-27.95 10-50.8 26.35-68.69-2.63-6.48-11.42-32.5 2.51-67.75 0 0 21.49-6.88 70.4 26.24a242.65 242.65 0 0 1 128.18 0c48.87-33.13 70.33-26.24 70.33-26.24 14 35.25 5.18 61.27 2.55 67.75 16.41 17.9 26.31 40.75 26.31 68.69 0 98.35-59.85 120-116.88 126.32 9.19 7.9 17.38 23.53 17.38 47.41 0 34.22-.31 61.83-.31 70.23 0 6.85 4.61 14.81 17.6 12.31C438.72 464.97 512 369.08 512 256.02 512 114.62 397.37 0 256 0z">
+                  </path>
+                </svg>
+                <small class="d-lg-none ms-2">GitHub</small>
+              </a>
+            </li>
+
+            <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+              <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+              <hr class="d-lg-none my-2 text-white-50">
+            </li>
+
+            <li class="nav-item col-6 col-lg-auto">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://jiny.dev" aria-label="Home">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
+                  viewBox="0 0 16 16" role="img">
+                  <title>Home</title>
+                  <path fill="currentColor"
+                    d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z" />
+                </svg>
+                <small class="d-lg-none ms-2">Home</small>
+              </a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container bd-gutter mt-3 my-md-4 bd-layout">
+    <aside class="bd-sidebar scrollBar">
+        <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="bdSidebar"
+            aria-labelledby="bdSidebarOffcanvasLabel">
+            <div class="offcanvas-header border-bottom">
+                <h5 class="offcanvas-title" id="bdSidebarOffcanvasLabel">학습목차</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"
+                    data-bs-target="#bdSidebar"></button>
+            </div>
+
+            <div class="offcanvas-body">
+                <!-- 네비게이션 -->
+                <nav class="bd-links w-100" id="bd-docs-nav" aria-label="Docs navigation">
+  <ul class="bd-links-nav list-unstyled mb-0 pb-3 pb-md-2 pe-lg-2">
+    <li class="bd-links-group py-2">
+      <strong class="bd-links-heading d-flex w-100 align-items-center fw-semibold">
+        디자인 패턴 목차
+      </strong>
+      <ul class="list-unstyled fw-normal pb-2 small">
+        
+        
+
+        
+        <li>
+          
+          <a href="/part03/"
+            class="bd-links-link d-inline-block rounded ">
+            Part 3 행동 패턴
+          </a>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-2"
+            aria-expanded="false">
+            CHAPTER 14 반복자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-2">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch14/#141-객체의-집합"
+                  class="bd-links-link d-inline-block rounded">
+                  14.1 객체의 집합
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#142-배열"
+                  class="bd-links-link d-inline-block rounded">
+                  14.2 배열
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#143-집합체"
+                  class="bd-links-link d-inline-block rounded">
+                  14.3 집합체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#144-반복자"
+                  class="bd-links-link d-inline-block rounded">
+                  14.4 반복자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#145-작업-분할"
+                  class="bd-links-link d-inline-block rounded">
+                  14.5 작업 분할
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#146-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  14.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#147-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  14.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-3"
+            aria-expanded="false">
+            CHAPTER 15 명령 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-3">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch15/#151-명령-처리"
+                  class="bd-links-link d-inline-block rounded">
+                  15.1 명령 처리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#152-명령-패턴의-구성과-특징"
+                  class="bd-links-link d-inline-block rounded">
+                  15.2 명령 패턴의 구성과 특징
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#153-인터페이스"
+                  class="bd-links-link d-inline-block rounded">
+                  15.3 인터페이스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#154-명령"
+                  class="bd-links-link d-inline-block rounded">
+                  15.4 명령
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#155-리시버"
+                  class="bd-links-link d-inline-block rounded">
+                  15.5 리시버
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#156-인보커"
+                  class="bd-links-link d-inline-block rounded">
+                  15.6 인보커
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#157-클라이언트"
+                  class="bd-links-link d-inline-block rounded">
+                  15.7 클라이언트
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#158-undo"
+                  class="bd-links-link d-inline-block rounded">
+                  15.8 undo
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#159-장단점"
+                  class="bd-links-link d-inline-block rounded">
+                  15.9 장단점
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#1510-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  15.10 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#1511-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  15.11 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-4"
+            aria-expanded="false">
+            CHAPTER 16 방문자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-4">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch16/#161-데이터-처리"
+                  class="bd-links-link d-inline-block rounded">
+                  16.1 데이터 처리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#162-분리"
+                  class="bd-links-link d-inline-block rounded">
+                  16.2 분리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#163-원소-객체"
+                  class="bd-links-link d-inline-block rounded">
+                  16.3 원소 객체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#164-방문자"
+                  class="bd-links-link d-inline-block rounded">
+                  16.4 방문자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#165-반복자"
+                  class="bd-links-link d-inline-block rounded">
+                  16.5 반복자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#166-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  16.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#167-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  16.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-5"
+            aria-expanded="false">
+            CHAPTER 17 체인 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-5">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch17/#171-제어문"
+                  class="bd-links-link d-inline-block rounded">
+                  17.1 제어문
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#172-동작-조건"
+                  class="bd-links-link d-inline-block rounded">
+                  17.2 동작 조건
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#173-행동-분리"
+                  class="bd-links-link d-inline-block rounded">
+                  17.3 행동 분리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#174-사슬-연결"
+                  class="bd-links-link d-inline-block rounded">
+                  17.4 사슬 연결
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#175-체인-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  17.5 체인 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#176-미들웨어"
+                  class="bd-links-link d-inline-block rounded">
+                  17.6 미들웨어
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#177-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  17.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#178-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  17.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-6"
+            aria-expanded="false">
+            CHAPTER 18 감시자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-6">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch18/#observer"
+                  class="bd-links-link d-inline-block rounded">
+                  ob·ser·ver
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#181-감시자"
+                  class="bd-links-link d-inline-block rounded">
+                  18.1 감시자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#182-구성"
+                  class="bd-links-link d-inline-block rounded">
+                  18.2 구성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#183-관계"
+                  class="bd-links-link d-inline-block rounded">
+                  18.3 관계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#184-주체"
+                  class="bd-links-link d-inline-block rounded">
+                  18.4 주체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#185-감시자"
+                  class="bd-links-link d-inline-block rounded">
+                  18.5 감시자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#186-동작-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  18.6 동작 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#187-활용"
+                  class="bd-links-link d-inline-block rounded">
+                  18.7 활용
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#188-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  18.8 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#189-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  18.9 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-7"
+            aria-expanded="false">
+            CHAPTER 19 중재자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-7">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch19/#191-중재"
+                  class="bd-links-link d-inline-block rounded">
+                  19.1 중재
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#192-중재자"
+                  class="bd-links-link d-inline-block rounded">
+                  19.2 중재자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#193-동료-객체"
+                  class="bd-links-link d-inline-block rounded">
+                  19.3 동료 객체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#194-기본-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  19.4 기본 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#195-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  19.5 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#196-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  19.6 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-8"
+            aria-expanded="false">
+            CHAPTER 20 상태 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-8">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch20/#201-상태란"
+                  class="bd-links-link d-inline-block rounded">
+                  20.1 상태란
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#202-상태-처리"
+                  class="bd-links-link d-inline-block rounded">
+                  20.2 상태 처리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#203-패턴-구현"
+                  class="bd-links-link d-inline-block rounded">
+                  20.3 패턴 구현
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#204-객체-생성"
+                  class="bd-links-link d-inline-block rounded">
+                  20.4 객체 생성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#205-상태-전환"
+                  class="bd-links-link d-inline-block rounded">
+                  20.5 상태 전환
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#206-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  20.6 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#207-효과"
+                  class="bd-links-link d-inline-block rounded">
+                  20.7 효과
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#208-패턴-유사성"
+                  class="bd-links-link d-inline-block rounded">
+                  20.8 패턴 유사성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#209-적용-사례"
+                  class="bd-links-link d-inline-block rounded">
+                  20.9 적용 사례
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#2010-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  20.10 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-9"
+            aria-expanded="false">
+            CHAPTER 21 메멘토 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-9">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch21/#211-상태-저장"
+                  class="bd-links-link d-inline-block rounded">
+                  21.1 상태 저장
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#212-캡슐화"
+                  class="bd-links-link d-inline-block rounded">
+                  21.2 캡슐화
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#213-메멘토"
+                  class="bd-links-link d-inline-block rounded">
+                  21.3 메멘토
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#214-originator-클래스"
+                  class="bd-links-link d-inline-block rounded">
+                  21.4 Originator 클래스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#215-caretaker-클래스"
+                  class="bd-links-link d-inline-block rounded">
+                  21.5 CareTaker 클래스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#216-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  21.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#217-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  21.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0  w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-10"
+            aria-expanded="true">
+            CHAPTER 22 템플릿 메서드 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse show" id="collapse-10">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch22/#221-프로그램의-구조"
+                  class="bd-links-link d-inline-block rounded">
+                  22.1 프로그램의 구조
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#222-템플릿"
+                  class="bd-links-link d-inline-block rounded">
+                  22.2 템플릿
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#223-일반화"
+                  class="bd-links-link d-inline-block rounded">
+                  22.3 일반화
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#224-추상화"
+                  class="bd-links-link d-inline-block rounded">
+                  22.4 추상화
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#225-템플릿-메서드"
+                  class="bd-links-link d-inline-block rounded">
+                  22.5 템플릿 메서드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#226-의존성-디자인"
+                  class="bd-links-link d-inline-block rounded">
+                  22.6 의존성 디자인
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#227-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  22.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#228-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  22.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-11"
+            aria-expanded="false">
+            CHAPTER 23 전략 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-11">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch23/#231-문제"
+                  class="bd-links-link d-inline-block rounded">
+                  23.1 문제
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#232-알고리즘"
+                  class="bd-links-link d-inline-block rounded">
+                  23.2 알고리즘
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#233-분리"
+                  class="bd-links-link d-inline-block rounded">
+                  23.3 분리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#234-인터페이스"
+                  class="bd-links-link d-inline-block rounded">
+                  23.4 인터페이스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#235-전략"
+                  class="bd-links-link d-inline-block rounded">
+                  23.5 전략
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#236-전략-실행"
+                  class="bd-links-link d-inline-block rounded">
+                  23.6 전략 실행
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#237-적용-사례"
+                  class="bd-links-link d-inline-block rounded">
+                  23.7 적용 사례
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#238-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  23.8 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#239-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  23.9 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-12"
+            aria-expanded="false">
+            CHAPTER 24 인터프리터 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-12">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch24/#241-언어"
+                  class="bd-links-link d-inline-block rounded">
+                  24.1 언어
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#242-언어-설계"
+                  class="bd-links-link d-inline-block rounded">
+                  24.2 언어 설계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#243-처리계"
+                  class="bd-links-link d-inline-block rounded">
+                  24.3 처리계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#244-중간-코드"
+                  class="bd-links-link d-inline-block rounded">
+                  24.4 중간 코드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#245-해석"
+                  class="bd-links-link d-inline-block rounded">
+                  24.5 해석
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#246-클래스-표현"
+                  class="bd-links-link d-inline-block rounded">
+                  24.6 클래스 표현
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#247-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  24.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#248-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  24.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+      </ul>
+    </li>
+  </ul>
+</nav>
+            </div>
+        </div>
+    </aside>
+
+    <main class="bd-main order-1">
+        <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        
+        
+        
+        
+        
+        
+        <li class="breadcrumb-item active" aria-current="page">CHAPTER 22 템플릿 메서드 패턴</li>
+        
+        
+        
+    </ol>
+</nav>
+
+        <div class="bd-content ps-lg-2">
+            
+<h1 id="template-method">tem·plate method</h1>
+<p>[‘templeit ‘meθəd]</p>
+
+<h1 id="chapter-22-템플릿-메서드-패턴">CHAPTER 22 템플릿 메서드 패턴</h1>
+
+<p>템플릿 메서드 패턴은 메서드를 이용해 각 단계를 템플릿 구조화하고 행동을 구분합니다.</p>
+
+<h2 id="221-프로그램의-구조">22.1 프로그램의 구조</h2>
+
+<p>프로그램의 코드는 구조를 갖고 있습니다. 시작을 기준으로 하여 순차적으로 코드를 읽고 해석합니다. 프로그램이 순차적으로 실행된다는 의미는 단계적으로 코드를 따라간다는 것입니다.</p>
+
+<h3 id="2211-코드-실행-순서-분석">22.1.1 코드 실행 순서 분석</h3>
+<p>모든 행동에는 순서가 있으며, 우리가 무의식적으로 걸을 때도 동작에 순서가 있습니다. 프로그램은 이러한 동작을 분석해서 순차적으로 연결합니다.</p>
+
+<h4 id="그림-22-1-프로그램-실행-단계">그림 22-1 프로그램 실행 단계</h4>
+
+<p><img src="./img/fig_22_1.svg" alt="그림 22-1" /></p>
+
+<p>22장 템플릿 메서드 패턴 <strong>477</strong></p>
+
+<p>최근 들어 언플러그드 코딩 교육이 인기를 얻고 있습니다. 인간이 무의식적으로 행동하는 것을 프로그램 방식으로 분석하고 논리적으로 사고하는 훈련입니다. 프로그래밍은 사용자가 원하는 동작을 정확히 이해하고 분석하는 것부터 시작합니다. 그리고 분석된 행동과 결과를 코드로 작성합니다.</p>
+
+<p>예를 들어 샌드위치 제작 방법을 코드로 작성해봅시다. 맛있는 샌드위치를 만드는 과정을 프로그래밍하기 위해 호텔 주방장을 섭외했습니다. 호텔 주방장은 컴퓨터 프로그래밍을 해본 경험이 없습니다.</p>
+
+<p>개발자: “샌드위치는 어떤 모양이고 어떻게 만드나요?”
+주방장: “샌드위치는 2개의 빵 안에 원하는 재료를 넣습니다.”</p>
+
+<p>주방장의 이야기를 들은 개발자는 주방장이 얘기한 것과 같이 샌드위치를 만드는 코드를 작성합니다.</p>
+
+<p>예제 22-1 Template/01/sandwich.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">SandWich</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">make</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">"빵 + 속재료 + 빵"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>작성한 SandWich 클래스를 이용해 샌드위치를 만들어봅시다.</p>
+
+<p>예제 22-2 Template/01/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">include</span> <span class="s2">"sandwich.php"</span><span class="p">;</span>
+
+<span class="k">echo</span> <span class="s2">"배고프다. 샌드위치를 만든다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">sandwich</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">make</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p><strong>478</strong> 3부 행동 패턴</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php index.php
+배고프다. 샌드위치를 만든다.
+빵 + 속재료 + 빵
+</code></pre></div></div>
+
+<p>주방장은 샌드위치 제작 과정을 너무 추상적으로 설명했습니다. 하지만 실제 샌드위치를 만드는 과정은 매우 복잡합니다.</p>
+
+<h3 id="2212-단계">22.1.2 단계</h3>
+<p>앞의 예제는 복잡한 샌드위치 요리 과정을 단순하게 설명했습니다. 하지만 사람들은 이 설명만 듣고도 원하는 샌드위치를 만들 수 있습니다.</p>
+
+<p>인간과 컴퓨터의 차이는 무엇일까요? 인간은 어떤 행동을 추상화하고 이를 이해합니다. 또한 추상화된 각 단계의 동작을 무의식적으로 학습된 형태로 반복합니다.</p>
+
+<p>실제 코딩으로 샌드위치를 만들려면 보다 상세하고 구체적인 동작을 기술해야 합니다. 동작 처리 과정을 면밀하게 살펴보면 단계별로 구분할 수 있습니다. 프로그래밍은 복잡한 동작을 단계별로, 구체적으로 구분하여 나열하는 것입니다.</p>
+
+<h4 id="그림-22-2-샌드위치-생성-단계-구분">그림 22-2 샌드위치 생성 단계 구분</h4>
+
+<p><img src="./img/fig_22_2.svg" alt="그림 22-2" /></p>
+
+<p>컴퓨터는 동작을 하나씩 지정해서 실행해야 하므로 컴퓨터 프로그램을 바르게 작성하는 것은 각각의 단계를 잘 구별하는 것이라고 할 수 있습니다.</p>
+
+<p>22장 템플릿 메서드 패턴 <strong>479</strong></p>
+
+<p>예제 22-3 Template/02/sandwich.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">SandWich</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">make</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// 1단계 : 빵을 하나 준비합니다.</span>
+        <span class="nv">$food</span> <span class="o">=</span> <span class="s2">"빵"</span><span class="p">;</span>
+
+        <span class="c1">// 2단계 : 준비된 빵에 속재료를 올려놓습니다.</span>
+        <span class="nv">$food</span> <span class="mf">.</span><span class="o">=</span> <span class="s2">" + "</span><span class="p">;</span>
+        <span class="nv">$food</span> <span class="mf">.</span><span class="o">=</span> <span class="s2">"속재료"</span><span class="p">;</span>
+
+        <span class="c1">// 3단계 : 속재료 위에 다시 빵 하나를 놓습니다.</span>
+        <span class="nv">$food</span> <span class="mf">.</span><span class="o">=</span> <span class="s2">" + "</span><span class="p">;</span>
+        <span class="nv">$food</span> <span class="mf">.</span><span class="o">=</span> <span class="s2">"빵"</span><span class="p">;</span>
+
+        <span class="c1">// 생성된 샌드위치를 반환합니다.</span>
+        <span class="k">return</span> <span class="nv">$food</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>[예제 22-3]에서는 샌드위치 생성 방법을 단계적으로 분리했습니다. 코드의 길이가 길어졌지만 실행 결과는 동일합니다.</p>
+
+<h2 id="222-템플릿">22.2 템플릿</h2>
+
+<p>모든 샌드위치는 공통된 모양의 형틀을 갖고 있고 샌드위치를 만드는 원리와 만들어진 모습이 같습니다. 즉 샌드위치의 내용물만 다를 뿐 겉모양은 비슷합니다.</p>
+
+<h3 id="2221-공통-로직">22.2.1 공통 로직</h3>
+<p>샌드위치의 종류는 매우 다양합니다. 하지만 만드는 방법과 구성(재료)은 동일합니다. 샌드위치는 2개의 빵 속에 속재료를 넣은 모양입니다. 이는 어떤 샌드위치라도 동일합니다.</p>
+
+<p><strong>480</strong> 3부 행동 패턴</p>
+
+<p>공통된 특징을 적용해 샌드위치 생성 과정을 단계별로 분리합니다.</p>
+
+<h4 id="그림-22-3-샌드위치-생성-과정-객체화">그림 22-3 샌드위치 생성 과정 객체화</h4>
+
+<p><img src="./img/fig_22_3.svg" alt="그림 22-3" /></p>
+
+<p>SandWich 클래스를 좀 더 개선해보겠습니다.</p>
+
+<p>예제 22-4 Template/03/sandwich.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">SandWich</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">make</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// 1단계 : 빵을 하나 준비합니다.</span>
+        <span class="nv">$food</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">bread</span><span class="p">();</span>
+
+        <span class="c1">// 2단계 : 준비된 빵에 속재료를 올려놓습니다.</span>
+        <span class="nv">$food</span> <span class="mf">.</span><span class="o">=</span> <span class="s2">" + "</span><span class="p">;</span>
+        <span class="nv">$food</span> <span class="mf">.</span><span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">jam</span><span class="p">();</span>
+
+        <span class="c1">// 3단계 : 속재료 위에 다시 빵 하나를 놓습니다.</span>
+        <span class="nv">$food</span> <span class="mf">.</span><span class="o">=</span> <span class="s2">" + "</span><span class="p">;</span>
+        <span class="nv">$food</span> <span class="mf">.</span><span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">bread</span><span class="p">();</span>
+
+        <span class="c1">// 생성된 샌드위치를 반환합니다.</span>
+        <span class="k">return</span> <span class="nv">$food</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">bread</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">"식빵"</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>22장 템플릿 메서드 패턴 <strong>481</strong></p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">function</span> <span class="n">jam</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">"딸기잼"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php index.php
+배고프다. 샌드위치를 만든다.
+식빵 + 딸기잼 + 식빵
+</code></pre></div></div>
+
+<p>샌드위치를 만들기 위한 원재료를 메서드로 분리했습니다. <code class="language-plaintext highlighter-rouge">make()</code> 메서드가 재료에 해당하는 메서드를 호출하지만 공통된 단계별 과정에는 변함이 없습니다.</p>
+
+<h3 id="2222-템플릿">22.2.2 템플릿</h3>
+<p>템플릿(Template)에는 ‘형판’, ‘견본’이라는 뜻이 있으며, 객체지향에서의 템플릿은 공통된 처리 로직을 말합니다.</p>
+
+<p>우리는 샌드위치를 만들기 위한 공통 로직을 설계했고 <code class="language-plaintext highlighter-rouge">make()</code> 메서드를 반복적으로 실행하면 됩니다. 어떤 샌드위치든지 만드는 방법은 크게 변하지 않습니다.</p>
+
+<h4 id="그림-22-4-샌드위치를-만드는-템플릿-반복-수행">그림 22-4 샌드위치를 만드는 템플릿 반복 수행</h4>
+
+<p><img src="./img/fig_22_4.svg" alt="그림 22-4" /></p>
+
+<p><code class="language-plaintext highlighter-rouge">make()</code> 메서드는 샌드위치를 만드는 알고리즘과 같습니다. <code class="language-plaintext highlighter-rouge">make()</code> 메서드와 같이 공통된 단계적 과정을 템플릿이라고 합니다.</p>
+
+<p><strong>482</strong> 3부 행동 패턴</p>
+
+<p>계적 과정을 템플릿이라고 합니다.</p>
+
+<h2 id="223-일반화">22.3 일반화</h2>
+
+<p>클래스의 일반화(generalization)는 공통점을 찾아 상위 클래스로 도출하는 과정입니다. 공통점을 기준으로 1개의 클래스를 2개의 클래스로 분리합니다.</p>
+
+<h3 id="2231-클래스-분리">22.3.1 클래스 분리</h3>
+<p>일반화는 객체지향의 상속을 구현하기 위해 공통된 부분을 찾는 과정입니다. 공통된 템플릿 로직을 분리하는 이유는 중복된 코드가 발생하기 때문입니다.</p>
+
+<p>일반화는 공통된 부분과 다른 부분을 분리합니다. 다양한 클래스로 객체를 확장할 때 공통된 부분만 모아서 별도로 관리하면 추후 유지 보수하기가 편합니다. 공통된 부분은 상위 클래스로, 다른 클래스는 하위 클래스로 재설계합니다.</p>
+
+<p>기존의 sandwich 클래스의 공통된 부분만 남겨놓습니다. 공통된 부분은 템플릿을 처리하는 메서드입니다.</p>
+
+<p>예제 22-5 Template/04/sandwich.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 공통된 부분</span>
+<span class="kd">class</span> <span class="nc">SandWich</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">make</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// 1단계 : 빵을 하나 준비합니다.</span>
+        <span class="nv">$food</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">bread</span><span class="p">();</span>
+
+        <span class="c1">// 2단계 : 준비된 빵에 속재료를 올려놓습니다.</span>
+        <span class="nv">$food</span> <span class="mf">.</span><span class="o">=</span> <span class="s2">" + "</span><span class="p">;</span>
+        <span class="nv">$food</span> <span class="mf">.</span><span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">jam</span><span class="p">();</span>
+
+        <span class="c1">// 3단계 : 속재료 위에 다시 빵 하나를 놓습니다.</span>
+</code></pre></div></div>
+
+<p>22장 템플릿 메서드 패턴 <strong>483</strong></p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="nv">$food</span> <span class="mf">.</span><span class="o">=</span> <span class="s2">" + "</span><span class="p">;</span>
+        <span class="nv">$food</span> <span class="mf">.</span><span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">bread</span><span class="p">();</span>
+
+        <span class="c1">// 생성된 샌드위치를 반환합니다.</span>
+        <span class="k">return</span> <span class="nv">$food</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>처리 로직은 알고리즘 단계를 가지며 이 단계는 반복적으로 수행됩니다.</p>
+
+<h3 id="2232-접근-속성">22.3.2 접근 속성</h3>
+<p>일반화를 통해 공통된 로직을 상위 클래스로 분리했습니다. 공통되지 않은 부분은 하위 클래스에 위임합니다. 상위 클래스의 템플릿 메서드는 하위 클래스의 메서드를 호출하여 사용합니다.</p>
+
+<p>템플릿 메서드에서는 불필요한 접근을 제한하고 템플릿 접근만 허용합니다. 샌드위치를 만드는 사용자는 공통된 로직인 템플릿만 호출하면 되며 하위 클래스의 메서드에 직접 접근할 필요가 없습니다.</p>
+
+<h4 id="그림-22-5-공통된-부분-분리메서드-호출">그림 22-5 공통된 부분 분리(메서드 호출)</h4>
+
+<p><img src="./img/fig_22_5.svg" alt="그림 22-5" /></p>
+
+<p>하위 클래스는 상위 클래스를 상속받으므로 외부에서 불필요한 메서드가 접근하는 것을 제한합니다. 하위 클래스의 메서드 속성은 상속된 구조에서만 접근을 허용하는 protected를 부여하여 설계합니다.</p>
+
+<p><strong>484</strong> 3부 행동 패턴</p>
+
+<p>예제 22-6 Template/04/Strawberry.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 공통되지 않은 부분</span>
+<span class="kd">class</span> <span class="nc">Strawberry</span> <span class="kd">extends</span> <span class="nc">SandWich</span>
+<span class="p">{</span>
+    <span class="k">protected</span> <span class="k">function</span> <span class="n">bread</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">"식빵"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">protected</span> <span class="k">function</span> <span class="n">jam</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">"딸기잼"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>샌드위치를 만드는 공통 과정은 동일하지만 완성된 샌드위치는 다를 수 있습니다. 일반화로 분리된 하위 클래스는 공통되지 않는 부분을 담을 수 있습니다. 하위 클래스만 변경하면 다양한 샌드위치를 만들 수 있습니다.</p>
+
+<h3 id="2233-일반화-결과">22.3.3 일반화 결과</h3>
+<p>일반화를 통해 분리한 클래스는 코드 중복이 발생하지 않도록 구조를 개선한 효과를 얻을 수 있습니다. 일반화로 분리된 클래스는 상속을 통해 결합합니다.</p>
+
+<p>일반화를 통해 분리된 클래스를 사용하려면 실행 코드에 2개의 클래스 파일을 모두 include해야 합니다.</p>
+
+<p>상속으로 구성된 클래스의 객체를 생성합니다. 하위 클래스를 사용해 객체를 생성하며, Strawberry 클래스는 SandWich 클래스를 상속합니다.</p>
+
+<p>예제 22-7 Template/04/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">include</span> <span class="s2">"sandwich.php"</span><span class="p">;</span>
+<span class="k">include</span> <span class="s2">"strawberry.php"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>22장 템플릿 메서드 패턴 <strong>485</strong></p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">echo</span> <span class="s2">"배고프다. 샌드위치를 만든다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Strawberry</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">make</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php index.php
+배고프다. 샌드위치를 만든다.
+식빵 + 딸기잼 + 식빵
+</code></pre></div></div>
+
+<h2 id="224-추상화">22.4 추상화</h2>
+
+<p>템플릿 메서드 패턴은 추상 클래스의 특징을 잘 활용하여 적용한 디자인 패턴입니다.</p>
+
+<h3 id="2241-오버라이드">22.4.1 오버라이드</h3>
+<p>클래스 상속은 모든 내용을 포괄적으로 승계받습니다. 샌드위치를 만들 때 식빵을 사용하지 않고 베이글을 사용하려면 어떻게 해야 할까요?</p>
+
+<p>Strawberry 클래스를 다시 상속하고 bread() 메서드를 오버라이드합니다.</p>
+
+<h4 id="그림-22-6-메서드-오버라이드">그림 22-6 메서드 오버라이드</h4>
+
+<p><img src="./img/fig_22_6.svg" alt="그림 22-6" /></p>
+
+<p>StrawberryBagel 클래스는 Strawberry 클래스를 다시 상속합니다.</p>
+
+<p><strong>486</strong> 3부 행동 패턴</p>
+
+<p>예제 22-8 Template/05/StrawberryBagel.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 공통되지 않은 부분</span>
+<span class="kd">class</span> <span class="nc">StrawberryBagel</span> <span class="kd">extends</span> <span class="nc">Strawberry</span>
+<span class="p">{</span>
+    <span class="k">protected</span> <span class="k">function</span> <span class="n">bread</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">"베이글"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>StrawberryBagel 클래스 내부에는 기존의 식빵을 처리하는 bread() 메서드와 베이글을 처리하는 bread() 메서드가 있습니다.</p>
+
+<p>예제 22-9 Template/05/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">include</span> <span class="s2">"sandwich.php"</span><span class="p">;</span>
+<span class="k">include</span> <span class="s2">"strawberry.php"</span><span class="p">;</span>
+<span class="k">include</span> <span class="s2">"StrawberryBagel.php"</span><span class="p">;</span>
+
+<span class="k">echo</span> <span class="s2">"배고프다. 샌드위치를 만든다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StrawberryBagel</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">make</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php index.php
+배고프다. 샌드위치를 만든다.
+베이글 + 딸기잼 + 베이글
+</code></pre></div></div>
+
+<h3 id="2242-추상-클래스">22.4.2 추상 클래스</h3>
+<p>상속을 통해 메서드를 오버라이드하면 불필요한 메서드만 남습니다. [그림 22-6]을 살펴보면 StrawberryBagel은 bread 메서드를 재정의합니다. 메서드 재정의로 인해 기존 Strawberry의 bread 메서드는 사용하지 않는 코드로 남게 됩니다. 메서드를 재정의하는 것은 클래스의 크기만 커지는 결과를 가져옵니다. 즉 불필요한 자원 낭비입니다.</p>
+
+<p>22장 템플릿 메서드 패턴 <strong>487</strong></p>
+
+<p>일반적인 상속 구조를 추상 클래스 구조로 변경합니다. 상위 일반 클래스에 abstract 키워드만 추가하면 SandWich 클래스를 추상 클래스로 변경할 수 있습니다.</p>
+
+<p>예제 22-10 Template/06/sandwich.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 공통된 부분</span>
+<span class="k">abstract</span> <span class="kd">class</span> <span class="nc">SandWich</span>
+<span class="p">{</span>
+    <span class="c1">// 템플릿</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">make</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// 1단계 : 빵을 하나 준비합니다.</span>
+        <span class="nv">$food</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">bread</span><span class="p">();</span>
+
+        <span class="c1">// 2단계 : 준비된 빵에 속재료를 올려놓습니다.</span>
+        <span class="nv">$food</span> <span class="mf">.</span><span class="o">=</span> <span class="s2">" + "</span><span class="p">;</span>
+        <span class="nv">$food</span> <span class="mf">.</span><span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">jam</span><span class="p">();</span>
+
+        <span class="c1">// 3단계 : 속재료 위에 다시 빵 하나를 놓습니다.</span>
+        <span class="nv">$food</span> <span class="mf">.</span><span class="o">=</span> <span class="s2">" + "</span><span class="p">;</span>
+        <span class="nv">$food</span> <span class="mf">.</span><span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">bread</span><span class="p">();</span>
+
+        <span class="c1">// 생성된 샌드위치를 반환합니다.</span>
+        <span class="k">return</span> <span class="nv">$food</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 추상 메서드</span>
+    <span class="k">abstract</span> <span class="k">protected</span> <span class="k">function</span> <span class="n">bread</span><span class="p">();</span>
+    <span class="k">abstract</span> <span class="k">protected</span> <span class="k">function</span> <span class="n">jam</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>추상 클래스도 동일한 상속 구조로 결합됩니다.</p>
+
+<blockquote>
+  <p>[!NOTE]
+일반 클래스와 달리 추상 클래스는 독립적인 인스턴스를 생성할 수 없습니다.</p>
+</blockquote>
+
+<p>변경된 추상 클래스의 템플릿을 살펴보겠습니다. 템플릿 역할의 메서드는 선언된 추상 메서드를 호출해 사용합니다. make() 템플릿(메서드) 안에서는 식재료의 메서드를 호출해서 사용합니다. 하지만 추상 클래스 안에서는 실제 식재료의 메서드만 선언할 뿐 구현하지 않으며, 추상</p>
+
+<p><strong>488</strong> 3부 행동 패턴</p>
+
+<p>메서드는 상속받은 하위 클래스에 실제 동작을 위임합니다.</p>
+
+<p>추상화를 통해 추상 메서드를 선언하면 실제로 구현하지 않아도 호출해서 사용할 수 있습니다. 실제 구현 메서드의 호출 및 처리 동작에 대해서만 알면 됩니다. 이는 추상화를 통해 사용과 구현을 분리하는 특징입니다.</p>
+
+<h3 id="2243-상위-클래스">22.4.3 상위 클래스</h3>
+<p>템플릿 메서드 패턴은 추상 클래스를 통해 상속을 추상화합니다. 상위 클래스의 추상화는 외형적인 뼈대만 결정합니다. 또한 하위 클래스를 구현하는 기준이 됩니다.</p>
+
+<h4 id="그림-22-7-추상화-상위-클래스">그림 22-7 추상화 상위 클래스</h4>
+
+<p><img src="./img/fig_22_7.svg" alt="그림 22-7" /></p>
+
+<p>메서드는 상위 클래스에 공통적 기능만 구현하고, 변경되는 부분은 추상 메서드로 선언합니다. 변경할 부분을 추상 메서드로 선언하는 이유는 상속받을 때 하위 클래스에서 중복적으로 재구현되기 때문입니다. 추상 클래스를 상속한 하위 클래스에서도 일반화된 공통 로직을 호출하여 사용할 수 있습니다. 공통된 코드를 상위 클래스로 옮길 경우 추후에 효율적으로 유지 보수할 수 있습니다.</p>
+
+<h3 id="2244-추상-메서드">22.4.4 추상 메서드</h3>
+<p>템플릿 메서드 패턴은 2개의 클래스를 갖고 있습니다. 하나는 템플릿의 메서드를 정의하는 추상 클래스이고, 하나는 템플릿 구현부인 일반 클래스입니다. 또한 두 개의 클래스는 서로 밀접한 관계를 갖고 있습니다.</p>
+
+<p>두 클래스의 관계는 추상 메서드의 선언을 통해 분리됩니다. 상위 클래스의 추상 메서드는 인</p>
+
+<p>22장 템플릿 메서드 패턴 <strong>489</strong></p>
+
+<p>터페이스와 같은 성격을 갖고 있습니다. 즉, 메서드 선언만 있을 뿐, 메서드의 실체는 없습니다. 추상 클래스는 추상 메서드 선언으로 실제 구현을 하위 클래스에 위임합니다.</p>
+
+<p>추상 메서드의 경우 호출 동작은 쉽게 알 수 있지만 내부 동작은 알 수 없습니다. 추상 메서드를 사용하면 호출부를 통일하는 효과를 얻을 수 있습니다.</p>
+
+<p>추상 클래스를 상속하면 하위 구현 클래스는 선언된 추상 메서드를 반드시 구현해야 합니다.</p>
+
+<h3 id="2245-하위-클래스">22.4.5 하위 클래스</h3>
+<p>실제 동작은 하위 클래스에서 처리하며 하위 클래스는 일반적인 클래스입니다. 다음과 같이 베이글로 만든 샌드위치가 생성되는 클래스를 추상화로 재설계해봅시다.</p>
+
+<p>예제 22-11 Template/06/StrawberryBagel.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 공통되지 않은 부분</span>
+<span class="kd">class</span> <span class="nc">StrawberryBagel</span> <span class="kd">extends</span> <span class="nc">SandWich</span>
+<span class="p">{</span>
+    <span class="c1">// 추상 메서드 : 구현</span>
+    <span class="k">protected</span> <span class="k">function</span> <span class="n">bread</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">"베이글"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 추상 메서드 : 구현</span>
+    <span class="k">protected</span> <span class="k">function</span> <span class="n">jam</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">"딸기잼"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>변경된 StrawberryBagel 클래스는 일반 클래스인 Strawberry를 상속하지 않고, 추상 클래스로 변경된 SandWich 클래스를 상속받습니다. StrawberryBagel 클래스는 SandWich 클래스에서 선언된 추상 메서드의 실제를 반드시 구현해야 합니다. 구현하지 않으면 오류가 발생합니다.</p>
+
+<p><strong>490</strong> 3부 행동 패턴</p>
+
+<h4 id="그림-22-8-추상화의-하위-클래스-구현">그림 22-8 추상화의 하위 클래스 구현</h4>
+
+<p><img src="./img/fig_22_8.svg" alt="그림 22-8" /></p>
+
+<p>상위 클래스의 역할은 골격을 정의하는 것이고 하위 클래스의 역할은 골격의 실제 수행을 처리하는 것입니다. 템플릿 메서드 패턴을 설계할 때 중요한 부분은 상위 클래스와 하위 클래스의 역할을 분배하는 것입니다.</p>
+
+<h3 id="2246-추상화-결과">22.4.6 추상화 결과</h3>
+<p>추상화하면 다수의 하위 클래스로 다양한 동작을 분리할 수 있고 중복된 코드도 제거할 수 있습니다. 또한 필요에 따라 처리하는 동작을 그룹별로 생성할 수도 있습니다.</p>
+
+<p>추상 클래스로 변환한 코드를 실행해봅시다.</p>
+
+<p>예제 22-12 Template/06/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">include</span> <span class="s2">"sandwich.php"</span><span class="p">;</span>
+<span class="k">include</span> <span class="s2">"StrawberryBagel.php"</span><span class="p">;</span>
+
+<span class="k">echo</span> <span class="s2">"배고프다. 샌드위치를 만든다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StrawberryBagel</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">make</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php index.php
+배고프다. 샌드위치를 만든다.
+베이글 + 딸기잼 + 베이글
+</code></pre></div></div>
+
+<p>이전과 달리 Strawberry 클래스가 없어도 추상화로 베이글 샌드위치를 만들 수 있습니다. 또한 오버라이드하지 않으므로 불필요한 코드가 내포되지 않습니다.</p>
+
+<p>22장 템플릿 메서드 패턴 <strong>491</strong></p>
+
+<p>샌드위치 생성 방법을 수정할 경우 추상 클래스만 변경하면 되는 등 구조를 보다 쉽게 개선할 수 있고 단계도 쉽게 수정할 수 있습니다.</p>
+
+<h3 id="2247-final-키워드">22.4.7 Final 키워드</h3>
+<p>템플릿 메서드는 기능의 구조를 템플릿에 미리 정의합니다. 템플릿은 분리된 상위 클래스에 위치하고 상속을 통해 기능을 사용합니다.</p>
+
+<p>템플릿은 공통된 기능으로 하위 클래스에서 오버라이딩되지 않도록 방지해야 합니다. 상속 구조에서 final 키워드를 사용하면 메서드의 오버라이딩을 방지할 수 있습니다.</p>
+
+<h2 id="225-템플릿-메서드">22.5 템플릿 메서드</h2>
+
+<p>템플릿 메서드는 공통된 로직을 분리하여 캡슐화합니다. 공통 단계인 템플릿을 별도의 메서드로 작성합니다.</p>
+
+<h3 id="2251-로직-변경">22.5.1 로직 변경</h3>
+<p>템플릿 메서드는 공통된 알고리즘을 정의하며, 공통된 로직을 처리하는 행동입니다. 템플릿 메서드 패턴은 로직의 전체 구조를 변경하지 않고 일부분만 수정할 때 유용합니다.</p>
+
+<p>큰 틀에서 보면 비슷한 로직이지만, 미세한 차이로 인해 코드를 중복 작성하는 경우가 많습니다. 중복된 코드는 유지 보수를 어렵게 만드는 원인이 됩니다.</p>
+
+<p><strong>492</strong> 3부 행동 패턴</p>
+
+<h4 id="그림-22-9-공통된-로직과-변화된-로직을-분리하여-처리">그림 22-9 공통된 로직과 변화된 로직을 분리하여 처리</h4>
+
+<p><img src="./img/fig_22_9.svg" alt="그림 22-9" /></p>
+
+<p>큰 틀의 공통된 로직만 처리하는 메서드와 변화된 작은 동작을 처리하는 메서드를 서로 분리합니다. 이러한 분리는 추상 클래스로 구현합니다.</p>
+
+<h3 id="2252-분할과-협력">22.5.2 분할과 협력</h3>
+<p>템플릿 메서드 패턴은 알고리즘과 같은 동작을 적용할 때 유용한 패턴입니다. 템플릿 메서드는 단계를 미리 정해놓고, 실제 구체적인 내용은 하위 클래스에게 요청합니다.</p>
+
+<p>템플릿 메서드는 추상화를 통해 로직을 분리합니다. 이처럼 추상화를 통해 알고리즘을 분리하면 구조를 변경하지 않고도 하위 클래스로 상세 동작을 재정의할 수 있습니다. 템플릿 메서드 패턴은 알고리즘의 뼈대를 정의하는 것과 같습니다.</p>
+
+<p>알고리즘은 단계별 행동을 정의하고 처리 과정을 세부적으로 묘사합니다. 또한 공통된 로직을 메서드로 캡슐화하고 캡슐화된 공통 로직은 상위 클래스에 배치합니다.</p>
+
+<p>공통되지 않은 로직은 단계별로 하위 클래스에 구현을 위임합니다. 상위 템플릿은 하위 클래스에서 구현된 메서드를 호출해 사용합니다. 템플릿 메서드는 메서드 호출을 통해 복잡한 처리를 간단히 단계별로 수행할 수 있습니다.</p>
+
+<p>22장 템플릿 메서드 패턴 <strong>493</strong></p>
+
+<h3 id="2253-후크">22.5.3 후크</h3>
+<p>하위 클래스에서 구현되는 메서드를 후크(Hook) 메서드, primitive 메서드라고 합니다. 후크는 중복된 코드를 제거하고 처리 로직의 일부를 변경할 때 자주 사용하는 기법입니다.</p>
+
+<h4 id="그림-22-10-후크">그림 22-10 후크</h4>
+
+<p><img src="./img/fig_22_10.svg" alt="그림 22-10" /></p>
+
+<p>템플릿 메서드는 추상 클래스를 통해 호출 방식을 미리 정의하고 하위 클래스에서 실체를 구현합니다. 이러한 동작은 후크 기능과 유사합니다.</p>
+
+<p>상속으로 후크를 구현할 때는 오버라이드를 사용합니다. 오버라이드는 기존의 메서드를 남겨둔 채 중복된 메서드를 새로 추가합니다. 하지만 추상 클래스로 후크를 처리할 때는 재정의가 아닌 미정의된 메서드를 신규로 구현합니다.</p>
+
+<h3 id="2254-장점">22.5.4 장점</h3>
+<p>템플릿 메서드는 클래스 일부를 외부에 노출하고, 외부에 노출된 메서드는 다른 객체에서 접근해 사용할 수 있습니다. 외부 접근을 허용함으로써 코드의 중복을 줄이는 효과를 얻을 수 있습니다.</p>
+
+<p>공통된 메서드를 노출함으로써 처리 로직을 한 곳에 집중합니다. 템플릿 메서드는 코드를 분산하지 않고 집중화하므로 변경이 용이합니다.</p>
+
+<h2 id="226-의존성-디자인">22.6 의존성 디자인</h2>
+
+<p>템플릿 메서드 패턴에서는 구성 요소 간 상호 의존성이 발생합니다.</p>
+
+<p><strong>494</strong> 3부 행동 패턴</p>
+
+<h3 id="2261-할리우드-원칙">22.6.1 할리우드 원칙</h3>
+<p>템플릿 메서드는 할리우드 원칙(hollywood principle)이라는 역전 제어 구조를 사용하는데, 높은 수준의 구성 요소가 낮은 수준의 구성 요소에 의존합니다.</p>
+
+<p>하위 클래스는 상위 클래스를 상속받는 서브 역할을 합니다. 하위 클래스는 구성 요소를 재구현하는 낮은 수준의 코드로 구성됩니다. 상위 클래스의 템플릿에서는 아직 구현되지 않거나 재구현될 낮은 수준의 구성 요소를 호출합니다.</p>
+
+<p>할리우드 원칙을 적용해서 의존성을 설계할 때는 순환 의존성이 발생하지 않도록 주의해야 합니다. 템플릿 메서드 패턴은 리스코프 치환 원칙(The Liskov Substitution Principle, LSP)도 함께 사용합니다.</p>
+
+<h2 id="227-관련-패턴">22.7 관련 패턴</h2>
+
+<p>템플릿 메서드는 다음 패턴과 함께 사용할 수 있으며 유사한 특징을 갖고 있습니다.</p>
+
+<h3 id="2271-팩토리-메서드-패턴">22.7.1 팩토리 메서드 패턴</h3>
+<p>팩토리 메서드 패턴은 추상화를 통해 객체의 요청과 생성을 분리합니다. 요청과 생성을 분리할 때는 템플릿 메서드 패턴을 응용합니다.</p>
+
+<h3 id="2272-전략-패턴">22.7.2 전략 패턴</h3>
+<p>템플릿 메서드는 상속 구조를 갖고 있습니다. 상위 클래스에서 먼저 큰 골격에 대한 동작의 흐름을 구현하고, 그 외의 실제적인 동작은 하위 클래스에서 구현합니다.</p>
+
+<p>템플릿 메서드에서 처리하는 템플릿은 전략 패턴에서 구현하는 알고리즘과 유사하며, 전략 패턴은 위임을 통해 알고리즘 동작을 변경합니다. 템플릿 메서드 패턴은 알고리즘의 동작 일부를</p>
+
+<hr />
+<ol>
+  <li>치환성은 객체 지향 프로그래밍 원칙이다. 컴퓨터 프로그램에서 자료형 S가 자료형 T의 하위형이라면 필요한 프로그램의 속성(정확성, 수행하는 업무 등) 변경 없이 자료형 T의 객체를 자료형 S의 객체로 교체(치환)할 수 있어야 한다는 원칙이다. 출처: 위키백과</li>
+</ol>
+
+<p>22장 템플릿 메서드 패턴 <strong>495</strong></p>
+
+<p>변경하지만 전략 패턴은 알고리즘 동작 전체를 변경합니다.</p>
+
+<h2 id="228-정리">22.8 정리</h2>
+
+<p>템플릿 메서드 패턴은 공통적인 프로세스를 묶어 처리하는 패턴입니다. 즉 일정한 프로세스가 유사한 동작을 할 때 템플릿 메서드 패턴을 적용합니다.</p>
+
+<p>템플릿 메서드는 구조를 변경하지 않고 처리 로직의 일부를 재정의하는 기법입니다. 템플릿 메서드 패턴은 추상 클래스를 이용해 공통적 기능을 추상화하고, 템플릿을 이용해 처리 로직의 상세 기능을 쉽게 확장할 수 있습니다.</p>
+
+<p>템플릿 메서드 패턴은 코드를 재사용하는 방법을 설명합니다. 템플릿 메서드는 상위 클래스에서 하위 클래스의 명령을 호출하는 후크 동작을 처리하는데, 이 후크 동작은 할리우드 원칙을 적용한 것입니다.</p>
+
+<p>템플릿 메서드 패턴은 실제 개발에서 자주 사용되는 패턴입니다. 특히 프레임워크에서는 구조를 제어할 때 템플릿 메서드가 자주 사용되는 것을 볼 수 있습니다.</p>
+
+<p><strong>496</strong> 3부 행동 패턴</p>
+
+
+
+            <!-- 다음/이전 학습 페이지네이션 -->
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+    
+    
+
+<div class="d-flex justify-content-between align-items-center mt-5 mb-4 py-3 border-top border-bottom">
+  <div>
+    
+      <span class="text-muted small me-2">이전 학습</span>
+      <a href="/ch21/" class="text-decoration-none fw-semibold">
+        &laquo; CHAPTER 21 메멘토 패턴
+      </a>
+    
+  </div>
+
+  <div class="text-end">
+    
+      <span class="text-muted small me-2">다음 학습</span>
+      <a href="/ch23/" class="text-decoration-none fw-semibold">
+        CHAPTER 23 전략 패턴 &raquo;
+      </a>
+    
+  </div>
+</div>
+
+
+            <div class="mt-10">
+                <!-- 구글 에스센스 광고 -->
+                <script async
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3321560028329475"
+                    crossorigin="anonymous"></script>
+                <!-- jinydev-java -->
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3321560028329475"
+                    data-ad-slot="9323221865" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+
+        </div>
+
+        <div class="bd-toc mt-3 mb-5 my-lg-0 ps-xl-3 mb-lg-5 text-body-secondary">
+
+  <button class="btn btn-link p-md-0 mb-2 mb-md-0 text-decoration-none bd-toc-toggle d-md-none" type="button"
+    data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents">
+    서브목차
+    <svg class="bi d-md-none ms-2" aria-hidden="true">
+      <use xlink:href="#chevron-expand"></use>
+    </svg>
+  </button>
+
+  <strong class="d-none d-md-block h6 my-2">서브목차</strong>
+
+  <div class="collapse bd-toc-collapse" id="tocContents">
+    <nav id="TableOfContents">
+      <!--
+      <ul>
+        <li><a href="#quick-start">Quick start</a></li>
+        <li><a href="#cdn-links">CDN links</a></li>
+        <li><a href="#next-steps">Next steps</a></li>
+        <li><a href="#js-components">JS components</a></li>
+        <li><a href="#important-globals">Important globals</a>
+          <ul>
+            <li><a href="#html5-doctype">HTML5 doctype</a></li>
+            <li><a href="#responsive-meta-tag">Responsive meta tag</a></li>
+            <li><a href="#box-sizing">Box-sizing</a></li>
+            <li><a href="#reboot">Reboot</a></li>
+          </ul>
+        </li>
+        <li><a href="#community">Community</a></li>
+      </ul>
+      -->
+    </nav>
+  </div>
+</div>
+    </main>
+
+
+</div>
+
+  <footer class="container">
+  <hr class="mt-5 mb-3">
+  <div class="row align-items-center pb-3">
+    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+      <p class="mb-0 text-secondary">Copyright 2017~2026 JinyDev. All Rights Reserved.</p>
+    </div>
+    <div class="col-md-6 text-center text-md-end">
+      
+      <a href="https://datas.jiny.dev" class="text-decoration-none text-secondary ms-3">빅데이터</a>
+      
+      <a href="https://mysql.jiny.dev" class="text-decoration-none text-secondary ms-3">MySQL</a>
+      
+      <a href="https://php.jiny.dev" class="text-decoration-none text-secondary ms-3">PHP</a>
+      
+      <a href="https://java.jiny.dev" class="text-decoration-none text-secondary ms-3">자바</a>
+      
+      <a href="https://git.jiny.dev" class="text-decoration-none text-secondary ms-3">깃&깃허브</a>
+      
+      <a href="https://linux.jiny.dev" class="text-decoration-none text-secondary ms-3">리눅스</a>
+      
+    </div>
+  </div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+    window.addEventListener('load', async function () {
+      mermaid.initialize({ startOnLoad: false });
+
+      const mermaidCodes = document.querySelectorAll('pre code.language-mermaid');
+      const mermaidDivs = [];
+
+      mermaidCodes.forEach(codeBlock => {
+        const mermaidDefinition = codeBlock.textContent.trim();
+        const container = codeBlock.closest('div.highlighter-rouge');
+
+        const mermaidDiv = document.createElement('div');
+        mermaidDiv.className = 'mermaid';
+        mermaidDiv.textContent = mermaidDefinition;
+
+        if (container) {
+          container.replaceWith(mermaidDiv);
+        } else {
+          const pre = codeBlock.parentElement;
+          if (pre) pre.replaceWith(mermaidDiv);
+        }
+        mermaidDivs.push(mermaidDiv);
+      });
+
+      if (mermaidDivs.length > 0) {
+        await mermaid.run({ nodes: mermaidDivs });
+      }
+    });
+  </script>
+  <script src="/assets/js/toc.js"></script>
+  <script src="/assets/js/sidebar.js"></script>
+
+</body>
+
+</html>

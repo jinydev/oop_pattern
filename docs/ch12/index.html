@@ -1,0 +1,2034 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- 기본 메타데이터 --><meta name="description" content="Jiny linux"><meta name="author" content="HojinLee"><!-- 제목 설정 --><title>CHAPTER 12 플라이웨이트 패턴</title>
+  <meta name="title" content="CHAPTER 12 플라이웨이트 패턴" /><!-- 키워드 설정 --><!-- Open Graph 메타데이터 --><meta property="og:title" content="CHAPTER 12 플라이웨이트 패턴"><meta property="og:description" content="Jiny linux"><meta property="og:type" content="website"><meta property="og:locale" content="ko">
+  <meta property="og:site_name" content="linux">
+  <meta property="og:url" content="http://0.0.0.0:4000/ch12/">
+  <!-- 대표 URL (캐노니컬) -->
+  <link rel="canonical" href="http://0.0.0.0:4000/ch12/">
+
+  <!-- Twitter 카드 메타데이터 --><meta name="twitter:card" content="summary"><meta property="twitter:title" content="CHAPTER 12 플라이웨이트 패턴"><!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="CHAPTER 12 플라이웨이트 패턴" />
+<meta name="author" content="Hojin" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="24가지 패턴으로 알아보는 객체지향의 원리" />
+<meta name="twitter:description" property="og:description" content="24가지 패턴으로 알아보는 객체지향의 원리" />
+<link rel="canonical" href="http://0.0.0.0:4000/ch12/" />
+<meta property="og:url" content="http://0.0.0.0:4000/ch12/" />
+<meta property="og:site_name" content="쉽게 배워 바로 써먹는 디자인 패턴" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="CHAPTER 12 플라이웨이트 패턴" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Hojin"},"description":"24가지 패턴으로 알아보는 객체지향의 원리","headline":"CHAPTER 12 플라이웨이트 패턴","url":"http://0.0.0.0:4000/ch12/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/assets/css/docs.css" rel="stylesheet" />
+  <link href="/assets/css/highlight.css" rel="stylesheet" />
+
+  <style>
+    blockquote {
+      border-left: solid 5px #dee2e6;
+      padding: 5px 10px;
+      background-color: #f8f9fa;
+    }
+  </style>
+
+  <style>
+    h1 a {
+      text-decoration: none;
+    }
+
+    h2 a {
+      text-decoration: none;
+    }
+
+    h3 a {
+      text-decoration: none;
+    }
+
+    h4 a {
+      text-decoration: none;
+    }
+
+    h5 a {
+      text-decoration: none;
+    }
+
+    h6 a {
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      vertical-align: top
+    }
+
+    strong a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* 스크롤바 커스텀 */
+    /* 임의의 영역 생성 */
+    .scrollBar {}
+
+    /* 아래의 모든 코드는 영역::코드로 사용 */
+    .scrollBar::-webkit-scrollbar {
+      width: 7px;
+      /* 스크롤바의 너비 */
+    }
+
+    .scrollBar::-webkit-scrollbar-thumb {
+      height: 30%;
+      /* 스크롤바의 길이 */
+      background: #cccccc;
+      /* 스크롤바의 색상 */
+
+      border-radius: 5px;
+    }
+
+    .scrollBar::-webkit-scrollbar-track {
+      background: rgba(33, 122, 244, .1);
+      /*스크롤바 뒷 배경 색상*/
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4VBPCT3CR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-R4VBPCT3CR');
+  </script>
+
+
+</head>
+
+<body>
+  <header class="navbar navbar-expand-lg bd-navbar sticky-top">
+    <nav class="container bd-gutter flex-wrap flex-lg-nowrap position-relative" aria-label="Main navigation">
+
+      <!-- Mobile: Left Toggle (Browse) -->
+      <div class="bd-navbar-toggle d-lg-none">
+        <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdSidebar"
+          aria-controls="bdSidebar" aria-label="Toggle docs navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="bi" fill="currentColor"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z">
+            </path>
+          </svg>
+          <span class="d-none fs-6 pe-1">Browse</span>
+        </button>
+      </div>
+
+      <!-- Brand: Desktop (Static), Mobile (Absolute Center) -->
+      <a class="navbar-brand p-0 me-0 me-lg-2 ms-lg-0 d-none d-lg-inline-block" href="/" aria-label="jinydev">
+        <svg width="32" height="26" viewBox="0 0 32 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M24.2746 5.33377C25.8486 7.33981 25.1183 11.1792 24.3961 13.0177C24.4028 13.0199 24.4094 13.0221 24.4161 13.0243L24.4013 13.0248L22.649 12.9082C22.649 12.9053 22.6488 12.9013 22.649 12.8993C22.9902 8.93373 22.5975 7.34575 22.2147 7.07677C17.6316 10.3896 13.5379 9.33658 12.2725 9.01111C11.928 8.9225 11.7932 8.88781 11.9152 9.00988C12.2872 9.38185 13.1336 9.82821 13.7371 10.1465H13.7372L13.7376 10.1467C13.8743 10.2188 13.9985 10.2843 14.1019 10.3409C9.12673 10.3984 7.12659 8.00279 6.53855 7.29846C6.47859 7.22664 6.4333 7.1724 6.40105 7.14015C6.11408 6.85318 4.49961 5.87252 3.99256 7.74227C3.50142 9.55335 3.81246 11.6775 3.97665 12.7988C3.99089 12.896 3.99257 12.8981 3.99257 12.9298L2.37635 13.0248L2.37213 13.0247C0.223493 8.05534 1.83854 5.26971 3.29536 4.2246C3.29536 1.78444 6.27428 -0.592359 10.0455 0.263262C14.8768 1.64043 16.3468 1.18409 18.0759 0.647278C18.774 0.430562 19.5143 0.200726 20.5351 0.073124C25.2219 -0.512739 26.7993 2.56612 27 4.16122C26.2141 3.70487 24.8556 4.73165 24.2746 5.33377ZM12.3374 1.5872C11.1225 1.16466 7.99257 0.717209 6.3478 2.41116C5.98397 2.78587 5.55554 3.48864 5.55554 3.48864C5.55554 3.48864 4.82665 4.81961 4.25622 4.24919C3.68579 3.67878 5.0168 1.96749 6.06259 1.46044C7.10838 0.953388 9.70703 0.0660505 12.3374 1.5872Z"
+            fill="currentColor" />
+          <path
+            d="M10.078 13.5002H3.10601C2.2309 13.5002 1.52148 14.2097 1.52148 15.0848V18.3172C1.52148 19.1923 2.2309 19.9018 3.10601 19.9018H10.078C10.9531 19.9018 11.6625 19.1923 11.6625 18.3172V15.0848C11.6625 14.2097 10.9531 13.5002 10.078 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M0.823513 14.6094H0.379847C0.187322 14.6094 0.03125 14.7654 0.03125 14.958V15.9721C0.03125 16.1646 0.187322 16.3207 0.379847 16.3207H0.823513C1.01604 16.3207 1.17211 16.1646 1.17211 15.9721V14.958C1.17211 14.7654 1.01604 14.6094 0.823513 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M16.7326 13.5002H23.7045C24.5796 13.5002 25.2891 14.2097 25.2891 15.0848V18.3172C25.2891 19.1923 24.5796 19.9018 23.7045 19.9018H16.7326C15.8575 19.9018 15.1481 19.1923 15.1481 18.3172V15.0848C15.1481 14.2097 15.8575 13.5002 16.7326 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M25.9861 14.6094H26.4297C26.6222 14.6094 26.7783 14.7654 26.7783 14.958V15.9721C26.7783 16.1646 26.6222 16.3207 26.4297 16.3207H25.9861C25.7935 16.3207 25.6375 16.1646 25.6375 15.9721V14.958C25.6375 14.7654 25.7935 14.6094 25.9861 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M12.2954 15.5601H14.5137C14.7062 15.5601 14.8623 15.7161 14.8623 15.9087V16.9228C14.8623 17.1153 14.7062 17.2713 14.5137 17.2713H12.2954C12.1028 17.2713 11.9468 17.1153 11.9468 16.9228V15.9087C11.9468 15.7161 12.1028 15.5601 12.2954 15.5601Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M9.93343 16.3937C9.93343 16.7087 9.76317 16.9641 9.55314 16.9641C9.34311 16.9641 9.17285 16.7087 9.17285 16.3937C9.17285 16.0786 9.34311 15.8232 9.55314 15.8232C9.76317 15.8232 9.93343 16.0786 9.93343 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M16.9688 16.3937C16.9688 16.7087 17.139 16.9641 17.3491 16.9641C17.5591 16.9641 17.7293 16.7087 17.7293 16.3937C17.7293 16.0786 17.5591 15.8232 17.3491 15.8232C17.139 15.8232 16.9688 16.0786 16.9688 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M14.2758 20.1016C13.642 20.6086 12.7863 20.3551 12.5645 20.1016C12.6278 20.4185 12.8687 20.8622 13.4518 20.8622C14.0349 20.8622 14.2441 20.3551 14.2758 20.1016Z"
+            fill="currentColor" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.1312 22.411C12.1575 22.2914 12.2759 22.2157 12.3956 22.2421L14.6347 22.735C14.7544 22.7614 14.83 22.8797 14.8036 22.9994C14.7773 23.119 14.659 23.1947 14.5393 23.1683L12.3002 22.6753C12.1805 22.649 12.1049 22.5307 12.1312 22.411Z"
+            fill="currentColor" />
+          <path
+            d="M13.4203 27.6754C9.00897 27.7261 5.77228 23.6613 4.70536 21.6225C4.54691 21.3197 4.42016 21.2739 4.32509 21.3373C4.17297 21.4387 4.28282 21.6437 4.32507 21.7493C4.85747 22.9916 5.58213 24.0416 5.87791 24.4113C4.83846 26.1353 4.49409 27.855 4.45183 28.4994C6.1758 26.8008 7.91668 26.8832 8.57162 27.1367C13.7055 29.7987 16.5577 27.929 18.1739 27.1367C19.4669 26.5029 21.4803 27.7388 22.3254 28.436C22.224 26.8642 21.3747 25.1402 20.9627 24.4747C21.6282 23.5873 22.1669 22.5099 22.4522 21.9711C22.6803 21.5401 22.6106 21.369 22.5472 21.3373C22.3951 21.2613 22.2092 21.4958 22.1353 21.6225C21.6599 22.4148 18.9345 27.6121 13.4203 27.6754Z"
+            fill="currentColor" />
+        </svg>
+      </a>
+      <a class="navbar-brand p-0 me-0 position-absolute top-50 start-50 translate-middle d-lg-none" href="/"
+        aria-label="jinydev">
+        <svg width="100" height="26" viewBox="0 0 112 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M24.2746 5.33377C25.8486 7.33981 25.1183 11.1792 24.3961 13.0177C24.4028 13.0199 24.4094 13.0221 24.4161 13.0243L24.4013 13.0248L22.649 12.9082C22.649 12.9053 22.6488 12.9013 22.649 12.8993C22.9902 8.93373 22.5975 7.34575 22.2147 7.07677C17.6316 10.3896 13.5379 9.33658 12.2725 9.01111C11.928 8.9225 11.7932 8.88781 11.9152 9.00988C12.2872 9.38185 13.1336 9.82821 13.7371 10.1465H13.7372L13.7376 10.1467C13.8743 10.2188 13.9985 10.2843 14.1019 10.3409C9.12673 10.3984 7.12659 8.00279 6.53855 7.29846C6.47859 7.22664 6.4333 7.1724 6.40105 7.14015C6.11408 6.85318 4.49961 5.87252 3.99256 7.74227C3.50142 9.55335 3.81246 11.6775 3.97665 12.7988C3.99089 12.896 3.99257 12.8981 3.99257 12.9298L2.37635 13.0248L2.37213 13.0247C0.223493 8.05534 1.83854 5.26971 3.29536 4.2246C3.29536 1.78444 6.27428 -0.592359 10.0455 0.263262C14.8768 1.64043 16.3468 1.18409 18.0759 0.647278C18.774 0.430562 19.5143 0.200726 20.5351 0.073124C25.2219 -0.512739 26.7993 2.56612 27 4.16122C26.2141 3.70487 24.8556 4.73165 24.2746 5.33377ZM12.3374 1.5872C11.1225 1.16466 7.99257 0.717209 6.3478 2.41116C5.98397 2.78587 5.55554 3.48864 5.55554 3.48864C5.55554 3.48864 4.82665 4.81961 4.25622 4.24919C3.68579 3.67878 5.0168 1.96749 6.06259 1.46044C7.10838 0.953388 9.70703 0.0660505 12.3374 1.5872Z"
+            fill="currentColor" />
+          <path
+            d="M10.078 13.5002H3.10601C2.2309 13.5002 1.52148 14.2097 1.52148 15.0848V18.3172C1.52148 19.1923 2.2309 19.9018 3.10601 19.9018H10.078C10.9531 19.9018 11.6625 19.1923 11.6625 18.3172V15.0848C11.6625 14.2097 10.9531 13.5002 10.078 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M0.823513 14.6094H0.379847C0.187322 14.6094 0.03125 14.7654 0.03125 14.958V15.9721C0.03125 16.1646 0.187322 16.3207 0.379847 16.3207H0.823513C1.01604 16.3207 1.17211 16.1646 1.17211 15.9721V14.958C1.17211 14.7654 1.01604 14.6094 0.823513 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M16.7326 13.5002H23.7045C24.5796 13.5002 25.2891 14.2097 25.2891 15.0848V18.3172C25.2891 19.1923 24.5796 19.9018 23.7045 19.9018H16.7326C15.8575 19.9018 15.1481 19.1923 15.1481 18.3172V15.0848C15.1481 14.2097 15.8575 13.5002 16.7326 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M25.9861 14.6094H26.4297C26.6222 14.6094 26.7783 14.7654 26.7783 14.958V15.9721C26.7783 16.1646 26.6222 16.3207 26.4297 16.3207H25.9861C25.7935 16.3207 25.6375 16.1646 25.6375 15.9721V14.958C25.6375 14.7654 25.7935 14.6094 25.9861 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M12.2954 15.5601H14.5137C14.7062 15.5601 14.8623 15.7161 14.8623 15.9087V16.9228C14.8623 17.1153 14.7062 17.2713 14.5137 17.2713H12.2954C12.1028 17.2713 11.9468 17.1153 11.9468 16.9228V15.9087C11.9468 15.7161 12.1028 15.5601 12.2954 15.5601Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M9.93343 16.3937C9.93343 16.7087 9.76317 16.9641 9.55314 16.9641C9.34311 16.9641 9.17285 16.7087 9.17285 16.3937C9.17285 16.0786 9.34311 15.8232 9.55314 15.8232C9.76317 15.8232 9.93343 16.0786 9.93343 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M16.9688 16.3937C16.9688 16.7087 17.139 16.9641 17.3491 16.9641C17.5591 16.9641 17.7293 16.7087 17.7293 16.3937C17.7293 16.0786 17.5591 15.8232 17.3491 15.8232C17.139 15.8232 16.9688 16.0786 16.9688 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M14.2758 20.1016C13.642 20.6086 12.7863 20.3551 12.5645 20.1016C12.6278 20.4185 12.8687 20.8622 13.4518 20.8622C14.0349 20.8622 14.2441 20.3551 14.2758 20.1016Z"
+            fill="currentColor" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.1312 22.411C12.1575 22.2914 12.2759 22.2157 12.3956 22.2421L14.6347 22.735C14.7544 22.7614 14.83 22.8797 14.8036 22.9994C14.7773 23.119 14.659 23.1947 14.5393 23.1683L12.3002 22.6753C12.1805 22.649 12.1049 22.5307 12.1312 22.411Z"
+            fill="currentColor" />
+          <path
+            d="M13.4203 27.6754C9.00897 27.7261 5.77228 23.6613 4.70536 21.6225C4.54691 21.3197 4.42016 21.2739 4.32509 21.3373C4.17297 21.4387 4.28282 21.6437 4.32507 21.7493C4.85747 22.9916 5.58213 24.0416 5.87791 24.4113C4.83846 26.1353 4.49409 27.855 4.45183 28.4994C6.1758 26.8008 7.91668 26.8832 8.57162 27.1367C13.7055 29.7987 16.5577 27.929 18.1739 27.1367C19.4669 26.5029 21.4803 27.7388 22.3254 28.436C22.224 26.8642 21.3747 25.1402 20.9627 24.4747C21.6282 23.5873 22.1669 22.5099 22.4522 21.9711C22.6803 21.5401 22.6106 21.369 22.5472 21.3373C22.3951 21.2613 22.2092 21.4958 22.1353 21.6225C21.6599 22.4148 18.9345 27.6121 13.4203 27.6754Z"
+            fill="currentColor" />
+          <text x="32" y="21" font-family="Arial, sans-serif" font-weight="bold" font-size="22"
+            fill="currentColor">Jiny</text>
+        </svg>
+      </a>
+
+      <!-- Mobile: Right Toggle (Menu) -->
+      <div class="d-flex d-lg-none ms-auto">
+        <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdNavbar"
+          aria-controls="bdNavbar" aria-label="Toggle navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid"
+            viewBox="0 0 16 16">
+            <path
+              d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- OffCanvas -->
+      <div class="offcanvas-lg offcanvas-end flex-grow-1" tabindex="-1" id="bdNavbar"
+        aria-labelledby="bdNavbarOffcanvasLabel" data-bs-scroll="true">
+        <!-- OffCanver Header -->
+        <div class="offcanvas-header px-4 pb-0">
+          <h5 class="offcanvas-title text-white" id="bdNavbarOffcanvasLabel">Jiny</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"
+            data-bs-target="#bdNavbar">
+          </button>
+        </div>
+
+        <!-- OffCanver Body -->
+        <div class="offcanvas-body p-4 pt-0 p-lg-0">
+          <hr class="d-lg-none text-white-50">
+
+          <ul class="navbar-nav flex-column flex-lg-row bd-navbar-nav">
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/ch00/">패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part01/">생성패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part02/">구조패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part03/">행동패턴</a>
+            </li>
+            
+          </ul>
+
+          <hr class="d-lg-none text-white-50">
+
+          <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
+            <li class="nav-item col-6 col-lg-auto">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://github.com/jinydev/datas" target="_blank"
+                rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
+                  viewBox="0 0 512 499.36" role="img">
+                  <title>GitHub</title>
+                  <path fill="currentColor" fill-rule="evenodd"
+                    d="M256 0C114.64 0 0 114.61 0 256c0 113.09 73.34 209 175.08 242.9 12.8 2.35 17.47-5.56 17.47-12.34 0-6.08-.22-22.18-.35-43.54-71.2 15.49-86.2-34.34-86.2-34.34-11.64-29.57-28.42-37.45-28.42-37.45-23.27-15.84 1.73-15.55 1.73-15.55 25.69 1.81 39.21 26.38 39.21 26.38 22.84 39.12 59.92 27.82 74.5 21.27 2.33-16.54 8.94-27.82 16.25-34.22-56.84-6.43-116.6-28.43-116.6-126.49 0-27.95 10-50.8 26.35-68.69-2.63-6.48-11.42-32.5 2.51-67.75 0 0 21.49-6.88 70.4 26.24a242.65 242.65 0 0 1 128.18 0c48.87-33.13 70.33-26.24 70.33-26.24 14 35.25 5.18 61.27 2.55 67.75 16.41 17.9 26.31 40.75 26.31 68.69 0 98.35-59.85 120-116.88 126.32 9.19 7.9 17.38 23.53 17.38 47.41 0 34.22-.31 61.83-.31 70.23 0 6.85 4.61 14.81 17.6 12.31C438.72 464.97 512 369.08 512 256.02 512 114.62 397.37 0 256 0z">
+                  </path>
+                </svg>
+                <small class="d-lg-none ms-2">GitHub</small>
+              </a>
+            </li>
+
+            <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+              <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+              <hr class="d-lg-none my-2 text-white-50">
+            </li>
+
+            <li class="nav-item col-6 col-lg-auto">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://jiny.dev" aria-label="Home">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
+                  viewBox="0 0 16 16" role="img">
+                  <title>Home</title>
+                  <path fill="currentColor"
+                    d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z" />
+                </svg>
+                <small class="d-lg-none ms-2">Home</small>
+              </a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container bd-gutter mt-3 my-md-4 bd-layout">
+    <aside class="bd-sidebar scrollBar">
+        <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="bdSidebar"
+            aria-labelledby="bdSidebarOffcanvasLabel">
+            <div class="offcanvas-header border-bottom">
+                <h5 class="offcanvas-title" id="bdSidebarOffcanvasLabel">학습목차</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"
+                    data-bs-target="#bdSidebar"></button>
+            </div>
+
+            <div class="offcanvas-body">
+                <!-- 네비게이션 -->
+                <nav class="bd-links w-100" id="bd-docs-nav" aria-label="Docs navigation">
+  <ul class="bd-links-nav list-unstyled mb-0 pb-3 pb-md-2 pe-lg-2">
+    <li class="bd-links-group py-2">
+      <strong class="bd-links-heading d-flex w-100 align-items-center fw-semibold">
+        디자인 패턴 목차
+      </strong>
+      <ul class="list-unstyled fw-normal pb-2 small">
+        
+        
+
+        
+        <li>
+          
+          <a href="/part02/"
+            class="bd-links-link d-inline-block rounded ">
+            Part 2 구조 패턴
+          </a>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-2"
+            aria-expanded="false">
+            CHAPTER 7 어댑터 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-2">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch07/#71-오래된-코드"
+                  class="bd-links-link d-inline-block rounded">
+                  7.1 오래된 코드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#72-잘못된-코드"
+                  class="bd-links-link d-inline-block rounded">
+                  7.2 잘못된 코드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#73-어댑터"
+                  class="bd-links-link d-inline-block rounded">
+                  7.3 어댑터
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#74-클래스-어댑터"
+                  class="bd-links-link d-inline-block rounded">
+                  7.4 클래스 어댑터
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#75-객체-어댑터"
+                  class="bd-links-link d-inline-block rounded">
+                  7.5 객체 어댑터
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#76-설계"
+                  class="bd-links-link d-inline-block rounded">
+                  7.6 설계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#77-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  7.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#78-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  7.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-3"
+            aria-expanded="false">
+            CHAPTER 8 브리지 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-3">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch08/#81-복잡한-코드"
+                  class="bd-links-link d-inline-block rounded">
+                  8.1 복잡한 코드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch08/#82-상속"
+                  class="bd-links-link d-inline-block rounded">
+                  8.2 상속
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch08/#83-패턴-설계-1"
+                  class="bd-links-link d-inline-block rounded">
+                  8.3 패턴 설계 1
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch08/#84-패턴-설계-2"
+                  class="bd-links-link d-inline-block rounded">
+                  8.4 패턴 설계 2
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch08/#85-장점과-단점"
+                  class="bd-links-link d-inline-block rounded">
+                  8.5 장점과 단점
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch08/#86-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  8.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch08/#87-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  8.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-4"
+            aria-expanded="false">
+            CHAPTER 9 복합체 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-4">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch09/#91-객체를-포함하는-객체"
+                  class="bd-links-link d-inline-block rounded">
+                  9.1 객체를 포함하는 객체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#92-복합체의-구조적-특징"
+                  class="bd-links-link d-inline-block rounded">
+                  9.2 복합체의 구조적 특징
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#93-투명성을-활용한-동일한-설계"
+                  class="bd-links-link d-inline-block rounded">
+                  9.3 투명성을 활용한 동일한 설계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#94-추상화를-통한-일반화-작업"
+                  class="bd-links-link d-inline-block rounded">
+                  9.4 추상화를 통한 일반화 작업
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#95-leaf"
+                  class="bd-links-link d-inline-block rounded">
+                  9.5 Leaf
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#96-composite"
+                  class="bd-links-link d-inline-block rounded">
+                  9.6 Composite
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#97-패턴-결합"
+                  class="bd-links-link d-inline-block rounded">
+                  9.7 패턴 결합
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#98-적용-사례-1"
+                  class="bd-links-link d-inline-block rounded">
+                  9.8 적용 사례 1
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#99-적용-사례-2"
+                  class="bd-links-link d-inline-block rounded">
+                  9.9 적용 사례 2
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#910-적용-사례-3"
+                  class="bd-links-link d-inline-block rounded">
+                  9.10 적용 사례 3
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#911-장단점-및-결과"
+                  class="bd-links-link d-inline-block rounded">
+                  9.11 장단점 및 결과
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#912-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  9.12 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#913-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  9.13 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-5"
+            aria-expanded="false">
+            CHAPTER 10 장식자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-5">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch10/#101-기능-추가"
+                  class="bd-links-link d-inline-block rounded">
+                  10.1 기능 추가
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#102-조건-추가"
+                  class="bd-links-link d-inline-block rounded">
+                  10.2 조건 추가
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#103-확장"
+                  class="bd-links-link d-inline-block rounded">
+                  10.3 확장
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#104-객체에-추가-장식하기"
+                  class="bd-links-link d-inline-block rounded">
+                  10.4 객체에 추가 장식하기
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#105-기본-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  10.5 기본 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#106-장단점-및-결과"
+                  class="bd-links-link d-inline-block rounded">
+                  10.6 장단점 및 결과
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#107-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  10.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#108-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  10.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-6"
+            aria-expanded="false">
+            CHAPTER 11 파사드 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-6">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch11/#111-협업을-위한-분리-작업"
+                  class="bd-links-link d-inline-block rounded">
+                  11.1 협업을 위한 분리 작업
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#112-파사드-패턴을-응용한-api"
+                  class="bd-links-link d-inline-block rounded">
+                  11.2 파사드 패턴을 응용한 API
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#113-파사드를-이용한-단순화"
+                  class="bd-links-link d-inline-block rounded">
+                  11.3 파사드를 이용한 단순화
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#114-최소-지식-원칙"
+                  class="bd-links-link d-inline-block rounded">
+                  11.4 최소 지식 원칙
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#115-기본-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  11.5 기본 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#116-파사드-패턴의-효과"
+                  class="bd-links-link d-inline-block rounded">
+                  11.6 파사드 패턴의 효과
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#117-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  11.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#118-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  11.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0  w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-7"
+            aria-expanded="true">
+            CHAPTER 12 플라이웨이트 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse show" id="collapse-7">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch12/#121-메모리-자원"
+                  class="bd-links-link d-inline-block rounded">
+                  12.1 메모리 자원
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch12/#122-자원-공유"
+                  class="bd-links-link d-inline-block rounded">
+                  12.2 자원 공유
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch12/#123-상태-구분"
+                  class="bd-links-link d-inline-block rounded">
+                  12.3 상태 구분
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch12/#124-패턴-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  12.4 패턴 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch12/#125-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  12.5 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch12/#126-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  12.6 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-8"
+            aria-expanded="false">
+            CHAPTER 13 프록시 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-8">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch13/#131-객체를-대행하는-프록시"
+                  class="bd-links-link d-inline-block rounded">
+                  13.1 객체를 대행하는 프록시
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#132-객체-가로채기"
+                  class="bd-links-link d-inline-block rounded">
+                  13.2 객체 가로채기
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#133-객체-분리"
+                  class="bd-links-link d-inline-block rounded">
+                  13.3 객체 분리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#134-프록시-생성"
+                  class="bd-links-link d-inline-block rounded">
+                  13.4 프록시 생성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#135-행위를-처리하는-핸들러"
+                  class="bd-links-link d-inline-block rounded">
+                  13.5 행위를 처리하는 핸들러
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#136-동적-프록시"
+                  class="bd-links-link d-inline-block rounded">
+                  13.6 동적 프록시
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#137-원격-프록시"
+                  class="bd-links-link d-inline-block rounded">
+                  13.7 원격 프록시
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#138-가상-프록시"
+                  class="bd-links-link d-inline-block rounded">
+                  13.8 가상 프록시
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#139-보호용-프록시"
+                  class="bd-links-link d-inline-block rounded">
+                  13.9 보호용 프록시
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#1310-스마트-참조자"
+                  class="bd-links-link d-inline-block rounded">
+                  13.10 스마트 참조자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#1311-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  13.11 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+      </ul>
+    </li>
+  </ul>
+</nav>
+            </div>
+        </div>
+    </aside>
+
+    <main class="bd-main order-1">
+        <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        
+        
+        
+        
+        
+        
+        <li class="breadcrumb-item active" aria-current="page">CHAPTER 12 플라이웨이트 패턴</li>
+        
+        
+        
+    </ol>
+</nav>
+
+        <div class="bd-content ps-lg-2">
+            
+<p>fly·weight
+[ ‘flaiweit ]</p>
+
+<p>CHAPTER 12</p>
+
+<p>플라이웨이트 패턴</p>
+
+<p>플라이웨이트 패턴은 객체를 공유하기 위해 구조를 변경하는 패턴입니다. 객체를 공유하면 객체를 재사용할 수 있어 시스템 자원이 절약됩니다.</p>
+
+<h2 id="121-메모리-자원">12.1 메모리 자원</h2>
+
+<p>객체는 클래스 선언을 통해 생성되고, 생성된 객체는 시스템의 자원을 할당 받습니다. 여기서 자원은 시스템의 메모리를 의미합니다.</p>
+
+<h3 id="1211-자원-할당">12.1.1 자원 할당</h3>
+
+<p>선언된 클래스를 하나의 객체로 생성하기 위해서는 인스턴스화 작업이 필요합니다. 인스턴스화는 클래스 안에 선언한 내역에 따라 메모리 자원을 할당 받고, 즉각 호출할 수 있는 객체를 배치합니다. 선언된 클래스는 다음과 같이 new 키워드를 이용해 객체를 생성합니다.</p>
+
+<p>$obj = new 클래스명;</p>
+
+<p>PHP 언어에서는 new 키워드를 통해 객체를 생성합니다. PHP 언어 외에 다른 프로그래밍 언어에서도 객체를 생성하기 위해 new 키워드를 사용합니다.</p>
+
+<p>12장 플라이웨이트 패턴 263</p>
+
+<p>간단한 예를 들어 하나의 클래스와 객체를 생성해봅시다.</p>
+
+<p>예제 12-1 Flyweight/01/index1.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Hello</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nv">$msg</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">greeting</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">msg</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Hello</span><span class="p">;</span> <span class="c1">// 객체 인스턴스화, 자원할당</span>
+<span class="nv">$obj</span><span class="o">-&gt;</span><span class="n">msg</span> <span class="o">=</span> <span class="s2">"hello world"</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">greeting</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index1.php
+hello world
+</code></pre></div></div>
+
+<p>Hello 객체는 동작을 수행하는 메서드와 데이터를 포함하는 프로퍼티로 구성돼 있습니다. 이렇게 new 키워드로 인스턴스화하면 객체를 생성하고 메모리에 자원을 참조할 수 있는 값을 반환합니다. 생성된 객체의 자원을 $obj 변수에 저장하고, 참조 변수인 $obj를 통해 객체 내부에 접근합니다.</p>
+
+<h3 id="1212-작은-단위">12.1.2 작은 단위</h3>
+
+<p>클래스를 설계할 때는 객체가 하나의 책임만 갖도록 합니다. 이를 단일 책임 원칙<sup>Single Responsibility Principle</sup>(SRP)이라고 합니다. 하나의 객체가 다양한 기능과 책임을 가지면 관리가 어려워집니다. 하나의 책임은 다시 여러 동작으로 구분되는데, 동작을 상세히 구분하는 것은 유지 보수와 가독성을 좋게 하기 위해서입니다.</p>
+
+<p>[예제 12-2]의 경우 2개의 클래스 안에 유사한 동작을 처리하는 코드가 있습니다.</p>
+
+<p>264 2부 구조 패턴</p>
+
+<p>예제 12-2 Flyweight/01/index2.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Korean</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">hello</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">"안녕하세요 </span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nc">English</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">hello</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">"hello </span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nv">$ko</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Korean</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nv">$ko</span><span class="o">-&gt;</span><span class="nf">hello</span><span class="p">();</span>
+
+<span class="nv">$en</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">English</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nv">$en</span><span class="o">-&gt;</span><span class="nf">hello</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>Korean 객체와 English 객체는 hello() 메서드를 갖고 있습니다. hello() 메서드는 문자열을 출력장치로 전달하는 역할입니다. 선언된 클래스의 객체를 생성하고 메서드를 각각 호출합니다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index2.php
+안녕하세요
+hello
+</code></pre></div></div>
+
+<p>정상적으로 인사말이 출력됐습니다. hello() 메서드는 문자열 출력 후 ‘\n’을 추가하고 다음 줄로 출력 위치를 이동합니다. 콘솔이 아닌 웹에서 실행할 경우에는 ‘<br />’ 태그를 사용해야 합니다.</p>
+
+<p>코드를 좀 더 개선해보겠습니다. 객체 간에 유사하고 중복된 코드는 리팩터링을 통해 분리할 수 있습니다. 앞의 [예제 12-2]처럼 행동이 세분화된 코드는 리팩터링하기 용이합니다. 앞의</p>
+
+<p>12장 플라이웨이트 패턴 265</p>
+
+<p>예제를 좀 더 리팩터링하여 분리합시다. 재사용할 수 있는 유사한 동작들은 별개의 클래스로 분리하여 상속으로 결합합니다.</p>
+
+<p>예제 12-3 Flyweight/02/index3.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 유사 기능 분리</span>
+<span class="kd">class</span> <span class="nc">Hello</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">console</span><span class="p">(</span><span class="nv">$msg</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$msg</span><span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span> <span class="c1">// 콘솔 출력 시</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">browser</span><span class="p">(</span><span class="nv">$msg</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$msg</span><span class="mf">.</span><span class="s2">"&lt;br/&gt;"</span><span class="p">;</span> <span class="c1">// 브라우저 출력 시</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 상속으로 재사용</span>
+<span class="kd">class</span> <span class="nc">Korean</span> <span class="kd">extends</span> <span class="nc">Hello</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">hello</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">console</span><span class="p">(</span><span class="s2">"안녕하세요"</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 상속으로 재사용</span>
+<span class="kd">class</span> <span class="nc">English</span> <span class="kd">extends</span> <span class="nc">Hello</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">hello</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">console</span><span class="p">(</span><span class="s2">"hello"</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nv">$ko</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Korean</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nv">$ko</span><span class="o">-&gt;</span><span class="nf">hello</span><span class="p">();</span>
+<span class="nv">$en</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">English</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nv">$en</span><span class="o">-&gt;</span><span class="nf">hello</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>266 2부 구조 패턴</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index3.php
+안녕하세요
+hello
+</code></pre></div></div>
+
+<p>객체를 세분화 및 분리하면 유지 보수와 확장이 용이합니다. 하지만 잘게 분리된 객체가 많을 경우 관리하기가 쉽지 않으며, 객체 재사용 시 중복이 발생할 수도 있습니다.</p>
+
+<p>클래스를 리팩터링하여 인사말 출력을 Hello 객체로 분리하고 Hello 객체는 기존의 Korean과 English 객체의 상속으로 결합합니다. 상속 결합한 코드는 독립적인 객체로 생성합니다.</p>
+
+<h4 id="그림-12-1-상속을-이용한-중복된-코드의-자원-할당">그림 12-1 상속을 이용한 중복된 코드의 자원 할당</h4>
+
+<p><img src="./img/fig_12_1.svg" alt="그림 12-1" /></p>
+
+<p>실제 사용 시에는 자원의 이중 할당으로 인해 중복 사용될 수도 있습니다. 예를 들어 $ko와 $en 객체에는 상속된 Hello 코드가 동일하게 중복 적용돼 있습니다. 작은 코드에서는 차이가 없을 수도 있지만, 큰 규모의 코드를 작성하다 보면 중복 적용된 자원이 해결해야 할 문제로 남습니다.</p>
+
+<h3 id="1213-중복된-코드의-자원">12.1.3 중복된 코드의 자원</h3>
+
+<p>자원을 효율적으로 사용하기 위해서는 최대한 중복을 방지해야 합니다. 이번 장에서 학습할 플라이웨이트 패턴은 중복을 제거하고 공유를 통해 자원을 효율적으로 사용합니다.</p>
+
+<p>플라이웨이트는 가볍다<sup>fly</sup>와 무게<sup>weight</sup>의 합성어입니다. 즉 객체지향에서 가벼운 객체란 메모리를 적게 사용하는 객체를 말합니다. 플라이웨이트 패턴은 중복되는 코드의 객체를 공유함으로써 객체의 메모리 할당을 작게 처리합니다. 중복된 객체를 개별적으로 상속하거나 생성하지 않고 자원을 재사용함으로써 효율을 개선합니다.</p>
+
+<p>12장 플라이웨이트 패턴 267</p>
+
+<h2 id="122-자원-공유">12.2 자원 공유</h2>
+
+<p>플라이웨이트 패턴은 객체를 공유하기 위한 패턴입니다. 중복되는 객체를 매번 생성하는 것이 아니라 생성된 객체를 공유하여 재사용하는 방법을 제시합니다.</p>
+
+<h3 id="1221-객체-재사용">12.2.1 객체 재사용</h3>
+
+<p>객체를 생성하는 것은 시스템의 새로운 자원을 할당 받는 것입니다. 개발을 하다 보면 무분별하게 객체를 생성하고 자원을 할당 받는 코드를 작성하는 경우가 있습니다. 또는 기존 객체를 중복으로 생성해 자원을 낭비하는 실수도 자주 합니다.</p>
+
+<p>앞에서 상속으로 분리한 [예제 12-3]을 [예제 12-4]와 같이 수정해봅시다. 객체를 상속이 아닌 의존성 주입으로 변경합니다.</p>
+
+<p>예제 12-4 Flyweight/02/index4.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Hello</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">console</span><span class="p">(</span><span class="nv">$msg</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$msg</span><span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">browser</span><span class="p">(</span><span class="nv">$msg</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$msg</span><span class="mf">.</span><span class="s2">"&lt;br/&gt;"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nc">Korean</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="nv">$hello</span><span class="p">;</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">(</span><span class="nv">$hello</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// 의존성 주입</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">hello</span> <span class="o">=</span> <span class="nv">$hello</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>268 2부 구조 패턴</p>
+
+<p>public function hello()
+    {
+        return $this-&gt;hello-&gt;browser(“안녕하세요”);
+    }
+}</p>
+
+<p>class English
+{
+    private $hello;
+    public function __construct($hello)
+    {
+        // 의존성 주입
+        $this-&gt;hello = $hello;
+    }</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public function hello()
+{
+    return $this-&gt;hello-&gt;browser("hello");
+} }
+</code></pre></div></div>
+
+<p>// Hello 객체 중복 생성
+$ko = new Korean(new Hello);
+echo $ko-&gt;hello();</p>
+
+<p>$en = new English(new Hello);
+echo $en-&gt;hello();</p>
+
+<p>echo “\n메모리 사용량=”.memory_get_usage();</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+</code></pre></div></div>
+<p>$ php index4.php
+안녕하세요<br />hello<br />
+메모리 사용량=357736</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+[예제 12-4]에서는 중복 코드와 메모리 할당을 줄이기 위해 객체의 의존성을 주입했습니다. Korean과 English 객체를 생성하면서 의존되는 객체를 new 키워드를 통해 주입한 것입니다.
+
+12장 플라이웨이트 패턴 269
+
+#### 그림 12-2 의존 객체의 중복 자원 할당
+
+![그림 12-2](./img/fig_12_2.svg)
+
+하지만 실제로 Korean과 English 객체의 내부 $hello 프로퍼티는 서로 다른 Hello 객체를 할당합니다. 직접 객체를 생성하여 의존성을 주입하지 않고, 공유 형태로 의존성을 주입하는 방법으로 변경해봅시다. 먼저 공유되는 객체를 먼저 생성합니다.
+
+생성된 공유 객체를 의존성으로 주입합니다. 공통된 객체를 하나씩 만들어 사용하는 것이 아니라 비슷한 객체 하나를 만들어서 공유하는 것입니다.
+
+예제 12-5 Flyweight/02/index5.php
+```php
+&lt;?php
+class Hello
+{
+    public function console($msg)
+    {
+        return $msg."\n";
+    }
+
+    public function browser($msg)
+    {
+        return $msg."&lt;br/&gt;";
+    }
+}
+
+class Korean
+{
+    private $hello;
+    public function __construct($hello)
+    {
+        // 의존성 주입
+        $this-&gt;hello = $hello;
+    }
+</code></pre></div></div>
+
+<p>270 2부 구조 패턴</p>
+
+<p>}</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public function hello()
+{
+    return $this-&gt;hello-&gt;browser("안녕하세요");
+} }
+</code></pre></div></div>
+
+<p>class English
+{
+    private $hello;
+    public function __construct($hello)
+    {
+        // 의존성 주입
+        $this-&gt;hello = $hello;
+    }</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public function hello()
+{
+    return $this-&gt;hello-&gt;browser("hello");
+} }
+</code></pre></div></div>
+
+<p>// 객체 할당1, &lt;= 공유 객체
+$hello = new Hello;</p>
+
+<p>// 객체 할당2
+$ko = new Korean($hello);
+echo $ko-&gt;hello();</p>
+
+<p>// 객체 할당3
+$en = new English($hello);
+echo $en-&gt;hello();</p>
+
+<p>echo “\n메모리 사용량=”.memory_get_usage();</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+</code></pre></div></div>
+<p>$ php index5.php
+안녕하세요<br />hello<br />
+메모리 사용량=357624</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+실행 결과는 동일하지만 메모리 할당량에 차이가 있습니다. 메모리가 약 112byte 적게 할당됐습니다.
+
+12장 플라이웨이트 패턴 271
+
+#### 그림 12-3 의존 객체 공유
+
+![그림 12-3](./img/fig_12_3.svg)
+
+중복된 객체를 재사용하면 메모리를 절약할 수 있습니다. 재사용은 달리 말하면 공유를 의미합니다.
+
+
+### 12.2.2 자원 관리
+
+우리는 객체가 필요할 때 언제든지 생성할 수 있습니다. 무수히 많은 객체와의 중복을 방지하려면 관리가 필요합니다.
+
+new 키워드는 클래스의 인스턴스화 과정을 통해 객체 생성과 자원을 할당합니다. 하지만 직접 new 키워드를 이용하여 객체를 생성하는 것은 별로 좋은 방법이 아닙니다. 이전 팩토리 패턴에서 학습한 것처럼 직접 객체를 생성하면 효율적으로 관리할 수 없습니다.
+
+따라서 객체 생성을 대신 처리하는 Factory 클래스를 만들어 사용하는 것이 좋습니다. 팩토리 패턴을 이용해 객체 생성을 위임하면 자원을 보다 효율적으로 관리할 수 있습니다.
+
+예제 12-6 Flyweight/02/factory1.php
+```php
+&lt;?php
+class Hello
+{
+    public function console($msg)
+    {
+        return $msg."\n";
+    }
+
+    public function browser($msg)
+    {
+        return $msg."&lt;br/&gt;";
+    }
+}
+</code></pre></div></div>
+
+<p>272 2부 구조 패턴</p>
+
+<p>public function browser($msg)
+    {
+        return $msg.”<br />”;
+    }
+}</p>
+
+<p>class Factory
+{
+    public function make()
+    {
+        // 객체의 생성을 처리
+        echo “팩토리 생성 요청.\n”;
+        return new Hello;
+    }
+}</p>
+
+<p>// 팩토리 객체1
+$hello1 = (new Factory())-&gt;make();</p>
+
+<p>// 팩토리 객체1
+$hello2 = (new Factory())-&gt;make();</p>
+
+<p>if ($hello1 === $hello2) {
+    echo “동일한 객체입니다.\n”;
+} else {
+    echo “서로 다른 객체입니다.\n”;
+}</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+</code></pre></div></div>
+<p>$ php factory.php
+팩토리 객체를 생성합니다.
+팩토리 객체를 생성합니다.
+서로 다른 객체입니다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+팩토리 패턴을 이용해 기존 Hello 클래스의 객체 생성을 Factory 클래스에 위임했습니다. 하지만 팩토리의 make() 메서드를 중복으로 사용하여 호출 실행할 경우 매번 다른 형태의 객체가 생성됩니다.
+
+
+### 12.2.3 동일 객체
+
+객체를 공유하려면 동일한 객체를 생성해야 합니다. 이를 위해 싱글턴 패턴을 같이 응용하면
+
+12장 플라이웨이트 패턴 273
+
+좋습니다.
+
+싱글턴은 하나의 객체만 생성하도록 보증합니다. 싱글턴 패턴은 객체를 생성하는 개수를 제한해 여러 객체가 중복 생성되는 것을 방지합니다.
+
+예제 12-7 Flyweight/02/factory2.php
+```php
+&lt;?php
+class Hello
+{
+    private static $Instance;
+    public static function instance()
+    {
+        // 객체 생성을 처리
+        if (isset(self::$Instance)) {
+            echo "기존 객체를 반환합니다.\n";
+            return self::$Instance;
+        } else {
+            echo "공유 객체를 생성합니다.\n";
+            self::$Instance = new self();
+            return self::$Instance;
+        }
+    }
+
+    public function console($msg)
+    {
+        return $msg."\n";
+    }
+
+    public function browser($msg)
+    {
+        return $msg."&lt;br/&gt;";
+    }
+}
+
+class Factory
+{
+    public function make()
+    {
+        // 객체의 생성을 처리
+        echo "팩토리 생성 요청=";
+        return Hello::instance();
+    }
+}
+</code></pre></div></div>
+
+<p>274 2부 구조 패턴</p>
+
+<p>}</p>
+
+<p>// 팩토리 객체1
+$hello1 = (new Factory())-&gt;make();</p>
+
+<p>// 팩토리 객체1
+$hello2 = (new Factory())-&gt;make();</p>
+
+<p>if ($hello1 === $hello2) {
+    echo “동일한 객체입니다.\n”;
+} else {
+    echo “서로 다른 객체입니다.\n”;
+}</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+</code></pre></div></div>
+<p>$ php factory2.php
+팩토리 생성 요청=공유 객체를 생성합니다.
+팩토리 생성 요청=기존 객체를 반환합니다.
+동일한 객체입니다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+팩토리 패턴과 싱글턴 패턴을 같이 결합하여 공유 객체를 생성합니다.
+
+
+### 12.2.4 공유 저장소
+
+객체를 공유한다는 것은 동일한 객체를 생성하고 이를 다시 재사용하는 것을 말합니다. 싱글턴 패턴은 단일 인스턴스의 생성을 보장하므로 객체를 공유하는 것이 유용합니다.
+
+싱글턴은 정적 메서드를 이용하여 자체 객체를 생성합니다. 하지만 객체를 생성하는 정적 메서드를 재호출하면 또 다른 객체를 생성할 수 밖에 없습니다. 싱글턴 패턴은 유일한 객체를 생성하기 위해서 플라이웨이트 패턴과 결합해 설계돼야 합니다.
+
+플라이웨이트 패턴은 보다 효율적인 공유 객체를 관리하기 위해 별도의 저장소를 갖고 있는데 이를 공유 저장소라고 합니다. 객체 각각의 생성 로직은 싱글턴으로 동작하지만 이를 호출하는 곳은 팩토리 클래스입니다.
+
+플라이웨이트 패턴은 팩토리 클래스에 공유 저장소를 추가하여 객체의 중복 생성 동작을 제한합니다.
+
+12장 플라이웨이트 패턴 275
+
+예제 12-8 Flyweight/02/factory3.php
+```php
+&lt;?php
+class Hello
+{
+    private static $Instance;
+    public static function instance()
+    {
+        // 객체의 생성을 처리
+        if (isset(self::$Instance)) {
+            echo "기존 객체를 반환합니다.\n";
+            return self::$Instance;
+        } else {
+            echo "공유 객체를 생성합니다.\n";
+            self::$Instance = new self();
+            return self::$Instance;
+        }
+    }
+
+    public function console($msg)
+    {
+        return $msg."\n";
+    }
+
+    public function browser($msg)
+    {
+        return $msg."&lt;br/&gt;";
+    }
+}
+
+class Factory
+{
+    private $pool = [];
+
+    public function make($name)
+    {
+        if(!isset($this-&gt;pool[$name]) ) {
+            echo "팩토리 생성 요청=";
+            $this-&gt;pool[$name] = $name::instance();
+            return $this-&gt;pool[$name];
+        }
+
+        echo "저장된 pool 객체 반환\n";
+        return $this-&gt;pool[$name];
+    }
+</code></pre></div></div>
+
+<p>276 2부 구조 패턴</p>
+
+<p>}
+}</p>
+
+<p>// 팩토리 객체1
+$factory = new Factory();
+$hello1 = $factory-&gt;make(“Hello”);</p>
+
+<p>// 팩토리 객체1
+$hello2 = $factory-&gt;make(“Hello”);</p>
+
+<p>if ($hello1 === $hello2) {
+    echo “동일한 객체입니다.\n”;
+} else {
+    echo “서로 다른 객체입니다.\n”;
+}</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+</code></pre></div></div>
+<p>$ php factory3.php
+팩토리 생성 요청=공유 객체를 생성합니다.
+저장된 pool 객체 반환
+동일한 객체입니다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+팩토리는 싱글턴으로 생성된 객체를 내부 $pool 공유 공간에 저장합니다.
+
+기존과 동일한 방법으로 생성된 객체는 싱글턴으로 생성 요청하지 않고 내부의 저장된 객체를 먼저 사용합니다.
+
+
+### 12.2.5 공유 객체의 참조
+
+공유란 동일한 객체를 참조하는 것입니다. 팩토리 패턴에서는 객체 생성을 분리하고 싱글턴 패턴에서는 중복 생성을 방지했습니다.
+
+중복된 자원을 효율적으로 사용하는 방법은 기존의 객체를 재사용하거나 공유하는 것입니다. 기존의 객체를 사용한 후 삭제하지 않고 재사용 또는 공유할 경우 메모리 자원을 절약하는 것과 동시에 객체를 생성하는 자원과 시간도 같이 절약할 수 있습니다.
+
+팩토리에 보관된 $pool 저장소는 참조할 수 있는 객체를 관리합니다. 이전에 생성한 객체가 $pool 저장소에 있을 경우 동일 객체를 반환합니다. $pool 저장소에 없다면 새로운 인스턴스화를 통해 객체를 생성합니다.
+
+12장 플라이웨이트 패턴 277
+
+#### 그림 12-4 공유 객체의 생성 관리
+
+![그림 12-4](./img/fig_12_4.svg)
+
+플라이웨이트 패턴은 무분별하게 객체를 생성하지 않고 기존 객체를 참조함으로써 중복을 방지합니다. 이러한 공유 객체를 저장하는 방식을 인스턴스풀, 레지스트리 패턴이라고도 부릅니다.
+
+
+## 12.3 상태 구분
+
+플라이웨이트 패턴은 객체를 공유합니다. 객체 공유는 본질적&lt;sup&gt;intrinsic&lt;/sup&gt; 공유와 부가적&lt;sup&gt;extrinsic&lt;/sup&gt; 공유로 구분합니다. 플라이웨이트 패턴의 개념을 더 잘 이해하려면 상태를 구분할 줄 알아야 합니다.
+
+
+### 12.3.1 본질적 상태
+
+객체는 행동을 처리하는 메서드와 값을 저장하는 프로퍼티로 구성돼 있습니다. 공유 및 참조하는 객체가 메서드만으로 구성돼 있다면 상관없지만, 데이터를 포함한 객체라면 공유 시 문제가
+
+278 2부 구조 패턴
+
+발생합니다.
+
+공유는 동일한 메모리에 생성된 객체를 여러 객체에서 참조하는 것을 말합니다. 공유되는 객체의 데이터가 변경되면 참조되는 모든 다른 객체에도 영향을 미치는데 이를 사이드 이펙트&lt;sup&gt;side effect&lt;/sup&gt;라고 합니다.
+
+따라서 사이드 이펙트 현상 없이 안정적으로 객체를 공유하려면 어떤 변경도 없이 객체를 있는 그대로 참조해서 사용해야 합니다. 이러한 상태를 본질적 상태라고 합니다.
+
+본질적 상태 공유는 객체의 상태값에 따라 달라지지 않고 동일하게 적용되는 것을 말합니다.
+
+&gt; **NOTE** 본질적 상태의 공유 객체를 shared라고 합니다.
+
+
+### 12.3.2 부가적 상태
+
+본질적 상태와 반대되는 의미로 부가적 상태가 있는데, 객체를 공유할 때 상태값에 따라 달라지는 것을 말합니다. 즉 객체의 값에 따라 종속적 상태가 됩니다. 부가적 상태로 객체를 사용하는 경우는 객체의 특정 데이터값을 변경해 참조하는 다른 객체에 영향을 주기 위해서입니다. 일례로 글자나 이미지를 출력할 때 위치나 크기를 변경하는 것을 들 수 있습니다.
+
+공유 객체가 상태값에 종속적인 상태면 플라이웨이트 패턴으로 공유할 수 없습니다. 객체 상태가 변경됨으로써 참조하는 다른 객체에 사이드 이펙트 효과가 발생하기 때문입니다.
+
+&gt; **NOTE** 부가적 상태의 객체를 unshared라고 합니다.
+
+
+### 12.3.3 사이드 이펙트
+
+나비 효과라고도 부르는 사이드 이펙트는 소프트웨어 개발 시 매우 주의해야 하는 문제입니다.
+
+하나의 동작이나 값이 다른 동작과 값에 영향을 줄 경우, 이들은 서로 종속적이며 강력하게 결합돼 있다고 표현합니다. 종속적 결합 관계를 주의해서 작성하지 않으면 예상치 못한 오동작이 발생할 수 있습니다.
+
+12장 플라이웨이트 패턴 279
+
+특히 플라이웨이트 패턴으로 공유되는 객체는 사이드 이펙트 문제에 노출될 확률이 매우 높습니다. 공유 객체는 새로 생성된 객체가 아니라 기존의 객체를 참조하는 객체이기 때문입니다.
+
+하나의 객체를 참조 형태로 공유하면 상호 영향이 발생할 수 있습니다. 한쪽 기능에서 공유 객체에 특별한 값을 설정할 경우, 참조하는 다른 객체에서 변경된 값과 기능이 적용되기 때문입니다.
+
+따라서 공유 객체를 여러 곳에서 참조할 때는 신중하게 판단한 후 적용해야 합니다.
+
+
+### 12.3.4 독립 객체
+
+공유 객체와 반대되는 의미로 독립 객체가 있습니다. 독립 객체는 공유되지 않고 각각의 상황에 맞게 생성된 객체입니다. 즉 독립적인 동작을 수행합니다.
+
+공유된 객체는 사이드 이펙트 문제에 주의해야 합니다. 이를 해결하기 위해 부가적 상태로 처리되는 종속 객체는 독립 객체로 처리하는 것이 좋습니다.
+
+소프트웨어를 개발할 때는 공유 객체와 독립 객체를 구분해서 사용해야 하며, 이를 명확히 구분하는 것이 플라이웨이트 패턴을 유용하게 적용할 수 있는 방법입니다. 하지만 실제 개발 과정에서는 이를 구분하기 어렵습니다. 플라이웨이트 패턴을 실제 현장에서 사용하기 어려운 이유는 개발 과정에서 공유 객체와 독립 객체를 쉽게 구별할 수 없기 때문입니다.
+
+
+## 12.4 패턴 실습
+
+플라이웨이트 패턴 설계에서 중요한 부분은 객체를 공유하는 것입니다. 패턴을 확인할 수 있는 실습 코드를 하나 만들어봅시다. 모스 부호를 출력하는 공유 객체를 만들어 메시지를 출력합니다.
+
+
+### 12.4.1 Flyweight 인터페이스
+
+우리는 여러 개의 공유 객체를 생성할 것입니다. 생성된 공유 객체들을 동일한 방법으로 호출
+
+280 2부 구조 패턴
+
+처리하기 위해 하나의 인터페이스를 생성합니다.
+
+예제 12-9 Flyweight/03/flyweight.php
+```php
+&lt;?php
+// 공유 객체의 인터페이스
+interface flyweight
+{
+    public function code();
+}
+</code></pre></div></div>
+
+<p>공유 객체에 인터페이스를 적용하면 호출 방식을 단일화할 수 있습니다.</p>
+
+<h3 id="1242-concreateflyweight-인터페이스">12.4.2 ConcreateFlyweight 인터페이스</h3>
+
+<p>인터페이스를 적용하여 공유되는 객체의 클래스를 선언합니다.</p>
+
+<p>생성되는 공유 객체는 크게 본질적 상태와 부가적 상태로 구분할 수 있습니다. 모스 부호는 상태값이 없기 때문에 본질적 상태의 공유 객체를 정의하기 좋습니다. 공유되는 객체를 개별로 작성합니다.</p>
+
+<p>예제 12-10 Flyweight/03/MorseG.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">MorseG</span> <span class="kd">implements</span> <span class="nc">flyweight</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__CLASS__</span><span class="mf">.</span><span class="s2">"을(를) 생성하였습니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">code</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"*"</span><span class="p">;</span>
+        <span class="k">echo</span> <span class="s2">"*"</span><span class="p">;</span>
+        <span class="k">echo</span> <span class="s2">"-"</span><span class="p">;</span>
+        <span class="k">echo</span> <span class="s2">"*"</span><span class="p">;</span>
+
+        <span class="k">echo</span> <span class="s2">" "</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>12장 플라이웨이트 패턴 281</p>
+
+<p>}
+}</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+예제 12-11 Flyweight/03/MorseO.php
+```php
+&lt;?php
+class MorseO implements flyweight
+{
+    public function __construct()
+    {
+        echo __CLASS__."을(를) 생성하였습니다.\n";
+    }
+
+    public function code()
+    {
+        echo "-";
+        echo "-";
+        echo "-";
+
+        echo " ";
+    }
+}
+</code></pre></div></div>
+
+<p>예제 12-12 Flyweight/03/MorseL.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">MorseL</span> <span class="kd">implements</span> <span class="nc">flyweight</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__CLASS__</span><span class="mf">.</span><span class="s2">"을(를) 생성하였습니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">code</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"*"</span><span class="p">;</span>
+        <span class="k">echo</span> <span class="s2">"-"</span><span class="p">;</span>
+        <span class="k">echo</span> <span class="s2">"*"</span><span class="p">;</span>
+        <span class="k">echo</span> <span class="s2">"*"</span><span class="p">;</span>
+
+        <span class="k">echo</span> <span class="s2">" "</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>282 2부 구조 패턴</p>
+
+<p>}
+}</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+예제 12-13 Flyweight/03/MorseE.php
+```php
+&lt;?php
+class MorseE implements flyweight
+{
+    public function __construct()
+    {
+        echo __CLASS__."을(를) 생성하였습니다.\n";
+    }
+
+    public function code()
+    {
+        echo "*";
+
+        echo " ";
+    }
+}
+</code></pre></div></div>
+
+<p>우리는 본질적 상태의 공유 객체 4개를 선언했습니다. 클래스 내부에는 본질적 공유 상태를 유지하기 위해 변수가 존재하지 않습니다. 따라서 객체의 상태값 변경에 따라 영향을 받는 사이드 이펙트가 발생하지 않습니다.</p>
+
+<p>각각의 공유 객체는 해당 알파벳의 모스 부호를 출력합니다.</p>
+
+<h3 id="1243-flyweightfactory-인터페이스">12.4.3 FlyweightFactory 인터페이스</h3>
+
+<p>플라이웨이트 패턴에서는 공유되는 객체의 인스턴스를 직접 생성하지 않습니다. 플라이웨이트 패턴은 객체 공유를 위해 new 키워드를 통한 객체 생성을 금지합니다. 그 대신 공유 객체를 생성할 수 있는 팩토리에게 위임합니다. 플라이웨이트 패턴은 실질적으로 하나의 인스턴스만 가지며 필요한 객체를 팩토리에서 담당하고 객체의 중복 생성을 방지합니다. 팩토리는 생성된 공유 객체의 관리 역할도 함께 수행합니다.</p>
+
+<p>플라이웨이트 패턴에서는 실체 객체를 갖지 않으며 필요한 객체를 참조해 사용할 수 있도록 합니다.</p>
+
+<p>12장 플라이웨이트 패턴 283</p>
+
+<p>니다. 이러한 참조 객체를 가상의 인스턴스라고 합니다. 플라이웨이트 패턴은 가상 인스턴스를 통해 메모리 공간을 절약하고, 보다 빠르게 많은 양의 동일 객체를 처리할 수 있습니다.</p>
+
+<p>예제 12-14 Flyweight/03/Factory.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Factory</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="nv">$pool</span> <span class="o">=</span> <span class="p">[];</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">getCode</span><span class="p">(</span><span class="nv">$char</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">pool</span><span class="p">[</span><span class="nv">$char</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="nv">$className</span> <span class="o">=</span> <span class="s2">"Morse"</span><span class="mf">.</span><span class="nb">strtoupper</span><span class="p">(</span><span class="nv">$char</span><span class="p">);</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">pool</span><span class="p">[</span><span class="nv">$char</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nv">$className</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">pool</span><span class="p">[</span><span class="nv">$char</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>플라이웨이트 패턴은 공유하는 객체를 모두 똑같은 방식으로 제어할 때 유용합니다. 특정 객체만 다른 형식으로 구현해서 처리하는 것은 어려우며 플라이웨이트 특성상 모두 동일하게 처리합니다.</p>
+
+<h3 id="1244-client">12.4.4 Client</h3>
+
+<p>플라이웨이트 패턴으로 생성한 공유 객체를 참조하여 모스 부호를 출력해봅시다.</p>
+
+<p>예제 12-15 03/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require</span> <span class="s2">"flyweight.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"MorseE.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"MorseG.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"MorseL.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"MorseO.php"</span><span class="p">;</span>
+
+<span class="k">require</span> <span class="s2">"Factory.php"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>284 2부 구조 패턴</p>
+
+<p>$share = new Factory;</p>
+
+<p>$name = “goooogllleee”;
+echo “원본 이름 = “.$name.”\n”;</p>
+
+<p>for ($i=0; $i&lt;strlen($name); $i++) {
+    echo $name[$i].”=&gt; “;
+    echo $share-&gt;getCode($name[$i])-&gt;code();
+    echo “\n”;
+}</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+</code></pre></div></div>
+<p>$ php index.php
+원본 이름 = goooogllleee
+g=&gt; MorseG을(를) 생성하였습니다.
+<strong>-*
+o=&gt; MorseO을(를) 생성하였습니다.
+—
+o=&gt; —
+o=&gt; —
+o=&gt; —
+g=&gt; **-*
+l=&gt; MorseL을(를) 생성하였습니다.
+*-</strong>
+l=&gt; *-**
+l=&gt; *-**
+e=&gt; MorseE을(를) 생성하였습니다.
+*
+e=&gt; *
+e=&gt; *
+```</p>
+
+<p>$name에 저장된 ‘goooogllleee’ 글자를 출력합니다. 해당 문자열 글자에는 중복된 알파벳이 존재합니다. 플라이웨이트 패턴에서는 중복된 글자의 모스 부호 객체를 참조하여 출력합니다.</p>
+
+<h2 id="125-관련-패턴">12.5 관련 패턴</h2>
+
+<p>플라이웨이트 패턴을 학습하면서 다른 패턴과 같이 사용한다는 것을 확인할 수 있었습니다. 플</p>
+
+<p>12장 플라이웨이트 패턴 285</p>
+
+<p>라이웨이트 패턴이 다른 패턴을 포함하기도 하고, 다른 패턴에서 플라이웨이트 패턴을 응용하기도 합니다.</p>
+
+<h3 id="1251-프록시-패턴">12.5.1 프록시 패턴</h3>
+
+<p>플라이웨이트 패턴은 중복 객체를 판별하기 위해 조건을 사용하는데, 조건을 사용해 객체를 검사하는 역할은 프록시 패턴에도 적용됩니다.</p>
+
+<h3 id="1252-복합체-패턴">12.5.2 복합체 패턴</h3>
+
+<p>플라이웨이트 패턴에는 팩토리 패턴이 같이 사용됩니다. 팩토리 패턴은 생성된 객체가 담긴 저장소를 갖고 있습니다.</p>
+
+<p>$pool 저장소는 생성된 객체를 저장하며 중복 객체를 관리합니다. 하나의 객체가 다수의 다른 객체를 포함하고 있는 구조로 생각해보면, 복합체 패턴을 응용한다는 사실을 알 수 있습니다.</p>
+
+<h3 id="1253-싱글턴-패턴">12.5.3 싱글턴 패턴</h3>
+
+<p>플라이웨이트 패턴에서는 중복 객체 생성을 방지하기 위해 싱글턴 패턴을 응용하며, 싱글턴 패턴을 적용해 공유되는 객체의 중복 생성을 방지합니다.</p>
+
+<h3 id="1254-전략-패턴-상태-패턴">12.5.4 전략 패턴, 상태 패턴</h3>
+
+<p>전략 패턴과 상태 패턴을 구현할 때 플라이웨이트 패턴이 활용됩니다.</p>
+
+<h2 id="126-정리">12.6 정리</h2>
+
+<p>우리는 객체에 접근하기 위해 동일한 인스턴스를 중복 생성하는 실수를 합니다. 서비스 응용프로그램처럼 한 명이라도 더 많은 사람에게 자원을 분배하기 위해서는 자원을 최대한 절약하는</p>
+
+<p>286 2부 구조 패턴</p>
+
+<p>설계가 필요합니다. 무분별하게 자원을 소모하는 코드는 올바른 작성법이 아닙니다.</p>
+
+<p>플라이웨이트는 객체의 할당을 적게 하기 위한 패턴이며, 한 번 할당한 자원을 재사용함으로써 메모리를 관리합니다. 그리고 플라이웨이트 패턴은 자원을 공유함으로써 낭비를 사전에 막을 수 있습니다. 객체를 생성, 호출하기 전에 중복 검사로 객체를 관리하는 패턴입니다.</p>
+
+<p>대량의 객체를 생성 및 관리할 경우 플라이웨이트 패턴은 매우 유용한 대안이 될 수 있습니다. 또한 관리하는 객체의 수가 많아서 처리하기 힘든 경우에도 효과적이라고 할 수 있습니다.</p>
+
+<p>12장 플라이웨이트 패턴 287</p>
+
+
+
+            <!-- 다음/이전 학습 페이지네이션 -->
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+    
+    
+
+<div class="d-flex justify-content-between align-items-center mt-5 mb-4 py-3 border-top border-bottom">
+  <div>
+    
+      <span class="text-muted small me-2">이전 학습</span>
+      <a href="/ch11/" class="text-decoration-none fw-semibold">
+        &laquo; CHAPTER 11 파사드 패턴
+      </a>
+    
+  </div>
+
+  <div class="text-end">
+    
+      <span class="text-muted small me-2">다음 학습</span>
+      <a href="/ch13/" class="text-decoration-none fw-semibold">
+        CHAPTER 13 프록시 패턴 &raquo;
+      </a>
+    
+  </div>
+</div>
+
+
+            <div class="mt-10">
+                <!-- 구글 에스센스 광고 -->
+                <script async
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3321560028329475"
+                    crossorigin="anonymous"></script>
+                <!-- jinydev-java -->
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3321560028329475"
+                    data-ad-slot="9323221865" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+
+        </div>
+
+        <div class="bd-toc mt-3 mb-5 my-lg-0 ps-xl-3 mb-lg-5 text-body-secondary">
+
+  <button class="btn btn-link p-md-0 mb-2 mb-md-0 text-decoration-none bd-toc-toggle d-md-none" type="button"
+    data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents">
+    서브목차
+    <svg class="bi d-md-none ms-2" aria-hidden="true">
+      <use xlink:href="#chevron-expand"></use>
+    </svg>
+  </button>
+
+  <strong class="d-none d-md-block h6 my-2">서브목차</strong>
+
+  <div class="collapse bd-toc-collapse" id="tocContents">
+    <nav id="TableOfContents">
+      <!--
+      <ul>
+        <li><a href="#quick-start">Quick start</a></li>
+        <li><a href="#cdn-links">CDN links</a></li>
+        <li><a href="#next-steps">Next steps</a></li>
+        <li><a href="#js-components">JS components</a></li>
+        <li><a href="#important-globals">Important globals</a>
+          <ul>
+            <li><a href="#html5-doctype">HTML5 doctype</a></li>
+            <li><a href="#responsive-meta-tag">Responsive meta tag</a></li>
+            <li><a href="#box-sizing">Box-sizing</a></li>
+            <li><a href="#reboot">Reboot</a></li>
+          </ul>
+        </li>
+        <li><a href="#community">Community</a></li>
+      </ul>
+      -->
+    </nav>
+  </div>
+</div>
+    </main>
+
+
+</div>
+
+  <footer class="container">
+  <hr class="mt-5 mb-3">
+  <div class="row align-items-center pb-3">
+    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+      <p class="mb-0 text-secondary">Copyright 2017~2026 JinyDev. All Rights Reserved.</p>
+    </div>
+    <div class="col-md-6 text-center text-md-end">
+      
+      <a href="https://datas.jiny.dev" class="text-decoration-none text-secondary ms-3">빅데이터</a>
+      
+      <a href="https://mysql.jiny.dev" class="text-decoration-none text-secondary ms-3">MySQL</a>
+      
+      <a href="https://php.jiny.dev" class="text-decoration-none text-secondary ms-3">PHP</a>
+      
+      <a href="https://java.jiny.dev" class="text-decoration-none text-secondary ms-3">자바</a>
+      
+      <a href="https://git.jiny.dev" class="text-decoration-none text-secondary ms-3">깃&깃허브</a>
+      
+      <a href="https://linux.jiny.dev" class="text-decoration-none text-secondary ms-3">리눅스</a>
+      
+    </div>
+  </div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+    window.addEventListener('load', async function () {
+      mermaid.initialize({ startOnLoad: false });
+
+      const mermaidCodes = document.querySelectorAll('pre code.language-mermaid');
+      const mermaidDivs = [];
+
+      mermaidCodes.forEach(codeBlock => {
+        const mermaidDefinition = codeBlock.textContent.trim();
+        const container = codeBlock.closest('div.highlighter-rouge');
+
+        const mermaidDiv = document.createElement('div');
+        mermaidDiv.className = 'mermaid';
+        mermaidDiv.textContent = mermaidDefinition;
+
+        if (container) {
+          container.replaceWith(mermaidDiv);
+        } else {
+          const pre = codeBlock.parentElement;
+          if (pre) pre.replaceWith(mermaidDiv);
+        }
+        mermaidDivs.push(mermaidDiv);
+      });
+
+      if (mermaidDivs.length > 0) {
+        await mermaid.run({ nodes: mermaidDivs });
+      }
+    });
+  </script>
+  <script src="/assets/js/toc.js"></script>
+  <script src="/assets/js/sidebar.js"></script>
+
+</body>
+
+</html>

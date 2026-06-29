@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 240" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Top Left: 디스크 -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="30" width="120" height="40" rx="20" fill="#ea580c" stroke="#c2410c" stroke-width="1.5" />
+    <text x="100" y="55" font-family="'Inter', sans-serif" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">디스크</text>
+  </g>
+
+  <!-- Memory boundary line/box -->
+  <rect x="200" y="20" width="310" height="200" rx="8" fill="none" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4,4" />
+  <text x="210" y="38" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#94a3b8">메모리</text>
+
+  <!-- Center Box in Memory: 클래스 선언 -->
+  <g filter="url(#shadow)">
+    <rect x="250" y="70" width="130" height="70" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="315" y="102" font-family="'Inter', sans-serif" font-size="13" font-weight="bold" fill="#334155" text-anchor="middle">클래스 선언</text>
+  </g>
+
+  <!-- Bottom Orange 3D Box in Memory: 객체 -->
+  <g transform="translate(275, 155)" filter="url(#shadow)">
+    <polygon points="25,0 70,0 55,12 10,12" fill="#fb923c" />
+    <polygon points="10,12 55,12 55,42 10,42" fill="#ea580c" />
+    <polygon points="55,12 70,0 70,30 55,42" fill="#c2410c" />
+    <text x="32" y="31" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">객체</text>
+  </g>
+
+  <!-- Flow Arrows -->
+  <g>
+    <!-- Disk load to Class 선언 -->
+    <path d="M 100,70 L 100,105 L 242,105" fill="none" stroke="#94a3b8" stroke-width="1.5" />
+    <polygon points="242,101 250,105 242,109" fill="#94a3b8" />
+    
+    <!-- new 객체 생성 line -->
+    <path d="M 100,105 L 100,175 L 265,175" fill="none" stroke="#ea580c" stroke-width="1.5" />
+    <polygon points="265,171 273,175 265,179" fill="#ea580c" />
+    <text x="145" y="167" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#ea580c" text-anchor="middle">new 객체 생성</text>
+
+    <!-- 정적 호출 (Static Invocation) -->
+    <path d="M 470,105 L 390,105" fill="none" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="3,3" />
+    <polygon points="390,109 382,105 390,101" fill="#0284c7" />
+    <text x="430" y="97" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#0284c7" text-anchor="middle">정적 호출</text>
+  </g>
+</svg>

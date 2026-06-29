@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 320" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Main System Labels (Top) -->
+  <text x="35" y="35" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#64748b">메인 시스템</text>
+
+  <!-- Three client modules at the top -->
+  <g filter="url(#shadow)">
+    <rect x="70" y="50" width="80" height="36" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="110" y="72" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#475569" text-anchor="middle">모듈</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="220" y="50" width="80" height="36" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="260" y="72" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#475569" text-anchor="middle">모듈</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="370" y="50" width="80" height="36" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="410" y="72" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#475569" text-anchor="middle">모듈</text>
+  </g>
+
+  <!-- Facade Layer (Middle) -->
+  <g filter="url(#shadow)">
+    <rect x="185" y="125" width="150" height="42" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" />
+    <text x="260" y="146" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#1e3a8a" text-anchor="middle">파사드 (Facade)</text>
+    <text x="260" y="159" font-family="'Inter', sans-serif" font-size="9" fill="#3b82f6" text-anchor="middle">인터페이스 계층</text>
+  </g>
+
+  <!-- Sub-System Area (Bottom Box) -->
+  <rect x="30" y="185" width="460" height="110" rx="8" fill="none" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="6,4" />
+  <text x="45" y="205" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#94a3b8">서브 시스템</text>
+
+  <!-- Nested sub-system modules (cleaner connections now) -->
+  <g filter="url(#shadow)">
+    <rect x="60" y="225" width="60" height="28" rx="3" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2" />
+    <text x="90" y="242" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#475569" text-anchor="middle">모듈</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="150" y="225" width="60" height="28" rx="3" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2" />
+    <text x="180" y="242" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#475569" text-anchor="middle">모듈</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="240" y="255" width="60" height="28" rx="3" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2" />
+    <text x="270" y="272" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#475569" text-anchor="middle">모듈</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="330" y="225" width="60" height="28" rx="3" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2" />
+    <text x="360" y="242" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#475569" text-anchor="middle">모듈</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="420" y="225" width="60" height="28" rx="3" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2" />
+    <text x="450" y="242" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#475569" text-anchor="middle">모듈</text>
+  </g>
+
+  <!-- Clean unified arrows -->
+  <g>
+    <!-- Clients point to Facade only -->
+    <path d="M 110,86 L 110,105 L 210,105 L 210,121" fill="none" stroke="#ef4444" stroke-width="1.2" />
+    <polygon points="207,121 210,125 213,121" fill="#ef4444" />
+
+    <path d="M 260,86 L 260,121" fill="none" stroke="#ef4444" stroke-width="1.2" />
+    <polygon points="257,121 260,125 263,121" fill="#ef4444" />
+
+    <path d="M 410,86 L 410,105 L 310,105 L 310,121" fill="none" stroke="#ef4444" stroke-width="1.2" />
+    <polygon points="307,121 310,125 313,121" fill="#ef4444" />
+
+    <!-- Facade distributes to subsystem modules -->
+    <path d="M 260,167 L 260,185" fill="none" stroke="#3b82f6" stroke-width="1.5" />
+
+    <!-- Distributing arrows inside subsystem -->
+    <path d="M 260,185 L 90,185 L 90,221" fill="none" stroke="#3b82f6" stroke-width="1.2" />
+    <polygon points="87,221 90,225 93,221" fill="#3b82f6" />
+
+    <path d="M 260,185 L 180,185 L 180,221" fill="none" stroke="#3b82f6" stroke-width="1.2" />
+    <polygon points="177,221 180,225 183,221" fill="#3b82f6" />
+
+    <path d="M 260,185 L 270,185 L 270,251" fill="none" stroke="#3b82f6" stroke-width="1.2" />
+    <polygon points="267,251 270,255 273,251" fill="#3b82f6" />
+
+    <path d="M 260,185 L 360,185 L 360,221" fill="none" stroke="#3b82f6" stroke-width="1.2" />
+    <polygon points="357,221 360,225 363,221" fill="#3b82f6" />
+
+    <path d="M 260,185 L 450,185 L 450,221" fill="none" stroke="#3b82f6" stroke-width="1.2" />
+    <polygon points="447,221 450,225 453,221" fill="#3b82f6" />
+  </g>
+</svg>

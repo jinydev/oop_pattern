@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 240" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Left Box: Hello Class -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="50" width="180" height="90" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="50" y="42" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#64748b">클래스명: Hello</text>
+    <!-- Code line inside -->
+    <text x="60" y="102" font-family="monospace" font-size="13" fill="#334155">new <tspan fill="#0f172a" font-weight="bold">Korean</tspan>;</text>
+    <!-- Highlight boundary around Korean -->
+    <rect x="92" y="86" width="60" height="22" rx="3" fill="none" stroke="#ef4444" stroke-dasharray="3,2" stroke-width="1.5" />
+  </g>
+
+  <!-- Right Box: Korean Class -->
+  <g filter="url(#shadow)">
+    <rect x="340" y="50" width="180" height="90" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <!-- Class Name Label -->
+    <text x="345" y="42" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#64748b">클래스명: </text>
+    <!-- Red highlight around Korean class name in label -->
+    <text x="405" y="42" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#ef4444">Korean</text>
+    <rect x="400" y="28" width="54" height="20" rx="3" fill="none" stroke="#ef4444" stroke-dasharray="3,2" stroke-width="1.5" />
+    <!-- Code line inside -->
+    <text x="360" y="102" font-family="monospace" font-size="13" fill="#64748b">...</text>
+  </g>
+
+  <!-- Arrow: 객체 생성 -->
+  <g>
+    <line x1="220" y1="95" x2="330" y2="95" stroke="#94a3b8" stroke-width="2" />
+    <polygon points="330,90 340,95 330,100" fill="#94a3b8" />
+    <text x="275" y="84" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#475569" text-anchor="middle">객체 생성</text>
+  </g>
+
+  <!-- Red connection lines to show tight coupling (동일한 클래스 이름 결합 관계 발생) -->
+  <g>
+    <!-- Line from left highlight -->
+    <path d="M 122,108 C 122,150 200,180 250,180" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <circle cx="122" cy="108" r="3" fill="#ef4444" />
+
+    <!-- Line from right highlight -->
+    <path d="M 427,28 C 427,150 340,180 290,180" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <circle cx="427" cy="28" r="3" fill="#ef4444" />
+
+    <!-- Text badge for coupling explanation -->
+    <rect x="200" y="175" width="170" height="34" rx="4" fill="#fef2f2" stroke="#fee2e2" stroke-width="1" />
+    <text x="285" y="188" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#b91c1c" text-anchor="middle">동일한 클래스 이름</text>
+    <text x="285" y="201" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#b91c1c" text-anchor="middle">결합 관계 발생</text>
+  </g>
+</svg>

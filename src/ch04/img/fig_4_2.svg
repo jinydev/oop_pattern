@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 250" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Top: 상위 클래스 -->
+  <g filter="url(#shadow)">
+    <circle cx="270" cy="55" r="30" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+    <text x="270" y="58" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#0f172a" text-anchor="middle">상위</text>
+    <text x="270" y="70" font-family="'Inter', sans-serif" font-size="9" fill="#64748b" text-anchor="middle">클래스</text>
+  </g>
+
+  <!-- Bottom Left: 일반 클래스 -->
+  <g filter="url(#shadow)">
+    <circle cx="100" cy="170" r="30" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+    <text x="100" y="173" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#0f172a" text-anchor="middle">일반</text>
+    <text x="100" y="185" font-family="'Inter', sans-serif" font-size="9" fill="#64748b" text-anchor="middle">클래스</text>
+  </g>
+
+  <!-- Bottom Right: 하위 클래스 -->
+  <g filter="url(#shadow)">
+    <circle cx="270" cy="170" r="30" fill="#ffffff" stroke="#ea580c" stroke-width="2" />
+    <text x="270" y="173" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#ea580c" text-anchor="middle">하위</text>
+    <text x="270" y="185" font-family="'Inter', sans-serif" font-size="9" fill="#ea580c" text-anchor="middle">클래스</text>
+  </g>
+
+  <!-- Interaction arrows: 일반 클래스 <-> 하위 클래스 -->
+  <g>
+    <!-- ① 객체 생성 호출 -->
+    <path d="M 130,160 L 240,160" fill="none" stroke="#64748b" stroke-width="1.2" stroke-dasharray="3,3" />
+    <polygon points="240,157 246,160 240,163" fill="#64748b" />
+    <text x="185" y="150" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#475569" text-anchor="middle">① 객체 생성 호출</text>
+
+    <!-- ④ 반환 -->
+    <path d="M 240,180 L 130,180" fill="none" stroke="#64748b" stroke-width="1.2" stroke-dasharray="3,3" />
+    <polygon points="130,183 124,180 130,177" fill="#64748b" />
+    <text x="185" y="195" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#475569" text-anchor="middle">④ 반환</text>
+  </g>
+
+  <!-- inheritance and override: 하위 클래스 <-> 상위 클래스 -->
+  <g>
+    <!-- extends (Orange line between circle edges) -->
+    <path d="M 270,140 L 270,85" fill="none" stroke="#ea580c" stroke-width="2.5" />
+    <!-- Label centered on the extends path -->
+    <rect x="250" y="105" width="40" height="14" rx="2" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.5" />
+    <text x="270" y="115" font-family="monospace" font-size="8" font-weight="bold" fill="#ea580c" text-anchor="middle">extends</text>
+
+    <!-- ② 인터페이스 확인 (Upward arrow on the left side of the vertical axis) -->
+    <path d="M 248,135 L 248,90" fill="none" stroke="#ef4444" stroke-width="1.2" />
+    <polygon points="245,90 248,84 251,90" fill="#ef4444" />
+    <text x="240" y="113" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#b91c1c" text-anchor="end">② 인터페이스 확인</text>
+
+    <!-- ③ 실제 구현 (Downward arrow on the right side of the vertical axis) -->
+    <path d="M 292,90 L 292,135" fill="none" stroke="#ef4444" stroke-width="1.2" />
+    <polygon points="289,135 292,141 295,135" fill="#ef4444" />
+    <text x="300" y="113" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#b91c1c" text-anchor="start">③ 실제 구현</text>
+  </g>
+</svg>

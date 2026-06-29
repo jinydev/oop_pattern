@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 200" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Single Dispatcher Box (Left) -->
+  <g transform="translate(30, 60)" filter="url(#shadow)">
+    <polygon points="50,10 90,40 50,70 10,40" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" />
+    <text x="50" y="44" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#1e3a8a" text-anchor="middle">switch</text>
+  </g>
+
+  <!-- Branches (Right) -->
+  <!-- Branch 1 (0x01) -->
+  <g transform="translate(230, 20)" filter="url(#shadow)">
+    <rect width="110" height="30" rx="4" fill="#ffffff" stroke="#64748b" stroke-width="1.2" />
+    <text x="55" y="19" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#334155" text-anchor="middle">동작 처리</text>
+  </g>
+
+  <!-- Branch 2 (0x02) -->
+  <g transform="translate(230, 80)" filter="url(#shadow)">
+    <rect width="110" height="30" rx="4" fill="#ffffff" stroke="#64748b" stroke-width="1.2" />
+    <text x="55" y="19" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#334155" text-anchor="middle">동작 처리</text>
+  </g>
+
+  <!-- Branch 3 (0x04 - Dotted/Future) -->
+  <g transform="translate(230, 140)" filter="url(#shadow)">
+    <rect width="110" height="30" rx="4" fill="#ffffff" stroke="#ea580c" stroke-width="1.2" stroke-dasharray="3,2" />
+    <text x="55" y="19" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#ea580c" text-anchor="middle">동작 처리</text>
+  </g>
+
+  <!-- Flow Lines -->
+  <g>
+    <!-- Main stem -->
+    <path d="M 80,130 L 80,155" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,2" />
+    
+    <!-- 0x01 Branch -->
+    <path d="M 80,100 L 80,35 L 222,35" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="222,31 230,35 222,39" fill="#ef4444" />
+    <text x="130" y="30" font-family="monospace" font-size="9" font-weight="bold" fill="#b91c1c">0x01</text>
+
+    <!-- 0x02 Branch -->
+    <path d="M 80,95 L 222,95" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="222,91 230,95 222,99" fill="#ef4444" />
+    <text x="130" y="90" font-family="monospace" font-size="9" font-weight="bold" fill="#b91c1c">0x02</text>
+
+    <!-- 0x04 Branch -->
+    <path d="M 80,155 L 222,155" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,2" />
+    <polygon points="222,151 230,155 222,159" fill="#ef4444" />
+    <text x="130" y="150" font-family="monospace" font-size="9" font-weight="bold" fill="#ea580c">계속 추가...</text>
+  </g>
+</svg>

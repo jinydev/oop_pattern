@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 180" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Object Circle (Top) -->
+  <g filter="url(#shadow)">
+    <circle cx="190" cy="70" r="50" fill="#ffffff" stroke="#0f172a" stroke-width="2" />
+    <text x="190" y="44" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#0f172a" text-anchor="middle">객체 (Object)</text>
+    
+    <!-- Inside elements -->
+    <text x="155" y="76" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#3b82f6" text-anchor="middle">프로퍼티</text>
+    <text x="225" y="76" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#ea580c" text-anchor="middle">메서드</text>
+  </g>
+
+  <!-- Outside mapping labels (Bottom) -->
+  <text x="80" y="145" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#64748b">변수 (Variable)</text>
+  <text x="300" y="145" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#64748b">함수 (Function)</text>
+
+  <!-- Pointing arrows -->
+  <g>
+    <!-- 변수 -> 프로퍼티 -->
+    <path d="M 100,132 L 140,90" fill="none" stroke="#3b82f6" stroke-width="1.5" />
+    <polygon points="137,87 145,86 142,94" fill="#3b82f6" />
+
+    <!-- 함수 -> 메서드 -->
+    <path d="M 280,132 L 240,90" fill="none" stroke="#ea580c" stroke-width="1.5" />
+    <polygon points="238,94 235,86 243,87" fill="#ea580c" />
+  </g>
+</svg>

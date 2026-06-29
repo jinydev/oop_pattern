@@ -1,0 +1,1890 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- 기본 메타데이터 --><meta name="description" content="Jiny linux"><meta name="author" content="HojinLee"><!-- 제목 설정 --><title>CHAPTER 19 중재자 패턴</title>
+  <meta name="title" content="CHAPTER 19 중재자 패턴" /><!-- 키워드 설정 --><!-- Open Graph 메타데이터 --><meta property="og:title" content="CHAPTER 19 중재자 패턴"><meta property="og:description" content="Jiny linux"><meta property="og:type" content="website"><meta property="og:locale" content="ko">
+  <meta property="og:site_name" content="linux">
+  <meta property="og:url" content="http://0.0.0.0:4000/ch19/">
+  <!-- 대표 URL (캐노니컬) -->
+  <link rel="canonical" href="http://0.0.0.0:4000/ch19/">
+
+  <!-- Twitter 카드 메타데이터 --><meta name="twitter:card" content="summary"><meta property="twitter:title" content="CHAPTER 19 중재자 패턴"><!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="CHAPTER 19 중재자 패턴" />
+<meta name="author" content="Hojin" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="24가지 패턴으로 알아보는 객체지향의 원리" />
+<meta name="twitter:description" property="og:description" content="24가지 패턴으로 알아보는 객체지향의 원리" />
+<link rel="canonical" href="http://0.0.0.0:4000/ch19/" />
+<meta property="og:url" content="http://0.0.0.0:4000/ch19/" />
+<meta property="og:site_name" content="쉽게 배워 바로 써먹는 디자인 패턴" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="CHAPTER 19 중재자 패턴" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Hojin"},"description":"24가지 패턴으로 알아보는 객체지향의 원리","headline":"CHAPTER 19 중재자 패턴","url":"http://0.0.0.0:4000/ch19/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/assets/css/docs.css" rel="stylesheet" />
+  <link href="/assets/css/highlight.css" rel="stylesheet" />
+
+  <style>
+    blockquote {
+      border-left: solid 5px #dee2e6;
+      padding: 5px 10px;
+      background-color: #f8f9fa;
+    }
+  </style>
+
+  <style>
+    h1 a {
+      text-decoration: none;
+    }
+
+    h2 a {
+      text-decoration: none;
+    }
+
+    h3 a {
+      text-decoration: none;
+    }
+
+    h4 a {
+      text-decoration: none;
+    }
+
+    h5 a {
+      text-decoration: none;
+    }
+
+    h6 a {
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      vertical-align: top
+    }
+
+    strong a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* 스크롤바 커스텀 */
+    /* 임의의 영역 생성 */
+    .scrollBar {}
+
+    /* 아래의 모든 코드는 영역::코드로 사용 */
+    .scrollBar::-webkit-scrollbar {
+      width: 7px;
+      /* 스크롤바의 너비 */
+    }
+
+    .scrollBar::-webkit-scrollbar-thumb {
+      height: 30%;
+      /* 스크롤바의 길이 */
+      background: #cccccc;
+      /* 스크롤바의 색상 */
+
+      border-radius: 5px;
+    }
+
+    .scrollBar::-webkit-scrollbar-track {
+      background: rgba(33, 122, 244, .1);
+      /*스크롤바 뒷 배경 색상*/
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4VBPCT3CR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-R4VBPCT3CR');
+  </script>
+
+
+</head>
+
+<body>
+  <header class="navbar navbar-expand-lg bd-navbar sticky-top">
+    <nav class="container bd-gutter flex-wrap flex-lg-nowrap position-relative" aria-label="Main navigation">
+
+      <!-- Mobile: Left Toggle (Browse) -->
+      <div class="bd-navbar-toggle d-lg-none">
+        <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdSidebar"
+          aria-controls="bdSidebar" aria-label="Toggle docs navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="bi" fill="currentColor"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z">
+            </path>
+          </svg>
+          <span class="d-none fs-6 pe-1">Browse</span>
+        </button>
+      </div>
+
+      <!-- Brand: Desktop (Static), Mobile (Absolute Center) -->
+      <a class="navbar-brand p-0 me-0 me-lg-2 ms-lg-0 d-none d-lg-inline-block" href="/" aria-label="jinydev">
+        <svg width="32" height="26" viewBox="0 0 32 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M24.2746 5.33377C25.8486 7.33981 25.1183 11.1792 24.3961 13.0177C24.4028 13.0199 24.4094 13.0221 24.4161 13.0243L24.4013 13.0248L22.649 12.9082C22.649 12.9053 22.6488 12.9013 22.649 12.8993C22.9902 8.93373 22.5975 7.34575 22.2147 7.07677C17.6316 10.3896 13.5379 9.33658 12.2725 9.01111C11.928 8.9225 11.7932 8.88781 11.9152 9.00988C12.2872 9.38185 13.1336 9.82821 13.7371 10.1465H13.7372L13.7376 10.1467C13.8743 10.2188 13.9985 10.2843 14.1019 10.3409C9.12673 10.3984 7.12659 8.00279 6.53855 7.29846C6.47859 7.22664 6.4333 7.1724 6.40105 7.14015C6.11408 6.85318 4.49961 5.87252 3.99256 7.74227C3.50142 9.55335 3.81246 11.6775 3.97665 12.7988C3.99089 12.896 3.99257 12.8981 3.99257 12.9298L2.37635 13.0248L2.37213 13.0247C0.223493 8.05534 1.83854 5.26971 3.29536 4.2246C3.29536 1.78444 6.27428 -0.592359 10.0455 0.263262C14.8768 1.64043 16.3468 1.18409 18.0759 0.647278C18.774 0.430562 19.5143 0.200726 20.5351 0.073124C25.2219 -0.512739 26.7993 2.56612 27 4.16122C26.2141 3.70487 24.8556 4.73165 24.2746 5.33377ZM12.3374 1.5872C11.1225 1.16466 7.99257 0.717209 6.3478 2.41116C5.98397 2.78587 5.55554 3.48864 5.55554 3.48864C5.55554 3.48864 4.82665 4.81961 4.25622 4.24919C3.68579 3.67878 5.0168 1.96749 6.06259 1.46044C7.10838 0.953388 9.70703 0.0660505 12.3374 1.5872Z"
+            fill="currentColor" />
+          <path
+            d="M10.078 13.5002H3.10601C2.2309 13.5002 1.52148 14.2097 1.52148 15.0848V18.3172C1.52148 19.1923 2.2309 19.9018 3.10601 19.9018H10.078C10.9531 19.9018 11.6625 19.1923 11.6625 18.3172V15.0848C11.6625 14.2097 10.9531 13.5002 10.078 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M0.823513 14.6094H0.379847C0.187322 14.6094 0.03125 14.7654 0.03125 14.958V15.9721C0.03125 16.1646 0.187322 16.3207 0.379847 16.3207H0.823513C1.01604 16.3207 1.17211 16.1646 1.17211 15.9721V14.958C1.17211 14.7654 1.01604 14.6094 0.823513 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M16.7326 13.5002H23.7045C24.5796 13.5002 25.2891 14.2097 25.2891 15.0848V18.3172C25.2891 19.1923 24.5796 19.9018 23.7045 19.9018H16.7326C15.8575 19.9018 15.1481 19.1923 15.1481 18.3172V15.0848C15.1481 14.2097 15.8575 13.5002 16.7326 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M25.9861 14.6094H26.4297C26.6222 14.6094 26.7783 14.7654 26.7783 14.958V15.9721C26.7783 16.1646 26.6222 16.3207 26.4297 16.3207H25.9861C25.7935 16.3207 25.6375 16.1646 25.6375 15.9721V14.958C25.6375 14.7654 25.7935 14.6094 25.9861 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M12.2954 15.5601H14.5137C14.7062 15.5601 14.8623 15.7161 14.8623 15.9087V16.9228C14.8623 17.1153 14.7062 17.2713 14.5137 17.2713H12.2954C12.1028 17.2713 11.9468 17.1153 11.9468 16.9228V15.9087C11.9468 15.7161 12.1028 15.5601 12.2954 15.5601Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M9.93343 16.3937C9.93343 16.7087 9.76317 16.9641 9.55314 16.9641C9.34311 16.9641 9.17285 16.7087 9.17285 16.3937C9.17285 16.0786 9.34311 15.8232 9.55314 15.8232C9.76317 15.8232 9.93343 16.0786 9.93343 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M16.9688 16.3937C16.9688 16.7087 17.139 16.9641 17.3491 16.9641C17.5591 16.9641 17.7293 16.7087 17.7293 16.3937C17.7293 16.0786 17.5591 15.8232 17.3491 15.8232C17.139 15.8232 16.9688 16.0786 16.9688 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M14.2758 20.1016C13.642 20.6086 12.7863 20.3551 12.5645 20.1016C12.6278 20.4185 12.8687 20.8622 13.4518 20.8622C14.0349 20.8622 14.2441 20.3551 14.2758 20.1016Z"
+            fill="currentColor" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.1312 22.411C12.1575 22.2914 12.2759 22.2157 12.3956 22.2421L14.6347 22.735C14.7544 22.7614 14.83 22.8797 14.8036 22.9994C14.7773 23.119 14.659 23.1947 14.5393 23.1683L12.3002 22.6753C12.1805 22.649 12.1049 22.5307 12.1312 22.411Z"
+            fill="currentColor" />
+          <path
+            d="M13.4203 27.6754C9.00897 27.7261 5.77228 23.6613 4.70536 21.6225C4.54691 21.3197 4.42016 21.2739 4.32509 21.3373C4.17297 21.4387 4.28282 21.6437 4.32507 21.7493C4.85747 22.9916 5.58213 24.0416 5.87791 24.4113C4.83846 26.1353 4.49409 27.855 4.45183 28.4994C6.1758 26.8008 7.91668 26.8832 8.57162 27.1367C13.7055 29.7987 16.5577 27.929 18.1739 27.1367C19.4669 26.5029 21.4803 27.7388 22.3254 28.436C22.224 26.8642 21.3747 25.1402 20.9627 24.4747C21.6282 23.5873 22.1669 22.5099 22.4522 21.9711C22.6803 21.5401 22.6106 21.369 22.5472 21.3373C22.3951 21.2613 22.2092 21.4958 22.1353 21.6225C21.6599 22.4148 18.9345 27.6121 13.4203 27.6754Z"
+            fill="currentColor" />
+        </svg>
+      </a>
+      <a class="navbar-brand p-0 me-0 position-absolute top-50 start-50 translate-middle d-lg-none" href="/"
+        aria-label="jinydev">
+        <svg width="100" height="26" viewBox="0 0 112 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M24.2746 5.33377C25.8486 7.33981 25.1183 11.1792 24.3961 13.0177C24.4028 13.0199 24.4094 13.0221 24.4161 13.0243L24.4013 13.0248L22.649 12.9082C22.649 12.9053 22.6488 12.9013 22.649 12.8993C22.9902 8.93373 22.5975 7.34575 22.2147 7.07677C17.6316 10.3896 13.5379 9.33658 12.2725 9.01111C11.928 8.9225 11.7932 8.88781 11.9152 9.00988C12.2872 9.38185 13.1336 9.82821 13.7371 10.1465H13.7372L13.7376 10.1467C13.8743 10.2188 13.9985 10.2843 14.1019 10.3409C9.12673 10.3984 7.12659 8.00279 6.53855 7.29846C6.47859 7.22664 6.4333 7.1724 6.40105 7.14015C6.11408 6.85318 4.49961 5.87252 3.99256 7.74227C3.50142 9.55335 3.81246 11.6775 3.97665 12.7988C3.99089 12.896 3.99257 12.8981 3.99257 12.9298L2.37635 13.0248L2.37213 13.0247C0.223493 8.05534 1.83854 5.26971 3.29536 4.2246C3.29536 1.78444 6.27428 -0.592359 10.0455 0.263262C14.8768 1.64043 16.3468 1.18409 18.0759 0.647278C18.774 0.430562 19.5143 0.200726 20.5351 0.073124C25.2219 -0.512739 26.7993 2.56612 27 4.16122C26.2141 3.70487 24.8556 4.73165 24.2746 5.33377ZM12.3374 1.5872C11.1225 1.16466 7.99257 0.717209 6.3478 2.41116C5.98397 2.78587 5.55554 3.48864 5.55554 3.48864C5.55554 3.48864 4.82665 4.81961 4.25622 4.24919C3.68579 3.67878 5.0168 1.96749 6.06259 1.46044C7.10838 0.953388 9.70703 0.0660505 12.3374 1.5872Z"
+            fill="currentColor" />
+          <path
+            d="M10.078 13.5002H3.10601C2.2309 13.5002 1.52148 14.2097 1.52148 15.0848V18.3172C1.52148 19.1923 2.2309 19.9018 3.10601 19.9018H10.078C10.9531 19.9018 11.6625 19.1923 11.6625 18.3172V15.0848C11.6625 14.2097 10.9531 13.5002 10.078 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M0.823513 14.6094H0.379847C0.187322 14.6094 0.03125 14.7654 0.03125 14.958V15.9721C0.03125 16.1646 0.187322 16.3207 0.379847 16.3207H0.823513C1.01604 16.3207 1.17211 16.1646 1.17211 15.9721V14.958C1.17211 14.7654 1.01604 14.6094 0.823513 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M16.7326 13.5002H23.7045C24.5796 13.5002 25.2891 14.2097 25.2891 15.0848V18.3172C25.2891 19.1923 24.5796 19.9018 23.7045 19.9018H16.7326C15.8575 19.9018 15.1481 19.1923 15.1481 18.3172V15.0848C15.1481 14.2097 15.8575 13.5002 16.7326 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M25.9861 14.6094H26.4297C26.6222 14.6094 26.7783 14.7654 26.7783 14.958V15.9721C26.7783 16.1646 26.6222 16.3207 26.4297 16.3207H25.9861C25.7935 16.3207 25.6375 16.1646 25.6375 15.9721V14.958C25.6375 14.7654 25.7935 14.6094 25.9861 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M12.2954 15.5601H14.5137C14.7062 15.5601 14.8623 15.7161 14.8623 15.9087V16.9228C14.8623 17.1153 14.7062 17.2713 14.5137 17.2713H12.2954C12.1028 17.2713 11.9468 17.1153 11.9468 16.9228V15.9087C11.9468 15.7161 12.1028 15.5601 12.2954 15.5601Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M9.93343 16.3937C9.93343 16.7087 9.76317 16.9641 9.55314 16.9641C9.34311 16.9641 9.17285 16.7087 9.17285 16.3937C9.17285 16.0786 9.34311 15.8232 9.55314 15.8232C9.76317 15.8232 9.93343 16.0786 9.93343 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M16.9688 16.3937C16.9688 16.7087 17.139 16.9641 17.3491 16.9641C17.5591 16.9641 17.7293 16.7087 17.7293 16.3937C17.7293 16.0786 17.5591 15.8232 17.3491 15.8232C17.139 15.8232 16.9688 16.0786 16.9688 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M14.2758 20.1016C13.642 20.6086 12.7863 20.3551 12.5645 20.1016C12.6278 20.4185 12.8687 20.8622 13.4518 20.8622C14.0349 20.8622 14.2441 20.3551 14.2758 20.1016Z"
+            fill="currentColor" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.1312 22.411C12.1575 22.2914 12.2759 22.2157 12.3956 22.2421L14.6347 22.735C14.7544 22.7614 14.83 22.8797 14.8036 22.9994C14.7773 23.119 14.659 23.1947 14.5393 23.1683L12.3002 22.6753C12.1805 22.649 12.1049 22.5307 12.1312 22.411Z"
+            fill="currentColor" />
+          <path
+            d="M13.4203 27.6754C9.00897 27.7261 5.77228 23.6613 4.70536 21.6225C4.54691 21.3197 4.42016 21.2739 4.32509 21.3373C4.17297 21.4387 4.28282 21.6437 4.32507 21.7493C4.85747 22.9916 5.58213 24.0416 5.87791 24.4113C4.83846 26.1353 4.49409 27.855 4.45183 28.4994C6.1758 26.8008 7.91668 26.8832 8.57162 27.1367C13.7055 29.7987 16.5577 27.929 18.1739 27.1367C19.4669 26.5029 21.4803 27.7388 22.3254 28.436C22.224 26.8642 21.3747 25.1402 20.9627 24.4747C21.6282 23.5873 22.1669 22.5099 22.4522 21.9711C22.6803 21.5401 22.6106 21.369 22.5472 21.3373C22.3951 21.2613 22.2092 21.4958 22.1353 21.6225C21.6599 22.4148 18.9345 27.6121 13.4203 27.6754Z"
+            fill="currentColor" />
+          <text x="32" y="21" font-family="Arial, sans-serif" font-weight="bold" font-size="22"
+            fill="currentColor">Jiny</text>
+        </svg>
+      </a>
+
+      <!-- Mobile: Right Toggle (Menu) -->
+      <div class="d-flex d-lg-none ms-auto">
+        <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdNavbar"
+          aria-controls="bdNavbar" aria-label="Toggle navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid"
+            viewBox="0 0 16 16">
+            <path
+              d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- OffCanvas -->
+      <div class="offcanvas-lg offcanvas-end flex-grow-1" tabindex="-1" id="bdNavbar"
+        aria-labelledby="bdNavbarOffcanvasLabel" data-bs-scroll="true">
+        <!-- OffCanver Header -->
+        <div class="offcanvas-header px-4 pb-0">
+          <h5 class="offcanvas-title text-white" id="bdNavbarOffcanvasLabel">Jiny</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"
+            data-bs-target="#bdNavbar">
+          </button>
+        </div>
+
+        <!-- OffCanver Body -->
+        <div class="offcanvas-body p-4 pt-0 p-lg-0">
+          <hr class="d-lg-none text-white-50">
+
+          <ul class="navbar-nav flex-column flex-lg-row bd-navbar-nav">
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/ch00/">패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part01/">생성패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part02/">구조패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part03/">행동패턴</a>
+            </li>
+            
+          </ul>
+
+          <hr class="d-lg-none text-white-50">
+
+          <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
+            <li class="nav-item col-6 col-lg-auto">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://github.com/jinydev/datas" target="_blank"
+                rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
+                  viewBox="0 0 512 499.36" role="img">
+                  <title>GitHub</title>
+                  <path fill="currentColor" fill-rule="evenodd"
+                    d="M256 0C114.64 0 0 114.61 0 256c0 113.09 73.34 209 175.08 242.9 12.8 2.35 17.47-5.56 17.47-12.34 0-6.08-.22-22.18-.35-43.54-71.2 15.49-86.2-34.34-86.2-34.34-11.64-29.57-28.42-37.45-28.42-37.45-23.27-15.84 1.73-15.55 1.73-15.55 25.69 1.81 39.21 26.38 39.21 26.38 22.84 39.12 59.92 27.82 74.5 21.27 2.33-16.54 8.94-27.82 16.25-34.22-56.84-6.43-116.6-28.43-116.6-126.49 0-27.95 10-50.8 26.35-68.69-2.63-6.48-11.42-32.5 2.51-67.75 0 0 21.49-6.88 70.4 26.24a242.65 242.65 0 0 1 128.18 0c48.87-33.13 70.33-26.24 70.33-26.24 14 35.25 5.18 61.27 2.55 67.75 16.41 17.9 26.31 40.75 26.31 68.69 0 98.35-59.85 120-116.88 126.32 9.19 7.9 17.38 23.53 17.38 47.41 0 34.22-.31 61.83-.31 70.23 0 6.85 4.61 14.81 17.6 12.31C438.72 464.97 512 369.08 512 256.02 512 114.62 397.37 0 256 0z">
+                  </path>
+                </svg>
+                <small class="d-lg-none ms-2">GitHub</small>
+              </a>
+            </li>
+
+            <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+              <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+              <hr class="d-lg-none my-2 text-white-50">
+            </li>
+
+            <li class="nav-item col-6 col-lg-auto">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://jiny.dev" aria-label="Home">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
+                  viewBox="0 0 16 16" role="img">
+                  <title>Home</title>
+                  <path fill="currentColor"
+                    d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z" />
+                </svg>
+                <small class="d-lg-none ms-2">Home</small>
+              </a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container bd-gutter mt-3 my-md-4 bd-layout">
+    <aside class="bd-sidebar scrollBar">
+        <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="bdSidebar"
+            aria-labelledby="bdSidebarOffcanvasLabel">
+            <div class="offcanvas-header border-bottom">
+                <h5 class="offcanvas-title" id="bdSidebarOffcanvasLabel">학습목차</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"
+                    data-bs-target="#bdSidebar"></button>
+            </div>
+
+            <div class="offcanvas-body">
+                <!-- 네비게이션 -->
+                <nav class="bd-links w-100" id="bd-docs-nav" aria-label="Docs navigation">
+  <ul class="bd-links-nav list-unstyled mb-0 pb-3 pb-md-2 pe-lg-2">
+    <li class="bd-links-group py-2">
+      <strong class="bd-links-heading d-flex w-100 align-items-center fw-semibold">
+        디자인 패턴 목차
+      </strong>
+      <ul class="list-unstyled fw-normal pb-2 small">
+        
+        
+
+        
+        <li>
+          
+          <a href="/part03/"
+            class="bd-links-link d-inline-block rounded ">
+            Part 3 행동 패턴
+          </a>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-2"
+            aria-expanded="false">
+            CHAPTER 14 반복자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-2">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch14/#141-객체의-집합"
+                  class="bd-links-link d-inline-block rounded">
+                  14.1 객체의 집합
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#142-배열"
+                  class="bd-links-link d-inline-block rounded">
+                  14.2 배열
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#143-집합체"
+                  class="bd-links-link d-inline-block rounded">
+                  14.3 집합체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#144-반복자"
+                  class="bd-links-link d-inline-block rounded">
+                  14.4 반복자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#145-작업-분할"
+                  class="bd-links-link d-inline-block rounded">
+                  14.5 작업 분할
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#146-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  14.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#147-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  14.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-3"
+            aria-expanded="false">
+            CHAPTER 15 명령 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-3">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch15/#151-명령-처리"
+                  class="bd-links-link d-inline-block rounded">
+                  15.1 명령 처리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#152-명령-패턴의-구성과-특징"
+                  class="bd-links-link d-inline-block rounded">
+                  15.2 명령 패턴의 구성과 특징
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#153-인터페이스"
+                  class="bd-links-link d-inline-block rounded">
+                  15.3 인터페이스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#154-명령"
+                  class="bd-links-link d-inline-block rounded">
+                  15.4 명령
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#155-리시버"
+                  class="bd-links-link d-inline-block rounded">
+                  15.5 리시버
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#156-인보커"
+                  class="bd-links-link d-inline-block rounded">
+                  15.6 인보커
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#157-클라이언트"
+                  class="bd-links-link d-inline-block rounded">
+                  15.7 클라이언트
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#158-undo"
+                  class="bd-links-link d-inline-block rounded">
+                  15.8 undo
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#159-장단점"
+                  class="bd-links-link d-inline-block rounded">
+                  15.9 장단점
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#1510-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  15.10 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#1511-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  15.11 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-4"
+            aria-expanded="false">
+            CHAPTER 16 방문자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-4">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch16/#161-데이터-처리"
+                  class="bd-links-link d-inline-block rounded">
+                  16.1 데이터 처리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#162-분리"
+                  class="bd-links-link d-inline-block rounded">
+                  16.2 분리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#163-원소-객체"
+                  class="bd-links-link d-inline-block rounded">
+                  16.3 원소 객체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#164-방문자"
+                  class="bd-links-link d-inline-block rounded">
+                  16.4 방문자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#165-반복자"
+                  class="bd-links-link d-inline-block rounded">
+                  16.5 반복자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#166-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  16.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#167-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  16.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-5"
+            aria-expanded="false">
+            CHAPTER 17 체인 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-5">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch17/#171-제어문"
+                  class="bd-links-link d-inline-block rounded">
+                  17.1 제어문
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#172-동작-조건"
+                  class="bd-links-link d-inline-block rounded">
+                  17.2 동작 조건
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#173-행동-분리"
+                  class="bd-links-link d-inline-block rounded">
+                  17.3 행동 분리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#174-사슬-연결"
+                  class="bd-links-link d-inline-block rounded">
+                  17.4 사슬 연결
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#175-체인-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  17.5 체인 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#176-미들웨어"
+                  class="bd-links-link d-inline-block rounded">
+                  17.6 미들웨어
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#177-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  17.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#178-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  17.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-6"
+            aria-expanded="false">
+            CHAPTER 18 감시자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-6">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch18/#observer"
+                  class="bd-links-link d-inline-block rounded">
+                  ob·ser·ver
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#181-감시자"
+                  class="bd-links-link d-inline-block rounded">
+                  18.1 감시자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#182-구성"
+                  class="bd-links-link d-inline-block rounded">
+                  18.2 구성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#183-관계"
+                  class="bd-links-link d-inline-block rounded">
+                  18.3 관계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#184-주체"
+                  class="bd-links-link d-inline-block rounded">
+                  18.4 주체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#185-감시자"
+                  class="bd-links-link d-inline-block rounded">
+                  18.5 감시자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#186-동작-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  18.6 동작 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#187-활용"
+                  class="bd-links-link d-inline-block rounded">
+                  18.7 활용
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#188-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  18.8 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#189-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  18.9 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0  w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-7"
+            aria-expanded="true">
+            CHAPTER 19 중재자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse show" id="collapse-7">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch19/#191-중재"
+                  class="bd-links-link d-inline-block rounded">
+                  19.1 중재
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#192-중재자"
+                  class="bd-links-link d-inline-block rounded">
+                  19.2 중재자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#193-동료-객체"
+                  class="bd-links-link d-inline-block rounded">
+                  19.3 동료 객체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#194-기본-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  19.4 기본 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#195-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  19.5 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#196-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  19.6 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-8"
+            aria-expanded="false">
+            CHAPTER 20 상태 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-8">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch20/#201-상태란"
+                  class="bd-links-link d-inline-block rounded">
+                  20.1 상태란
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#202-상태-처리"
+                  class="bd-links-link d-inline-block rounded">
+                  20.2 상태 처리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#203-패턴-구현"
+                  class="bd-links-link d-inline-block rounded">
+                  20.3 패턴 구현
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#204-객체-생성"
+                  class="bd-links-link d-inline-block rounded">
+                  20.4 객체 생성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#205-상태-전환"
+                  class="bd-links-link d-inline-block rounded">
+                  20.5 상태 전환
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#206-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  20.6 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#207-효과"
+                  class="bd-links-link d-inline-block rounded">
+                  20.7 효과
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#208-패턴-유사성"
+                  class="bd-links-link d-inline-block rounded">
+                  20.8 패턴 유사성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#209-적용-사례"
+                  class="bd-links-link d-inline-block rounded">
+                  20.9 적용 사례
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#2010-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  20.10 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-9"
+            aria-expanded="false">
+            CHAPTER 21 메멘토 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-9">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch21/#211-상태-저장"
+                  class="bd-links-link d-inline-block rounded">
+                  21.1 상태 저장
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#212-캡슐화"
+                  class="bd-links-link d-inline-block rounded">
+                  21.2 캡슐화
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#213-메멘토"
+                  class="bd-links-link d-inline-block rounded">
+                  21.3 메멘토
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#214-originator-클래스"
+                  class="bd-links-link d-inline-block rounded">
+                  21.4 Originator 클래스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#215-caretaker-클래스"
+                  class="bd-links-link d-inline-block rounded">
+                  21.5 CareTaker 클래스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#216-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  21.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#217-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  21.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-10"
+            aria-expanded="false">
+            CHAPTER 22 템플릿 메서드 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-10">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch22/#221-프로그램의-구조"
+                  class="bd-links-link d-inline-block rounded">
+                  22.1 프로그램의 구조
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#222-템플릿"
+                  class="bd-links-link d-inline-block rounded">
+                  22.2 템플릿
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#223-일반화"
+                  class="bd-links-link d-inline-block rounded">
+                  22.3 일반화
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#224-추상화"
+                  class="bd-links-link d-inline-block rounded">
+                  22.4 추상화
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#225-템플릿-메서드"
+                  class="bd-links-link d-inline-block rounded">
+                  22.5 템플릿 메서드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#226-의존성-디자인"
+                  class="bd-links-link d-inline-block rounded">
+                  22.6 의존성 디자인
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#227-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  22.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#228-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  22.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-11"
+            aria-expanded="false">
+            CHAPTER 23 전략 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-11">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch23/#231-문제"
+                  class="bd-links-link d-inline-block rounded">
+                  23.1 문제
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#232-알고리즘"
+                  class="bd-links-link d-inline-block rounded">
+                  23.2 알고리즘
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#233-분리"
+                  class="bd-links-link d-inline-block rounded">
+                  23.3 분리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#234-인터페이스"
+                  class="bd-links-link d-inline-block rounded">
+                  23.4 인터페이스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#235-전략"
+                  class="bd-links-link d-inline-block rounded">
+                  23.5 전략
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#236-전략-실행"
+                  class="bd-links-link d-inline-block rounded">
+                  23.6 전략 실행
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#237-적용-사례"
+                  class="bd-links-link d-inline-block rounded">
+                  23.7 적용 사례
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#238-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  23.8 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#239-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  23.9 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-12"
+            aria-expanded="false">
+            CHAPTER 24 인터프리터 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-12">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch24/#241-언어"
+                  class="bd-links-link d-inline-block rounded">
+                  24.1 언어
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#242-언어-설계"
+                  class="bd-links-link d-inline-block rounded">
+                  24.2 언어 설계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#243-처리계"
+                  class="bd-links-link d-inline-block rounded">
+                  24.3 처리계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#244-중간-코드"
+                  class="bd-links-link d-inline-block rounded">
+                  24.4 중간 코드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#245-해석"
+                  class="bd-links-link d-inline-block rounded">
+                  24.5 해석
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#246-클래스-표현"
+                  class="bd-links-link d-inline-block rounded">
+                  24.6 클래스 표현
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#247-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  24.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#248-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  24.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+      </ul>
+    </li>
+  </ul>
+</nav>
+            </div>
+        </div>
+    </aside>
+
+    <main class="bd-main order-1">
+        <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        
+        
+        
+        
+        
+        
+        <li class="breadcrumb-item active" aria-current="page">CHAPTER 19 중재자 패턴</li>
+        
+        
+        
+    </ol>
+</nav>
+
+        <div class="bd-content ps-lg-2">
+            
+<p>me·di·ator
+[ ‘mi:diertə(r) ] 🔊</p>
+
+<p>CHAPTER <strong>19</strong></p>
+<h1 id="중재자-패턴">중재자 패턴</h1>
+
+<p>중재자 패턴은 분산된 다수의 객체 역할을 조정할 때 주로 사용됩니다.</p>
+
+<h2 id="191-중재">19.1 중재</h2>
+
+<p>중재는 어떤 문제를 해결하거나 조정을 돕는 것을 말합니다. 객체지향에서는 분산된 객체의 행동을 중재합니다.</p>
+
+<h3 id="1911-분산">19.1.1 분산</h3>
+<p>객체지향의 특징은 모든 행동을 하나의 객체에 집중하여 처리하지 않는다는 것입니다. 행동은 작은 단위로 분리되고, 목적 동작을 수행하기 위해 분리된 행동을 연결합니다.</p>
+
+<h4 id="그림-19-1-행동-분리">그림 19-1 행동 분리</h4>
+
+<p><img src="./img/fig_19_1.svg" alt="그림 19-1" /></p>
+
+<p><strong>424</strong> 3부 행동 패턴</p>
+
+<p>분리된 객체는 각각의 독립된 행동을 가진 객체입니다.</p>
+
+<h3 id="1912-상호-작용">19.1.2 상호 작용</h3>
+<p>객체지향은 하나의 커다란 행동을 작은 단위의 객체로 분산합니다. 이렇게 객체의 역할을 보다 작은 객체로 분할하는 이유는 동작을 재사용하기 위해서입니다.</p>
+
+<h4 id="그림-19-2-객체의-상호-작용">그림 19-2 객체의 상호 작용</h4>
+
+<p><img src="./img/fig_19_2.svg" alt="그림 19-2" /></p>
+
+<p>객체의 행동을 작은 객체 단위로 분리하면, 객체는 목적으로 하는 행동을 수행하기 위해 객체 간에 의존 관계가 발생합니다. 이렇게 분리된 객체의 의존 관계는 구조적으로 복잡한 연결 고리를 생성합니다.</p>
+
+<p>하나의 목적을 완전히 이루기 위해서는 연관된 모든 객체의 행동이 필요합니다. 분산된 작은 객체들 간에 정보를 주고받기 위해 복잡한 메시지 호출 동작이 발생합니다.</p>
+
+<h3 id="1913-행동-제약">19.1.3 행동 제약</h3>
+<p>분산된 객체는 각각 세분화된 행동을 가지며, 분리된 객체는 서로 강력한 의존적 결합 구조를 가집니다. 또한 분리된 객체 수가 늘어날수록 구조는 더욱 복잡해지고 결합도는 단단해집니다. 그럼에도 불구하고 객체의 행동을 분산시키는 목적은 객체의 구성 단위를 재사용하기 위해서입니다.</p>
+
+<p>강력한 결합 구조는 객체의 재사용을 방해하는 요인이 됩니다. 이러한 이유로 객체를 분리했지만, 분리된 객체는 강한 의존성 때문에 독립적인 행동을 할 수 없습니다. 객체의 행동 제약이</p>
+
+<p>19장 중재자 패턴 <strong>425</strong></p>
+
+<p>발생한 것입니다.</p>
+
+<p>객체를 단순히 분할하는 것은 복합 객체와 같은 큰 덩어리입니다.</p>
+
+<h3 id="1914-중재자-패턴">19.1.4 중재자 패턴</h3>
+<p>중재자<sup id="fnref:1"><a href="#fn:1" class="footnote" rel="footnote" role="doc-noteref">1</a></sup>의 사전적 의미를 찾아보면 ‘중재인, 조정관, 중재기관’이라는 뜻이 있습니다.</p>
+
+<p>실제 생활과 관련된 예를 들어 봅시다. 회의, 토론 등에서는 여러 사람의 패널과 사회자를 볼 수 있습니다. 사회자는 여러 패널의 발언권을 제어하고 이를 정리하는 역할을 합니다.</p>
+
+<p>그리고 각종 모임에는 총무가 존재하는데, 총무는 각 회원에게 회식 비용을 받아 결제를 대행합니다. 회원이 일일이 계산하는 것은 복잡하기 때문입니다.</p>
+
+<p>이처럼 이해 관계자가 많은 경우 이를 정리하는 중개인이 있으면 일을 보다 편리하게 처리할 수 있습니다.</p>
+
+<h3 id="1915-중재를-위해-관계-정리하기">19.1.5 중재를 위해 관계 정리하기</h3>
+<p>객체의 행동을 중재하기 위해서는 복잡한 구조적 관계를 개선해야 합니다.</p>
+
+<p>분산된 객체는 매우 복잡하게 얽혀 있습니다. 객체는 상호 관계를 가지며 호출되면서 결합도가 급속히 증가합니다. 이렇게 되면 객체의 유연성이 떨어지고 원래 목적인 객체의 재사용도 힘들어집니다.</p>
+
+<p>중재자는 객체 간 복잡한 상호 관계를 중재하며 객체 간에 복잡한 관계로 묶인 것을 재구성합니다. 즉 서로 의존적인 M:N의 관계를 가진 객체를 느슨한 1:1 관계로 변경합니다.</p>
+
+<p>중재자 패턴은 객체의 관계를 하나의 객체로 정리하는 패턴입니다.</p>
+
+<h3 id="1916-소결합">19.1.6 소결합</h3>
+<p>복잡하게 얽히는 객체의 연관 관계를 중재자 객체에게 집중합니다. 객체의 연관 관계를 하나의 중간 매개 객체에 집중함으로서 관계의 결합도를 해소합니다.</p>
+
+<hr />
+
+<p><strong>426</strong> 3부 행동 패턴</p>
+
+<p>중재자 역할을 수행하는 객체를 관계 중심에 추가합니다. 중재자는 각각의 객체를 자신과 연결하고, 객체의 행위 요청을 중앙에서 제어합니다.</p>
+
+<h4 id="그림-19-3-중재자-객체">그림 19-3 중재자 객체</h4>
+
+<p><img src="./img/fig_19_3.svg" alt="그림 19-3" /></p>
+
+<p>객체는 더 이상 상호 간에 직접적으로 접근하지 않는 대신 중재자에게 필요한 행동을 요청합니다. 중재자 패턴을 사용하면 여러 클래스가 서로 직접적으로 호출해 복잡한 관계를 느슨한 결합으로 만듭니다. 그리고 느슨한 결합은 객체의 재사용과 유연성을 높입니다.</p>
+
+<p>중재자 객체는 행동을 중재함으로써 복잡한 객체의 구조를 단순화합니다. 또한 복잡한 통신과 제어를 한 곳에 집중하여 처리하는 효과도 있습니다.</p>
+
+<h2 id="192-중재자">19.2 중재자</h2>
+
+<p>중재자는 객체 간 상호 작용을 제어하며 객체의 동작을 조화롭게 조정하는 역할을 수행합니다.</p>
+
+<h3 id="1921-중재자와-동료">19.2.1 중재자와 동료</h3>
+<p>중재자는 하나의 중재자와 여러 동료 객체<sup id="fnref:1:1"><a href="#fn:1" class="footnote" rel="footnote" role="doc-noteref">1</a></sup>로 구성되어 있으며, 동료 객체의 강력한 결합 구조를 느슨한 결합 구조로 개선합니다.</p>
+
+<p>또한 중재자는 객체 간에 상호 작용을 제어하고 조화롭게 만드는 역할을 합니다. 호출이 필요한 경우 동료 객체가 다른 동료 객체에 직접 접근해서 호출하지 않으며, 중재자를 의존해서 다른 동료 객체를 호출합니다. 즉 각각의 동료 객체가 서로 통신하는 것이 아니라 중재자를 통해 통신하는 것입니다.</p>
+
+<hr />
+
+<p>19장 중재자 패턴 <strong>427</strong></p>
+
+<p>른 동료 객체를 호출합니다. 즉 각각의 동료 객체가 서로 통신하는 것이 아니라 중재자를 통해 통신하는 것입니다.</p>
+
+<p>중재자는 동료 객체가 호출한 명령을 다시 동료 객체에 전달하고, 중재자 패턴은 동료 객체와 명령을 주고받는 중재 역할을 수행합니다.</p>
+
+<h3 id="1922-인터페이스">19.2.2 인터페이스</h3>
+<p>중재자는 여러 동료 객체의 관계를 조정하는데, 행동을 중재하기 위해서는 다양한 메서드가 필요합니다. 이 메서드는 관계를 중재하는 모든 동료 객체에 적용되며 이 경우 공통된 인터페이스가 필요합니다.</p>
+
+<p>생성된 동료 객체에 여러 방식의 중재 기능이 더 필요하다면, 복수의 concreteMediator 메서드를 생성할 수도 있습니다. concreteMediator를 설계하기 전에 먼저 Mediator 인터페이스를 생성합니다.</p>
+
+<p>예제 19-1 Mediator/01/Mediator.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">interface</span> <span class="nc">Mediator</span>
+<span class="p">{</span>
+    <span class="c1">// 회원을 생성합니다.</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">createColleague</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>중재자는 관리할 동료 객체의 목록을 관리합니다. 또한 다음과 같이 Client 실행 코드에서 동적으로 동료를 생성하고 중재 목록에 추가할 수도 있습니다.</p>
+
+<p>중재자의 공통된 부분을 추상화로 변경하여 개선해봅시다.</p>
+
+<p>예제 19-2 Mediator/02/Mediator.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">abstract</span> <span class="kd">class</span> <span class="nc">Mediator</span>
+<span class="p">{</span>
+    <span class="c1">// 중재해야 될 객체의 목록을 가지고 있습니다.</span>
+    <span class="k">protected</span> <span class="nv">$Colleague</span> <span class="o">=</span> <span class="p">[];</span>
+</code></pre></div></div>
+
+<p><strong>428</strong> 3부 행동 패턴</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// Colleague를 추가합니다.</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">addColleague</span><span class="p">(</span><span class="nv">$obj</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nb">array_push</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="nc">Colleague</span><span class="p">,</span> <span class="nv">$obj</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 동료를 생성합니다.</span>
+    <span class="k">abstract</span> <span class="k">public</span> <span class="k">function</span> <span class="n">createColleague</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>추상 클래스는 <code class="language-plaintext highlighter-rouge">$Colleague</code> 배열을 이용해 복수의 동료 객체를 관리합니다. 접근 속성은 추상 클래스를 상속할 수 있도록 protected로 설정합니다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">addColleague()</code> 메서드는 스택 배열(<code class="language-plaintext highlighter-rouge">$Colleague</code>)에 동료 객체를 추가합니다. <code class="language-plaintext highlighter-rouge">$Colleague</code>는 복수의 객체를 보관하는 스택 구조입니다.</p>
+
+<h3 id="1923-concretemediator-클래스">19.2.3 concreteMediator 클래스</h3>
+<p>중재자는 인터페이스/추상화와 구체적인 concreteMediator 클래스로 분리하여 설계합니다. 실제적인 중재 동작은 concreteMediator 클래스에 선언합니다.</p>
+
+<p>예제 19-3 Mediator/01/Server.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// concreteMediator</span>
+<span class="kd">class</span> <span class="nc">Server</span> <span class="kd">extends</span> <span class="nc">Mediator</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"중재자 생성들이 되었습니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nc">Colleague</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">createColleague</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// 동료 객체 목록을 초기화합니다.</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>19장 중재자 패턴 <strong>429</strong></p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// 중재 기능</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">mediate</span><span class="p">(</span><span class="nv">$data</span><span class="p">,</span> <span class="nv">$user</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"&gt;&gt; "</span><span class="mf">.</span><span class="nv">$user</span><span class="mf">.</span><span class="s2">" 로부터 서버 메시지를 받았습니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+
+        <span class="c1">// 모든 Colleague에게 전달 받은 메시지를 통보합니다.</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="nc">Colleague</span> <span class="k">as</span> <span class="nv">$obj</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">echo</span> <span class="s2">"&lt;&lt; "</span><span class="mf">.</span><span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">userName</span><span class="p">()</span><span class="mf">.</span><span class="s2">" : "</span><span class="p">;</span>
+            <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">message</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>중재자의 핵심 기능은 <code class="language-plaintext highlighter-rouge">mediate()</code> 메서드입니다. <code class="language-plaintext highlighter-rouge">mediate()</code> 메서드는 각각의 동료 객체로부터 호출되며, 호출된 <code class="language-plaintext highlighter-rouge">mediate()</code> 메서드는 다시 전달해야 하는 동료 객체의 메서드를 재호출합니다.</p>
+
+<h3 id="1924-서브-클래스-제한">19.2.4 서브 클래스 제한</h3>
+<p>중개하는 행동마다 concreteMediator 클래스를 생성합니다. 중개 행동이 변경되는 경우 mediator 인터페이스를 적용 받은 또 다른 서브 클래스를 생성합니다. 이를 위해 미리 인터페이스/추상화를 실시한 것입니다.</p>
+
+<p>하나의 concreteMediator 클래스에는 하나의 <code class="language-plaintext highlighter-rouge">mediate()</code> 메서드만 구현하고 분산된 객체는 하나의 서브 객체로 제한합니다.</p>
+
+<h3 id="1925-집중적-통제">19.2.5 집중적 통제</h3>
+<p>행동들이 여러 동료 객체로 분산되면 객체 간 결합이 발생하면서 서로 직접적으로 통신하게 됩니다. 이때 객체의 통신부는 내부적으로 캡슐화되어 있습니다. 이러한 객체의 내부적 통신은 중재자 패턴으로 변경하는 것을 힘들게 합니다.</p>
+
+<p><strong>430</strong> 3부 행동 패턴</p>
+
+<h2 id="193-동료-객체">19.3 동료 객체</h2>
+
+<p>동료 객체는 분산된 행동들의 독립된 객체입니다. 동료 객체는 직접 통신하지 않고 중재자를 통해서만 상호 통신하도록 제한됩니다.</p>
+
+<h3 id="1931-통신-경로">19.3.1 통신 경로</h3>
+<p>중재자 패턴은 객체의 강력한 구조적 결합 문제점을 해결합니다.</p>
+
+<p>중재자를 이용하지 않으면 다수의 동료 객체가 서로 정보를 직접 주고받습니다. 중재자 패턴은 동료 객체끼리 정보를 직접 주고받지 않도록 통신 경로를 제한합니다. 또한 서로의 참조 정보를 전달하지도 않습니다.</p>
+
+<p>중재자 패턴을 이용하더라도 처리할 동료의 객체가 많으면 또 다른 문제가 발생합니다. 중재자는 하나의 객체 요청에 대해 모든 객체로 통보를 처리해야 하므로 경로의 수가 증가합니다.</p>
+
+<p>중재자 패턴을 설계할 때는 경로의 수가 증가함에 따라 성능이 저하되지 않도록 신경 써서 구상해야 합니다.</p>
+
+<h3 id="1932-인터페이스">19.3.2 인터페이스</h3>
+<p>중재자 패턴은 분산된 여러 동료 객체의 행동들을 조정해야 합니다. Mediator, Colleague와 같이 상호 간에 통신을 중개하기 위해 메서드를 사용합니다. 메서드는 객체 내부에 캡슐화되어 있습니다.</p>
+
+<p>중재자와 동료 객체들 간 통신을 위해 메서드를 사전에 정의합니다. mediator는 Colleague의 메서드를 호출함으로써 동작 처리를 요청합니다. Colleague 인터페이스는 Mediator와의 통신을 처리하기 위해 동료 객체에 적용되는 인터페이스입니다.</p>
+
+<p>예제 19-4 Mediator/01/Colleague.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">interface</span> <span class="nc">Colleague</span>
+<span class="p">{</span>
+</code></pre></div></div>
+
+<p>19장 중재자 패턴 <strong>431</strong></p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// 중재자 객체를 설정합니다.</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">setMediator</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>인터페이스는 하나의 <code class="language-plaintext highlighter-rouge">setMediator()</code> 메서드를 필수고 선언합니다. 중재자는 통신을 위해 행동 객체의 정보를 갖고 있어야 합니다.</p>
+
+<p>동료 객체는 복합 객체의 구조를 갖고 있습니다. 공통된 기능을 포함하기 위해 추상화로 변경합니다.</p>
+
+<p>예제 19-5 Mediator/02/Colleague.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">abstract</span> <span class="kd">class</span> <span class="nc">Colleague</span>
+<span class="p">{</span>
+    <span class="k">protected</span> <span class="nv">$Mediator</span><span class="p">;</span>
+
+    <span class="c1">// 중개 객체를 설정합니다.</span>
+    <span class="c1">// concreteMediator에 의해서 호출됩니다.</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">setMediator</span><span class="p">(</span><span class="nv">$mediator</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nc">Mediator</span> <span class="o">=</span> <span class="nv">$mediator</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>중재 객체의 정보를 저장할 수 있도록 프로퍼티를 하나 선언하고, 추상화 상속 후에도 접근할 수 있도록 속성을 protected로 설정합니다. <code class="language-plaintext highlighter-rouge">setMediator()</code> 메서드는 중재를 처리하는 객체의 정보를 설정합니다.</p>
+
+<h3 id="1933-concretecolleague">19.3.3 concreteColleague</h3>
+<p>추상 클래스 Colleague를 상속받아 실제적인 concreteColleague를 생성합니다. 처리할 행동에 따라 다수의 concreteColleague를 생성할 수도 있습니다.</p>
+
+<p>다음 예제에서는 채팅을 위한 concreteColleague를 생성합니다. Mediator 인터페이스를 통해 객체 간 통신을 실시해봅시다.</p>
+
+<p><strong>432</strong> 3부 행동 패턴</p>
+
+<p>예제 19-6 Mediator/02/User.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// concreteColleague</span>
+<span class="kd">class</span> <span class="nc">User</span> <span class="kd">extends</span> <span class="nc">Colleague</span>
+<span class="p">{</span>
+    <span class="k">protected</span> <span class="nv">$name</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">(</span><span class="nv">$name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"Colleague가 등재되었습니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">name</span> <span class="o">=</span> <span class="nv">$name</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 사용자 이름을 확인합니다.</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">userName</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 메시지를 전달합니다.</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">send</span><span class="p">(</span><span class="nv">$data</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// 중개 서버로 메시지를 전송합니다.</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nc">Mediator</span><span class="o">-&gt;</span><span class="nf">mediate</span><span class="p">(</span><span class="nv">$data</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">message</span><span class="p">(</span><span class="nv">$data</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"&lt;&lt; "</span><span class="mf">.</span><span class="nv">$data</span><span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Colleague 객체는 독립적이며 재사용 가능한 객체이므로 통신 방법에 따라 Colleague에 구현해야 하는 메서드가 달라집니다.</p>
+
+<p>이 예제의 concreteColleague는 2개의 통신 메서드 <code class="language-plaintext highlighter-rouge">send()</code>와 <code class="language-plaintext highlighter-rouge">message()</code>를 갖고 있습니다. <code class="language-plaintext highlighter-rouge">send()</code>는 중재자에게 처리를 요청하는 메서드이며, <code class="language-plaintext highlighter-rouge">message()</code>는 중재자로부터 처리를 부여받는 메서드입니다.</p>
+
+<p>중재자 패턴은 요청과 부여를 통해 Colleague 객체 간 종속성을 제거합니다. 중재자 패턴은</p>
+
+<p>19장 중재자 패턴 <strong>433</strong></p>
+
+<p>중재 기능을 캡슐화하고 각각의 객체는 행동보다 객체 연결에만 관심을 갖게 됩니다.</p>
+
+<h2 id="194-기본-실습">19.4 기본 실습</h2>
+
+<p>구현한 mediator와 Colleague를 통해 실제 채팅 통신을 처리하는 Client를 생성해보겠습니다.</p>
+
+<h3 id="1941-관계-설정">19.4.1 관계 설정</h3>
+<p>채팅 동작을 위해 먼저 중재자 기능을 처리하는 서버 객체를 생성합니다. 그리고 Colleague 기능을 갖는 3명의 사용자 객체를 생성합니다.</p>
+
+<p>각각의 Colleague에는 객체를 구별할 수 있는 이름이 있습니다. 구별되는 이름은 Colleague 생성자를 통해 지정하며, Colleague가 생성되면 각각의 Colleague에 mediator 객체의 정보를 추가 설정합니다.</p>
+
+<p>예제 19-7 Mediator/02/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require</span> <span class="s2">"Mediator.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"Server.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"Colleague.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"User.php"</span><span class="p">;</span>
+
+<span class="c1">// 1단계: 서버생성</span>
+<span class="nv">$mediator</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Server</span><span class="p">;</span>
+
+<span class="c1">// Colleague 1 등록</span>
+<span class="nv">$user1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">User</span><span class="p">(</span><span class="s2">"james"</span><span class="p">);</span>
+<span class="nv">$user1</span><span class="o">-&gt;</span><span class="nf">setMediator</span><span class="p">(</span><span class="nv">$mediator</span><span class="p">);</span>
+<span class="nv">$mediator</span><span class="o">-&gt;</span><span class="nf">addColleague</span><span class="p">(</span><span class="nv">$user1</span><span class="p">);</span>
+
+<span class="c1">// Colleague 2 등록</span>
+<span class="nv">$user2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">User</span><span class="p">(</span><span class="s2">"jiny"</span><span class="p">);</span>
+<span class="nv">$user2</span><span class="o">-&gt;</span><span class="nf">setMediator</span><span class="p">(</span><span class="nv">$mediator</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><strong>434</strong> 3부 행동 패턴</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$mediator</span><span class="o">-&gt;</span><span class="nf">addColleague</span><span class="p">(</span><span class="nv">$user2</span><span class="p">);</span>
+
+<span class="c1">// Colleague 3 등록</span>
+<span class="nv">$user3</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">User</span><span class="p">(</span><span class="s2">"eric"</span><span class="p">);</span>
+<span class="nv">$user3</span><span class="o">-&gt;</span><span class="nf">setMediator</span><span class="p">(</span><span class="nv">$mediator</span><span class="p">);</span>
+<span class="nv">$mediator</span><span class="o">-&gt;</span><span class="nf">addColleague</span><span class="p">(</span><span class="nv">$user3</span><span class="p">);</span>
+
+<span class="c1">// 중재자로 데이터를 전송합니다.</span>
+<span class="nv">$user1</span><span class="o">-&gt;</span><span class="nf">send</span><span class="p">(</span><span class="s2">"안녕하세요, 저는 james 입니다."</span><span class="p">);</span>
+<span class="k">echo</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+
+<span class="nv">$user2</span><span class="o">-&gt;</span><span class="nf">send</span><span class="p">(</span><span class="s2">"안녕하세요, 저는 jiny 입니다."</span><span class="p">);</span>
+<span class="k">echo</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+
+<span class="nv">$user3</span><span class="o">-&gt;</span><span class="nf">send</span><span class="p">(</span><span class="s2">"안녕하세요, 저는 eric 입니다."</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Mediator와 Colleague의 관계를 설정했으면 각각의 Colleague 사용자에게 메시지를 전달합니다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>php index.php
+중재자 생성들이 되었습니다.
+Colleague가 등재되었습니다.
+Colleague가 등재되었습니다.
+Colleague가 등재되었습니다.
+<span class="o">&gt;&gt;</span> james 로부터 서버 메시지를 받았습니다.
+<span class="o">&lt;&lt;</span> <span class="no">james</span><span class="sh"> : &lt;&lt; 안녕하세요, 저는 james 입니다.
+&lt;&lt; jiny : &lt;&lt; 안녕하세요, 저는 james 입니다.
+&lt;&lt; eric : &lt;&lt; 안녕하세요, 저는 james 입니다.
+
+&gt;&gt; jiny 로부터 서버 메시지를 받았습니다.
+&lt;&lt; james : &lt;&lt; 안녕하세요, 저는 jiny 입니다.
+&lt;&lt; jiny : &lt;&lt; 안녕하세요, 저는 jiny 입니다.
+&lt;&lt; eric : &lt;&lt; 안녕하세요, 저는 jiny 입니다.
+
+&gt;&gt; eric 로부터 서버 메시지를 받았습니다.
+&lt;&lt; james : &lt;&lt; 안녕하세요, 저는 eric 입니다.
+&lt;&lt; jiny : &lt;&lt; 안녕하세요, 저는 eric 입니다.
+&lt;&lt; eric : &lt;&lt; 안녕하세요, 저는 eric 입니다.
+</span></code></pre></div></div>
+
+<p>19장 중재자 패턴 <strong>435</strong></p>
+
+<h3 id="1942-양방향">19.4.2 양방향</h3>
+<p>중재자 패턴은 다른 패턴들과 달리 양방향 통신을 처리합니다. 먼저 concreteColleague의 <code class="language-plaintext highlighter-rouge">send()</code> 메서드를 호출합니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 중재자로 데이터를 전송합니다.</span>
+<span class="nv">$user1</span><span class="o">-&gt;</span><span class="nf">send</span><span class="p">(</span><span class="s2">"안녕하세요, 저는 james 입니다."</span><span class="p">);</span>
+<span class="k">echo</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>메시지를 전달받은 동료 객체는 수신한 메시지를 다시 중개 객체로 전송합니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 메시지를 전달합니다.</span>
+<span class="k">public</span> <span class="k">function</span> <span class="n">send</span><span class="p">(</span><span class="nv">$data</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// 중개 서버로 메시지를 전송합니다.</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="nc">Mediator</span><span class="o">-&gt;</span><span class="nf">mediate</span><span class="p">(</span><span class="nv">$data</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>전송 받은 중개 객체는 동작을 분석한 후 처리 의무가 있는 다른 동료 객체에게 행위를 요청합니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 중재 기능</span>
+<span class="k">public</span> <span class="k">function</span> <span class="n">mediate</span><span class="p">(</span><span class="nv">$data</span><span class="p">,</span> <span class="nv">$user</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"&gt;&gt; "</span><span class="mf">.</span><span class="nv">$user</span><span class="mf">.</span><span class="s2">" 로부터 서버 메시지를 받았습니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+
+    <span class="c1">// 모든 Colleague에게 전달 받은 메시지를 통보합니다.</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="nc">Colleague</span> <span class="k">as</span> <span class="nv">$obj</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"&lt;&lt; "</span><span class="mf">.</span><span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">userName</span><span class="p">()</span><span class="mf">.</span><span class="s2">" : "</span><span class="p">;</span>
+        <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">message</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>중재자 패턴은 Mediator와 Colleague 사이를 양방향 통신하면서 요청한 행위를 조정합니다.</p>
+
+<p><strong>436</strong> 3부 행동 패턴</p>
+
+<h2 id="195-관련-패턴">19.5 관련 패턴</h2>
+
+<p>중재자 패턴은 다른 패턴들과 같이 활용되며 유사한 특징을 갖고 있습니다.</p>
+
+<h3 id="1951-파사드-패턴">19.5.1 파사드 패턴</h3>
+<p>중재자 패턴과 유사한 패턴으로 파사드 패턴이 있습니다. 이 패턴은 더 편리한 인터페이스를 제공하는 추상화 작업이라고 할 수 있습니다. 파사드 패턴은 통신을 위해 높은 레벨의 인터페이스를 만든다는 점에서 중재자 패턴과 비슷하게 볼 수 있지만, 중재자 패턴은 양방향으로 통신하고 파사드는 단방향으로만 통신한다는 차이가 있습니다.</p>
+
+<h3 id="1952-감시자-패턴">19.5.2 감시자 패턴</h3>
+<p>중재자는 중개 기능을 처리하는 메서드를 갖고 있습니다. 이 메서드는 각각의 Colleague 요청 처리를 감지합니다. 중재재가 Colleague의 요청을 감지할 경우 감시자<sup id="fnref:1:2"><a href="#fn:1" class="footnote" rel="footnote" role="doc-noteref">1</a></sup> 패턴을 같이 활용할 수 있습니다.</p>
+
+<h2 id="196-정리">19.6 정리</h2>
+
+<p>객체지향에서는 수많은 객체들이 생성되고 관계를 맺습니다. 객체들은 강력한 결합 구조와 상호 의존 관계를 가지며, 복잡한 의존 관계를 M:N 관계로 풀어가는 것은 매우 힘든 일입니다.</p>
+
+<p>중재자 패턴은 여러 객체들의 복잡한 상호 의존성을 느슨한 소결합으로 재조정합니다. 또한 1:1 관계로 통신하여 보다 간단히 처리합니다. 중재자 패턴은 생성된 객체의 재사용이 용이하도록 만들 수도 있지만, 잘못된 중재자의 설계는 더 복잡한 객체를 생성할 수 있으므로 주의할 필요가 있습니다.</p>
+
+<hr />
+
+<p>19장 중재자 패턴 <strong>437</strong></p>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1">
+      <p>Observer <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a> <a href="#fnref:1:1" class="reversefootnote" role="doc-backlink">&#8617;<sup>2</sup></a> <a href="#fnref:1:2" class="reversefootnote" role="doc-backlink">&#8617;<sup>3</sup></a></p>
+    </li>
+  </ol>
+</div>
+
+
+            <!-- 다음/이전 학습 페이지네이션 -->
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+    
+    
+
+<div class="d-flex justify-content-between align-items-center mt-5 mb-4 py-3 border-top border-bottom">
+  <div>
+    
+      <span class="text-muted small me-2">이전 학습</span>
+      <a href="/ch18/" class="text-decoration-none fw-semibold">
+        &laquo; CHAPTER 18 감시자 패턴
+      </a>
+    
+  </div>
+
+  <div class="text-end">
+    
+      <span class="text-muted small me-2">다음 학습</span>
+      <a href="/ch20/" class="text-decoration-none fw-semibold">
+        CHAPTER 20 상태 패턴 &raquo;
+      </a>
+    
+  </div>
+</div>
+
+
+            <div class="mt-10">
+                <!-- 구글 에스센스 광고 -->
+                <script async
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3321560028329475"
+                    crossorigin="anonymous"></script>
+                <!-- jinydev-java -->
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3321560028329475"
+                    data-ad-slot="9323221865" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+
+        </div>
+
+        <div class="bd-toc mt-3 mb-5 my-lg-0 ps-xl-3 mb-lg-5 text-body-secondary">
+
+  <button class="btn btn-link p-md-0 mb-2 mb-md-0 text-decoration-none bd-toc-toggle d-md-none" type="button"
+    data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents">
+    서브목차
+    <svg class="bi d-md-none ms-2" aria-hidden="true">
+      <use xlink:href="#chevron-expand"></use>
+    </svg>
+  </button>
+
+  <strong class="d-none d-md-block h6 my-2">서브목차</strong>
+
+  <div class="collapse bd-toc-collapse" id="tocContents">
+    <nav id="TableOfContents">
+      <!--
+      <ul>
+        <li><a href="#quick-start">Quick start</a></li>
+        <li><a href="#cdn-links">CDN links</a></li>
+        <li><a href="#next-steps">Next steps</a></li>
+        <li><a href="#js-components">JS components</a></li>
+        <li><a href="#important-globals">Important globals</a>
+          <ul>
+            <li><a href="#html5-doctype">HTML5 doctype</a></li>
+            <li><a href="#responsive-meta-tag">Responsive meta tag</a></li>
+            <li><a href="#box-sizing">Box-sizing</a></li>
+            <li><a href="#reboot">Reboot</a></li>
+          </ul>
+        </li>
+        <li><a href="#community">Community</a></li>
+      </ul>
+      -->
+    </nav>
+  </div>
+</div>
+    </main>
+
+
+</div>
+
+  <footer class="container">
+  <hr class="mt-5 mb-3">
+  <div class="row align-items-center pb-3">
+    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+      <p class="mb-0 text-secondary">Copyright 2017~2026 JinyDev. All Rights Reserved.</p>
+    </div>
+    <div class="col-md-6 text-center text-md-end">
+      
+      <a href="https://datas.jiny.dev" class="text-decoration-none text-secondary ms-3">빅데이터</a>
+      
+      <a href="https://mysql.jiny.dev" class="text-decoration-none text-secondary ms-3">MySQL</a>
+      
+      <a href="https://php.jiny.dev" class="text-decoration-none text-secondary ms-3">PHP</a>
+      
+      <a href="https://java.jiny.dev" class="text-decoration-none text-secondary ms-3">자바</a>
+      
+      <a href="https://git.jiny.dev" class="text-decoration-none text-secondary ms-3">깃&깃허브</a>
+      
+      <a href="https://linux.jiny.dev" class="text-decoration-none text-secondary ms-3">리눅스</a>
+      
+    </div>
+  </div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+    window.addEventListener('load', async function () {
+      mermaid.initialize({ startOnLoad: false });
+
+      const mermaidCodes = document.querySelectorAll('pre code.language-mermaid');
+      const mermaidDivs = [];
+
+      mermaidCodes.forEach(codeBlock => {
+        const mermaidDefinition = codeBlock.textContent.trim();
+        const container = codeBlock.closest('div.highlighter-rouge');
+
+        const mermaidDiv = document.createElement('div');
+        mermaidDiv.className = 'mermaid';
+        mermaidDiv.textContent = mermaidDefinition;
+
+        if (container) {
+          container.replaceWith(mermaidDiv);
+        } else {
+          const pre = codeBlock.parentElement;
+          if (pre) pre.replaceWith(mermaidDiv);
+        }
+        mermaidDivs.push(mermaidDiv);
+      });
+
+      if (mermaidDivs.length > 0) {
+        await mermaid.run({ nodes: mermaidDivs });
+      }
+    });
+  </script>
+  <script src="/assets/js/toc.js"></script>
+  <script src="/assets/js/sidebar.js"></script>
+
+</body>
+
+</html>

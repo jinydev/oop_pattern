@@ -1,0 +1,2086 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- 기본 메타데이터 --><meta name="description" content="Jiny linux"><meta name="author" content="HojinLee"><!-- 제목 설정 --><title>CHAPTER 17 체인 패턴</title>
+  <meta name="title" content="CHAPTER 17 체인 패턴" /><!-- 키워드 설정 --><!-- Open Graph 메타데이터 --><meta property="og:title" content="CHAPTER 17 체인 패턴"><meta property="og:description" content="Jiny linux"><meta property="og:type" content="website"><meta property="og:locale" content="ko">
+  <meta property="og:site_name" content="linux">
+  <meta property="og:url" content="http://0.0.0.0:4000/ch17/">
+  <!-- 대표 URL (캐노니컬) -->
+  <link rel="canonical" href="http://0.0.0.0:4000/ch17/">
+
+  <!-- Twitter 카드 메타데이터 --><meta name="twitter:card" content="summary"><meta property="twitter:title" content="CHAPTER 17 체인 패턴"><!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="CHAPTER 17 체인 패턴" />
+<meta name="author" content="Hojin" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="24가지 패턴으로 알아보는 객체지향의 원리" />
+<meta name="twitter:description" property="og:description" content="24가지 패턴으로 알아보는 객체지향의 원리" />
+<link rel="canonical" href="http://0.0.0.0:4000/ch17/" />
+<meta property="og:url" content="http://0.0.0.0:4000/ch17/" />
+<meta property="og:site_name" content="쉽게 배워 바로 써먹는 디자인 패턴" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="CHAPTER 17 체인 패턴" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Hojin"},"description":"24가지 패턴으로 알아보는 객체지향의 원리","headline":"CHAPTER 17 체인 패턴","url":"http://0.0.0.0:4000/ch17/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/assets/css/docs.css" rel="stylesheet" />
+  <link href="/assets/css/highlight.css" rel="stylesheet" />
+
+  <style>
+    blockquote {
+      border-left: solid 5px #dee2e6;
+      padding: 5px 10px;
+      background-color: #f8f9fa;
+    }
+  </style>
+
+  <style>
+    h1 a {
+      text-decoration: none;
+    }
+
+    h2 a {
+      text-decoration: none;
+    }
+
+    h3 a {
+      text-decoration: none;
+    }
+
+    h4 a {
+      text-decoration: none;
+    }
+
+    h5 a {
+      text-decoration: none;
+    }
+
+    h6 a {
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      vertical-align: top
+    }
+
+    strong a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* 스크롤바 커스텀 */
+    /* 임의의 영역 생성 */
+    .scrollBar {}
+
+    /* 아래의 모든 코드는 영역::코드로 사용 */
+    .scrollBar::-webkit-scrollbar {
+      width: 7px;
+      /* 스크롤바의 너비 */
+    }
+
+    .scrollBar::-webkit-scrollbar-thumb {
+      height: 30%;
+      /* 스크롤바의 길이 */
+      background: #cccccc;
+      /* 스크롤바의 색상 */
+
+      border-radius: 5px;
+    }
+
+    .scrollBar::-webkit-scrollbar-track {
+      background: rgba(33, 122, 244, .1);
+      /*스크롤바 뒷 배경 색상*/
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4VBPCT3CR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-R4VBPCT3CR');
+  </script>
+
+
+</head>
+
+<body>
+  <header class="navbar navbar-expand-lg bd-navbar sticky-top">
+    <nav class="container bd-gutter flex-wrap flex-lg-nowrap position-relative" aria-label="Main navigation">
+
+      <!-- Mobile: Left Toggle (Browse) -->
+      <div class="bd-navbar-toggle d-lg-none">
+        <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdSidebar"
+          aria-controls="bdSidebar" aria-label="Toggle docs navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="bi" fill="currentColor"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z">
+            </path>
+          </svg>
+          <span class="d-none fs-6 pe-1">Browse</span>
+        </button>
+      </div>
+
+      <!-- Brand: Desktop (Static), Mobile (Absolute Center) -->
+      <a class="navbar-brand p-0 me-0 me-lg-2 ms-lg-0 d-none d-lg-inline-block" href="/" aria-label="jinydev">
+        <svg width="32" height="26" viewBox="0 0 32 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M24.2746 5.33377C25.8486 7.33981 25.1183 11.1792 24.3961 13.0177C24.4028 13.0199 24.4094 13.0221 24.4161 13.0243L24.4013 13.0248L22.649 12.9082C22.649 12.9053 22.6488 12.9013 22.649 12.8993C22.9902 8.93373 22.5975 7.34575 22.2147 7.07677C17.6316 10.3896 13.5379 9.33658 12.2725 9.01111C11.928 8.9225 11.7932 8.88781 11.9152 9.00988C12.2872 9.38185 13.1336 9.82821 13.7371 10.1465H13.7372L13.7376 10.1467C13.8743 10.2188 13.9985 10.2843 14.1019 10.3409C9.12673 10.3984 7.12659 8.00279 6.53855 7.29846C6.47859 7.22664 6.4333 7.1724 6.40105 7.14015C6.11408 6.85318 4.49961 5.87252 3.99256 7.74227C3.50142 9.55335 3.81246 11.6775 3.97665 12.7988C3.99089 12.896 3.99257 12.8981 3.99257 12.9298L2.37635 13.0248L2.37213 13.0247C0.223493 8.05534 1.83854 5.26971 3.29536 4.2246C3.29536 1.78444 6.27428 -0.592359 10.0455 0.263262C14.8768 1.64043 16.3468 1.18409 18.0759 0.647278C18.774 0.430562 19.5143 0.200726 20.5351 0.073124C25.2219 -0.512739 26.7993 2.56612 27 4.16122C26.2141 3.70487 24.8556 4.73165 24.2746 5.33377ZM12.3374 1.5872C11.1225 1.16466 7.99257 0.717209 6.3478 2.41116C5.98397 2.78587 5.55554 3.48864 5.55554 3.48864C5.55554 3.48864 4.82665 4.81961 4.25622 4.24919C3.68579 3.67878 5.0168 1.96749 6.06259 1.46044C7.10838 0.953388 9.70703 0.0660505 12.3374 1.5872Z"
+            fill="currentColor" />
+          <path
+            d="M10.078 13.5002H3.10601C2.2309 13.5002 1.52148 14.2097 1.52148 15.0848V18.3172C1.52148 19.1923 2.2309 19.9018 3.10601 19.9018H10.078C10.9531 19.9018 11.6625 19.1923 11.6625 18.3172V15.0848C11.6625 14.2097 10.9531 13.5002 10.078 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M0.823513 14.6094H0.379847C0.187322 14.6094 0.03125 14.7654 0.03125 14.958V15.9721C0.03125 16.1646 0.187322 16.3207 0.379847 16.3207H0.823513C1.01604 16.3207 1.17211 16.1646 1.17211 15.9721V14.958C1.17211 14.7654 1.01604 14.6094 0.823513 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M16.7326 13.5002H23.7045C24.5796 13.5002 25.2891 14.2097 25.2891 15.0848V18.3172C25.2891 19.1923 24.5796 19.9018 23.7045 19.9018H16.7326C15.8575 19.9018 15.1481 19.1923 15.1481 18.3172V15.0848C15.1481 14.2097 15.8575 13.5002 16.7326 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M25.9861 14.6094H26.4297C26.6222 14.6094 26.7783 14.7654 26.7783 14.958V15.9721C26.7783 16.1646 26.6222 16.3207 26.4297 16.3207H25.9861C25.7935 16.3207 25.6375 16.1646 25.6375 15.9721V14.958C25.6375 14.7654 25.7935 14.6094 25.9861 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M12.2954 15.5601H14.5137C14.7062 15.5601 14.8623 15.7161 14.8623 15.9087V16.9228C14.8623 17.1153 14.7062 17.2713 14.5137 17.2713H12.2954C12.1028 17.2713 11.9468 17.1153 11.9468 16.9228V15.9087C11.9468 15.7161 12.1028 15.5601 12.2954 15.5601Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M9.93343 16.3937C9.93343 16.7087 9.76317 16.9641 9.55314 16.9641C9.34311 16.9641 9.17285 16.7087 9.17285 16.3937C9.17285 16.0786 9.34311 15.8232 9.55314 15.8232C9.76317 15.8232 9.93343 16.0786 9.93343 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M16.9688 16.3937C16.9688 16.7087 17.139 16.9641 17.3491 16.9641C17.5591 16.9641 17.7293 16.7087 17.7293 16.3937C17.7293 16.0786 17.5591 15.8232 17.3491 15.8232C17.139 15.8232 16.9688 16.0786 16.9688 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M14.2758 20.1016C13.642 20.6086 12.7863 20.3551 12.5645 20.1016C12.6278 20.4185 12.8687 20.8622 13.4518 20.8622C14.0349 20.8622 14.2441 20.3551 14.2758 20.1016Z"
+            fill="currentColor" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.1312 22.411C12.1575 22.2914 12.2759 22.2157 12.3956 22.2421L14.6347 22.735C14.7544 22.7614 14.83 22.8797 14.8036 22.9994C14.7773 23.119 14.659 23.1947 14.5393 23.1683L12.3002 22.6753C12.1805 22.649 12.1049 22.5307 12.1312 22.411Z"
+            fill="currentColor" />
+          <path
+            d="M13.4203 27.6754C9.00897 27.7261 5.77228 23.6613 4.70536 21.6225C4.54691 21.3197 4.42016 21.2739 4.32509 21.3373C4.17297 21.4387 4.28282 21.6437 4.32507 21.7493C4.85747 22.9916 5.58213 24.0416 5.87791 24.4113C4.83846 26.1353 4.49409 27.855 4.45183 28.4994C6.1758 26.8008 7.91668 26.8832 8.57162 27.1367C13.7055 29.7987 16.5577 27.929 18.1739 27.1367C19.4669 26.5029 21.4803 27.7388 22.3254 28.436C22.224 26.8642 21.3747 25.1402 20.9627 24.4747C21.6282 23.5873 22.1669 22.5099 22.4522 21.9711C22.6803 21.5401 22.6106 21.369 22.5472 21.3373C22.3951 21.2613 22.2092 21.4958 22.1353 21.6225C21.6599 22.4148 18.9345 27.6121 13.4203 27.6754Z"
+            fill="currentColor" />
+        </svg>
+      </a>
+      <a class="navbar-brand p-0 me-0 position-absolute top-50 start-50 translate-middle d-lg-none" href="/"
+        aria-label="jinydev">
+        <svg width="100" height="26" viewBox="0 0 112 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M24.2746 5.33377C25.8486 7.33981 25.1183 11.1792 24.3961 13.0177C24.4028 13.0199 24.4094 13.0221 24.4161 13.0243L24.4013 13.0248L22.649 12.9082C22.649 12.9053 22.6488 12.9013 22.649 12.8993C22.9902 8.93373 22.5975 7.34575 22.2147 7.07677C17.6316 10.3896 13.5379 9.33658 12.2725 9.01111C11.928 8.9225 11.7932 8.88781 11.9152 9.00988C12.2872 9.38185 13.1336 9.82821 13.7371 10.1465H13.7372L13.7376 10.1467C13.8743 10.2188 13.9985 10.2843 14.1019 10.3409C9.12673 10.3984 7.12659 8.00279 6.53855 7.29846C6.47859 7.22664 6.4333 7.1724 6.40105 7.14015C6.11408 6.85318 4.49961 5.87252 3.99256 7.74227C3.50142 9.55335 3.81246 11.6775 3.97665 12.7988C3.99089 12.896 3.99257 12.8981 3.99257 12.9298L2.37635 13.0248L2.37213 13.0247C0.223493 8.05534 1.83854 5.26971 3.29536 4.2246C3.29536 1.78444 6.27428 -0.592359 10.0455 0.263262C14.8768 1.64043 16.3468 1.18409 18.0759 0.647278C18.774 0.430562 19.5143 0.200726 20.5351 0.073124C25.2219 -0.512739 26.7993 2.56612 27 4.16122C26.2141 3.70487 24.8556 4.73165 24.2746 5.33377ZM12.3374 1.5872C11.1225 1.16466 7.99257 0.717209 6.3478 2.41116C5.98397 2.78587 5.55554 3.48864 5.55554 3.48864C5.55554 3.48864 4.82665 4.81961 4.25622 4.24919C3.68579 3.67878 5.0168 1.96749 6.06259 1.46044C7.10838 0.953388 9.70703 0.0660505 12.3374 1.5872Z"
+            fill="currentColor" />
+          <path
+            d="M10.078 13.5002H3.10601C2.2309 13.5002 1.52148 14.2097 1.52148 15.0848V18.3172C1.52148 19.1923 2.2309 19.9018 3.10601 19.9018H10.078C10.9531 19.9018 11.6625 19.1923 11.6625 18.3172V15.0848C11.6625 14.2097 10.9531 13.5002 10.078 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M0.823513 14.6094H0.379847C0.187322 14.6094 0.03125 14.7654 0.03125 14.958V15.9721C0.03125 16.1646 0.187322 16.3207 0.379847 16.3207H0.823513C1.01604 16.3207 1.17211 16.1646 1.17211 15.9721V14.958C1.17211 14.7654 1.01604 14.6094 0.823513 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M16.7326 13.5002H23.7045C24.5796 13.5002 25.2891 14.2097 25.2891 15.0848V18.3172C25.2891 19.1923 24.5796 19.9018 23.7045 19.9018H16.7326C15.8575 19.9018 15.1481 19.1923 15.1481 18.3172V15.0848C15.1481 14.2097 15.8575 13.5002 16.7326 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M25.9861 14.6094H26.4297C26.6222 14.6094 26.7783 14.7654 26.7783 14.958V15.9721C26.7783 16.1646 26.6222 16.3207 26.4297 16.3207H25.9861C25.7935 16.3207 25.6375 16.1646 25.6375 15.9721V14.958C25.6375 14.7654 25.7935 14.6094 25.9861 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M12.2954 15.5601H14.5137C14.7062 15.5601 14.8623 15.7161 14.8623 15.9087V16.9228C14.8623 17.1153 14.7062 17.2713 14.5137 17.2713H12.2954C12.1028 17.2713 11.9468 17.1153 11.9468 16.9228V15.9087C11.9468 15.7161 12.1028 15.5601 12.2954 15.5601Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M9.93343 16.3937C9.93343 16.7087 9.76317 16.9641 9.55314 16.9641C9.34311 16.9641 9.17285 16.7087 9.17285 16.3937C9.17285 16.0786 9.34311 15.8232 9.55314 15.8232C9.76317 15.8232 9.93343 16.0786 9.93343 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M16.9688 16.3937C16.9688 16.7087 17.139 16.9641 17.3491 16.9641C17.5591 16.9641 17.7293 16.7087 17.7293 16.3937C17.7293 16.0786 17.5591 15.8232 17.3491 15.8232C17.139 15.8232 16.9688 16.0786 16.9688 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M14.2758 20.1016C13.642 20.6086 12.7863 20.3551 12.5645 20.1016C12.6278 20.4185 12.8687 20.8622 13.4518 20.8622C14.0349 20.8622 14.2441 20.3551 14.2758 20.1016Z"
+            fill="currentColor" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.1312 22.411C12.1575 22.2914 12.2759 22.2157 12.3956 22.2421L14.6347 22.735C14.7544 22.7614 14.83 22.8797 14.8036 22.9994C14.7773 23.119 14.659 23.1947 14.5393 23.1683L12.3002 22.6753C12.1805 22.649 12.1049 22.5307 12.1312 22.411Z"
+            fill="currentColor" />
+          <path
+            d="M13.4203 27.6754C9.00897 27.7261 5.77228 23.6613 4.70536 21.6225C4.54691 21.3197 4.42016 21.2739 4.32509 21.3373C4.17297 21.4387 4.28282 21.6437 4.32507 21.7493C4.85747 22.9916 5.58213 24.0416 5.87791 24.4113C4.83846 26.1353 4.49409 27.855 4.45183 28.4994C6.1758 26.8008 7.91668 26.8832 8.57162 27.1367C13.7055 29.7987 16.5577 27.929 18.1739 27.1367C19.4669 26.5029 21.4803 27.7388 22.3254 28.436C22.224 26.8642 21.3747 25.1402 20.9627 24.4747C21.6282 23.5873 22.1669 22.5099 22.4522 21.9711C22.6803 21.5401 22.6106 21.369 22.5472 21.3373C22.3951 21.2613 22.2092 21.4958 22.1353 21.6225C21.6599 22.4148 18.9345 27.6121 13.4203 27.6754Z"
+            fill="currentColor" />
+          <text x="32" y="21" font-family="Arial, sans-serif" font-weight="bold" font-size="22"
+            fill="currentColor">Jiny</text>
+        </svg>
+      </a>
+
+      <!-- Mobile: Right Toggle (Menu) -->
+      <div class="d-flex d-lg-none ms-auto">
+        <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdNavbar"
+          aria-controls="bdNavbar" aria-label="Toggle navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid"
+            viewBox="0 0 16 16">
+            <path
+              d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- OffCanvas -->
+      <div class="offcanvas-lg offcanvas-end flex-grow-1" tabindex="-1" id="bdNavbar"
+        aria-labelledby="bdNavbarOffcanvasLabel" data-bs-scroll="true">
+        <!-- OffCanver Header -->
+        <div class="offcanvas-header px-4 pb-0">
+          <h5 class="offcanvas-title text-white" id="bdNavbarOffcanvasLabel">Jiny</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"
+            data-bs-target="#bdNavbar">
+          </button>
+        </div>
+
+        <!-- OffCanver Body -->
+        <div class="offcanvas-body p-4 pt-0 p-lg-0">
+          <hr class="d-lg-none text-white-50">
+
+          <ul class="navbar-nav flex-column flex-lg-row bd-navbar-nav">
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/ch00/">패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part01/">생성패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part02/">구조패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part03/">행동패턴</a>
+            </li>
+            
+          </ul>
+
+          <hr class="d-lg-none text-white-50">
+
+          <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
+            <li class="nav-item col-6 col-lg-auto">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://github.com/jinydev/datas" target="_blank"
+                rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
+                  viewBox="0 0 512 499.36" role="img">
+                  <title>GitHub</title>
+                  <path fill="currentColor" fill-rule="evenodd"
+                    d="M256 0C114.64 0 0 114.61 0 256c0 113.09 73.34 209 175.08 242.9 12.8 2.35 17.47-5.56 17.47-12.34 0-6.08-.22-22.18-.35-43.54-71.2 15.49-86.2-34.34-86.2-34.34-11.64-29.57-28.42-37.45-28.42-37.45-23.27-15.84 1.73-15.55 1.73-15.55 25.69 1.81 39.21 26.38 39.21 26.38 22.84 39.12 59.92 27.82 74.5 21.27 2.33-16.54 8.94-27.82 16.25-34.22-56.84-6.43-116.6-28.43-116.6-126.49 0-27.95 10-50.8 26.35-68.69-2.63-6.48-11.42-32.5 2.51-67.75 0 0 21.49-6.88 70.4 26.24a242.65 242.65 0 0 1 128.18 0c48.87-33.13 70.33-26.24 70.33-26.24 14 35.25 5.18 61.27 2.55 67.75 16.41 17.9 26.31 40.75 26.31 68.69 0 98.35-59.85 120-116.88 126.32 9.19 7.9 17.38 23.53 17.38 47.41 0 34.22-.31 61.83-.31 70.23 0 6.85 4.61 14.81 17.6 12.31C438.72 464.97 512 369.08 512 256.02 512 114.62 397.37 0 256 0z">
+                  </path>
+                </svg>
+                <small class="d-lg-none ms-2">GitHub</small>
+              </a>
+            </li>
+
+            <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+              <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+              <hr class="d-lg-none my-2 text-white-50">
+            </li>
+
+            <li class="nav-item col-6 col-lg-auto">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://jiny.dev" aria-label="Home">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
+                  viewBox="0 0 16 16" role="img">
+                  <title>Home</title>
+                  <path fill="currentColor"
+                    d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z" />
+                </svg>
+                <small class="d-lg-none ms-2">Home</small>
+              </a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container bd-gutter mt-3 my-md-4 bd-layout">
+    <aside class="bd-sidebar scrollBar">
+        <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="bdSidebar"
+            aria-labelledby="bdSidebarOffcanvasLabel">
+            <div class="offcanvas-header border-bottom">
+                <h5 class="offcanvas-title" id="bdSidebarOffcanvasLabel">학습목차</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"
+                    data-bs-target="#bdSidebar"></button>
+            </div>
+
+            <div class="offcanvas-body">
+                <!-- 네비게이션 -->
+                <nav class="bd-links w-100" id="bd-docs-nav" aria-label="Docs navigation">
+  <ul class="bd-links-nav list-unstyled mb-0 pb-3 pb-md-2 pe-lg-2">
+    <li class="bd-links-group py-2">
+      <strong class="bd-links-heading d-flex w-100 align-items-center fw-semibold">
+        디자인 패턴 목차
+      </strong>
+      <ul class="list-unstyled fw-normal pb-2 small">
+        
+        
+
+        
+        <li>
+          
+          <a href="/part03/"
+            class="bd-links-link d-inline-block rounded ">
+            Part 3 행동 패턴
+          </a>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-2"
+            aria-expanded="false">
+            CHAPTER 14 반복자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-2">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch14/#141-객체의-집합"
+                  class="bd-links-link d-inline-block rounded">
+                  14.1 객체의 집합
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#142-배열"
+                  class="bd-links-link d-inline-block rounded">
+                  14.2 배열
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#143-집합체"
+                  class="bd-links-link d-inline-block rounded">
+                  14.3 집합체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#144-반복자"
+                  class="bd-links-link d-inline-block rounded">
+                  14.4 반복자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#145-작업-분할"
+                  class="bd-links-link d-inline-block rounded">
+                  14.5 작업 분할
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#146-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  14.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#147-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  14.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-3"
+            aria-expanded="false">
+            CHAPTER 15 명령 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-3">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch15/#151-명령-처리"
+                  class="bd-links-link d-inline-block rounded">
+                  15.1 명령 처리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#152-명령-패턴의-구성과-특징"
+                  class="bd-links-link d-inline-block rounded">
+                  15.2 명령 패턴의 구성과 특징
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#153-인터페이스"
+                  class="bd-links-link d-inline-block rounded">
+                  15.3 인터페이스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#154-명령"
+                  class="bd-links-link d-inline-block rounded">
+                  15.4 명령
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#155-리시버"
+                  class="bd-links-link d-inline-block rounded">
+                  15.5 리시버
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#156-인보커"
+                  class="bd-links-link d-inline-block rounded">
+                  15.6 인보커
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#157-클라이언트"
+                  class="bd-links-link d-inline-block rounded">
+                  15.7 클라이언트
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#158-undo"
+                  class="bd-links-link d-inline-block rounded">
+                  15.8 undo
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#159-장단점"
+                  class="bd-links-link d-inline-block rounded">
+                  15.9 장단점
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#1510-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  15.10 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#1511-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  15.11 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-4"
+            aria-expanded="false">
+            CHAPTER 16 방문자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-4">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch16/#161-데이터-처리"
+                  class="bd-links-link d-inline-block rounded">
+                  16.1 데이터 처리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#162-분리"
+                  class="bd-links-link d-inline-block rounded">
+                  16.2 분리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#163-원소-객체"
+                  class="bd-links-link d-inline-block rounded">
+                  16.3 원소 객체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#164-방문자"
+                  class="bd-links-link d-inline-block rounded">
+                  16.4 방문자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#165-반복자"
+                  class="bd-links-link d-inline-block rounded">
+                  16.5 반복자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#166-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  16.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#167-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  16.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0  w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-5"
+            aria-expanded="true">
+            CHAPTER 17 체인 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse show" id="collapse-5">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch17/#171-제어문"
+                  class="bd-links-link d-inline-block rounded">
+                  17.1 제어문
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#172-동작-조건"
+                  class="bd-links-link d-inline-block rounded">
+                  17.2 동작 조건
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#173-행동-분리"
+                  class="bd-links-link d-inline-block rounded">
+                  17.3 행동 분리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#174-사슬-연결"
+                  class="bd-links-link d-inline-block rounded">
+                  17.4 사슬 연결
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#175-체인-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  17.5 체인 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#176-미들웨어"
+                  class="bd-links-link d-inline-block rounded">
+                  17.6 미들웨어
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#177-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  17.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#178-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  17.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-6"
+            aria-expanded="false">
+            CHAPTER 18 감시자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-6">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch18/#observer"
+                  class="bd-links-link d-inline-block rounded">
+                  ob·ser·ver
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#181-감시자"
+                  class="bd-links-link d-inline-block rounded">
+                  18.1 감시자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#182-구성"
+                  class="bd-links-link d-inline-block rounded">
+                  18.2 구성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#183-관계"
+                  class="bd-links-link d-inline-block rounded">
+                  18.3 관계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#184-주체"
+                  class="bd-links-link d-inline-block rounded">
+                  18.4 주체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#185-감시자"
+                  class="bd-links-link d-inline-block rounded">
+                  18.5 감시자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#186-동작-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  18.6 동작 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#187-활용"
+                  class="bd-links-link d-inline-block rounded">
+                  18.7 활용
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#188-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  18.8 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#189-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  18.9 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-7"
+            aria-expanded="false">
+            CHAPTER 19 중재자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-7">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch19/#191-중재"
+                  class="bd-links-link d-inline-block rounded">
+                  19.1 중재
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#192-중재자"
+                  class="bd-links-link d-inline-block rounded">
+                  19.2 중재자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#193-동료-객체"
+                  class="bd-links-link d-inline-block rounded">
+                  19.3 동료 객체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#194-기본-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  19.4 기본 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#195-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  19.5 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#196-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  19.6 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-8"
+            aria-expanded="false">
+            CHAPTER 20 상태 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-8">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch20/#201-상태란"
+                  class="bd-links-link d-inline-block rounded">
+                  20.1 상태란
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#202-상태-처리"
+                  class="bd-links-link d-inline-block rounded">
+                  20.2 상태 처리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#203-패턴-구현"
+                  class="bd-links-link d-inline-block rounded">
+                  20.3 패턴 구현
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#204-객체-생성"
+                  class="bd-links-link d-inline-block rounded">
+                  20.4 객체 생성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#205-상태-전환"
+                  class="bd-links-link d-inline-block rounded">
+                  20.5 상태 전환
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#206-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  20.6 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#207-효과"
+                  class="bd-links-link d-inline-block rounded">
+                  20.7 효과
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#208-패턴-유사성"
+                  class="bd-links-link d-inline-block rounded">
+                  20.8 패턴 유사성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#209-적용-사례"
+                  class="bd-links-link d-inline-block rounded">
+                  20.9 적용 사례
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#2010-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  20.10 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-9"
+            aria-expanded="false">
+            CHAPTER 21 메멘토 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-9">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch21/#211-상태-저장"
+                  class="bd-links-link d-inline-block rounded">
+                  21.1 상태 저장
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#212-캡슐화"
+                  class="bd-links-link d-inline-block rounded">
+                  21.2 캡슐화
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#213-메멘토"
+                  class="bd-links-link d-inline-block rounded">
+                  21.3 메멘토
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#214-originator-클래스"
+                  class="bd-links-link d-inline-block rounded">
+                  21.4 Originator 클래스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#215-caretaker-클래스"
+                  class="bd-links-link d-inline-block rounded">
+                  21.5 CareTaker 클래스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#216-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  21.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#217-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  21.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-10"
+            aria-expanded="false">
+            CHAPTER 22 템플릿 메서드 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-10">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch22/#221-프로그램의-구조"
+                  class="bd-links-link d-inline-block rounded">
+                  22.1 프로그램의 구조
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#222-템플릿"
+                  class="bd-links-link d-inline-block rounded">
+                  22.2 템플릿
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#223-일반화"
+                  class="bd-links-link d-inline-block rounded">
+                  22.3 일반화
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#224-추상화"
+                  class="bd-links-link d-inline-block rounded">
+                  22.4 추상화
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#225-템플릿-메서드"
+                  class="bd-links-link d-inline-block rounded">
+                  22.5 템플릿 메서드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#226-의존성-디자인"
+                  class="bd-links-link d-inline-block rounded">
+                  22.6 의존성 디자인
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#227-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  22.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#228-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  22.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-11"
+            aria-expanded="false">
+            CHAPTER 23 전략 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-11">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch23/#231-문제"
+                  class="bd-links-link d-inline-block rounded">
+                  23.1 문제
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#232-알고리즘"
+                  class="bd-links-link d-inline-block rounded">
+                  23.2 알고리즘
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#233-분리"
+                  class="bd-links-link d-inline-block rounded">
+                  23.3 분리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#234-인터페이스"
+                  class="bd-links-link d-inline-block rounded">
+                  23.4 인터페이스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#235-전략"
+                  class="bd-links-link d-inline-block rounded">
+                  23.5 전략
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#236-전략-실행"
+                  class="bd-links-link d-inline-block rounded">
+                  23.6 전략 실행
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#237-적용-사례"
+                  class="bd-links-link d-inline-block rounded">
+                  23.7 적용 사례
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#238-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  23.8 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#239-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  23.9 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-12"
+            aria-expanded="false">
+            CHAPTER 24 인터프리터 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-12">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch24/#241-언어"
+                  class="bd-links-link d-inline-block rounded">
+                  24.1 언어
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#242-언어-설계"
+                  class="bd-links-link d-inline-block rounded">
+                  24.2 언어 설계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#243-처리계"
+                  class="bd-links-link d-inline-block rounded">
+                  24.3 처리계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#244-중간-코드"
+                  class="bd-links-link d-inline-block rounded">
+                  24.4 중간 코드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#245-해석"
+                  class="bd-links-link d-inline-block rounded">
+                  24.5 해석
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#246-클래스-표현"
+                  class="bd-links-link d-inline-block rounded">
+                  24.6 클래스 표현
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#247-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  24.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#248-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  24.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+      </ul>
+    </li>
+  </ul>
+</nav>
+            </div>
+        </div>
+    </aside>
+
+    <main class="bd-main order-1">
+        <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        
+        
+        
+        
+        
+        
+        <li class="breadcrumb-item active" aria-current="page">CHAPTER 17 체인 패턴</li>
+        
+        
+        
+    </ol>
+</nav>
+
+        <div class="bd-content ps-lg-2">
+            
+<h1 id="chapter-17-체인-패턴-chain">CHAPTER 17 체인 패턴 (chain)</h1>
+
+<p>체인 패턴은 객체 메시지의 송신과 수신을 분리해서 처리합니다. 17장에서는 다음 세 가지 내용을 중심으로 살펴보겠습니다.</p>
+
+<ul>
+  <li>상태값과 처리 방식에 대해 알아봅니다.</li>
+  <li>상태값과 복수의 행동 객체를 연결하는 방법에 대해 알아봅니다.</li>
+  <li>객체를 연결하는 방법에 대해 알아봅니다.</li>
+</ul>
+
+<h2 id="171-제어문">17.1 제어문</h2>
+
+<p>프로그램은 순차적 절차에 따라 코드를 실행합니다. 그중 제어문은 상태값을 비교하여 코드의 실행 흐름을 변경합니다.</p>
+
+<h3 id="1711-조건-처리">17.1.1 조건 처리</h3>
+
+<p>개발 언어는 코드의 동작을 제어할 수 있는 조건문을 지원합니다. 대표적으로 if문과 switch문이 있습니다.</p>
+
+<p>다음 예제는 상태값에 따라 실행하는 함수를 다르게 호출합니다.</p>
+
+<p>17장 체인 패턴 383</p>
+
+<p>예제 17-1 Chain/01/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="nv">$conf</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nv">$conf</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 조건이 참인 경우 코드 분기</span>
+    <span class="nf">ordered</span><span class="p">();</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">// 조건이 거짓인 경우 코드 분기</span>
+    <span class="nf">cancel</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="k">function</span> <span class="n">ordered</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"주문이 성공적으로 접수되었습니다."</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">function</span> <span class="n">cancel</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"주문을 취소합니다."</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index.php
+주문이 성공적으로 접수되었습니다.
+</code></pre></div></div>
+
+<p>if문은 상태값을 비교합니다. 소괄호 안의 상태값이 참<sup>true</sup>인 경우 다음 중괄호 블록의 코드를 실행합니다. 만일 상태값이 거짓<sup>false</sup>이라면 else 이후의 중괄호 블록 코드를 실행합니다.</p>
+
+<h4 id="그림-17-1-조건에-따른-동작-분기">그림 17-1 조건에 따른 동작 분기</h4>
+
+<p><img src="./img/fig_17_1.svg" alt="그림 17-1" /></p>
+
+<p>384 3부 행동 패턴</p>
+
+<p>조건문은 순차적으로 실행되는 코드를 상태값에 의해 선택적으로 제어합니다. 선택적으로 실행을 제어한다는 의미는 상태에 따라 동작을 분리한다는 것과 같습니다.</p>
+
+<h3 id="1712-메시지-전송">17.1.2 메시지 전송</h3>
+
+<p>객체지향 개발에서는 메시지에 대해 이해하는 것이 중요합니다. 절차적 프로그래밍에서는 코드 순서와 함수 호출을 통해 동작을 분리하지만, 객체지향에서는 함수 호출 대신 메시지를 객체에 전송하여 메서드를 호출합니다.</p>
+
+<p>객체의 메시지 전송은 다른 객체에 접근하여 메서드를 호출하는 동작을 말합니다. 또한 객체 간 정보도 주고받습니다.</p>
+
+<p>다음 예제는 메시지 전송을 통해 객체의 메서드 호출을 분리합니다.</p>
+
+<p>예제 17-2 Chain/02/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Cart</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">ordered</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"장바구니 상품을 성공적으로 주문 접수했습니다."</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">cancel</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"장바구니 상품 주문을 취소합니다."</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nv">$Cart</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Cart</span><span class="p">;</span>
+
+<span class="nv">$conf</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nv">$conf</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 조건이 참인 경우</span>
+    <span class="c1">// 메시지를 전송합니다.</span>
+    <span class="nv">$Cart</span><span class="o">-&gt;</span><span class="nf">ordered</span><span class="p">();</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</code></pre></div></div>
+
+<p>17장 체인 패턴 385</p>
+
+<p>// 조건이 거짓인 경우
+    // 메시지를 전송합니다.
+    $Cart-&gt;cancel();
+}</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+</code></pre></div></div>
+<p>$ php index.php
+장바구니 상품 주문을 취소합니다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+[예제 17-2]는 조건의 상태값에 따라 함수를 다르게 호출했습니다. 변경된 예제는 상태값에 따라 객체의 메시지 전송을 다르게 처리합니다.
+
+#### 그림 17-2 객체의 메서드로 메시지를 전송하여 호출
+
+![그림 17-2](./img/fig_17_2.svg)
+
+즉 객체지향에서는 함수 호출 대신 객체의 메시지를 전송하여 동작을 분리합니다.
+
+
+## 17.2 동작 조건
+
+제어문은 상태값에 따라 동작을 분리하며, 상태값은 동작을 분리하는 조건의 기준값입니다. 다음에는 시스템에서 조건의 상태값을 처리하는 다양한 방법에 대해 알아보겠습니다.
+
+
+### 17.2.1 조건값
+
+순차적으로 실행되는 코드의 동작을 분기하기 위해 조건문과 상태값을 사용합니다. 조건문을
+
+386 3부 행동 패턴
+
+처리하려면 상태값이 반드시 필요한데 상태값은 대부분 내부 동작에 의해 발생하는 경우가 많으며 외부로부터 조건의 상태값을 전달 받기도 합니다.
+
+조건의 상태값이 발생하는 방법에 따라 처리 동작이 두 가지로 나뉩니다.
+
+* 외부 하드웨어로부터 발생한 조건을 처리하는 인터럽트
+* 내부의 상태값을 처리하는 이벤트
+
+
+### 17.2.2 인터럽트
+
+인터럽트&lt;sup&gt;interrupt&lt;/sup&gt;는 외부적인 하드웨어 신호를 입력 받아 상태를 처리합니다.
+
+프로그램은 조건문을 처리한 후 다음 줄의 코드를 실행합니다. 인터럽트가 발생하면 중앙 처리 장치(CPU)는 프로그램 실행을 잠시 중단하고 실행 제어권을 지정한 코드의 위치로 이동시킵니다. 인터럽트 동작이 완료되면 다시 이전의 실행 위치로 제어권을 되돌리고 다음 코드줄을 실행합니다. 인터럽트는 함수와 같은 호출의 성격을 갖고 있습니다.
+
+#### 그림 17-3 인터럽트 동작
+
+![그림 17-3](./img/fig_17_3.svg)
+
+인터럽트의 특징은 하드웨어적으로 프로그램 실행을 방해하여 외부로부터 입력 받은 조건 동작을 최우선적으로 처리합니다. 따라서 인터럽트는 하드웨어적으로 구성되어 있으며 개수와 동작 방식은 제한적입니다.
+
+17장 체인 패턴 387
+
+### 17.2.3 이벤트
+
+이벤트&lt;sup&gt;Event&lt;/sup&gt;는 하드웨어적인 인터럽트와 달리 프로그램에 의해 동작을 분리하여 실행합니다. 그리고 이벤트는 내부의 상태값을 지속적으로 감시하고, 특정 상태값이 됐을 때 지정한 동작을 실행합니다.
+
+프로그램은 이벤트를 감지하기 위해 일정 시간마다 상태값을 체크합니다. 펌웨어오나 운영체제는 시스템의 타이머 인터럽트를 이용하여 상태값을 지속적으로 확인합니다.
+
+#### 그림 17-4 이벤트 감시
+
+![그림 17-4](./img/fig_17_4.svg)
+
+이벤트는 사전에 정의된 상태값에 따라서 분리된 동작을 실행하며 상태값은 상수로 지정하여 사용합니다.
+
+상태값에 의한 이벤트 처리 동작은 별도의 처리 로직으로 분리할 수 있습니다. 이렇게 분리된 로직을 디스패치라고 하며, 이벤트의 처리를 핸들러라고 하기도 합니다.
+
+
+### 17.2.4 핸들러
+
+핸들러는 분리된 이벤트를 처리하는 로직입니다. 핸들러는 이벤트의 상태값을 지속적으로 감시하기 위해 반복 루프 구조로 되어 있는 경우가 많습니다.
+
+핸들러는 다중 처리를 위한 작업을 선택적으로 실행하며, 실행 대기열에 있는 프로세스를 선택
+
+388 3부 행동 패턴
+
+하여 작업 처리를 지시합니다.
+
+핸들러는 크게 정적&lt;sup&gt;static&lt;/sup&gt;과 동적&lt;sup&gt;dynamic&lt;/sup&gt; 동작으로 구분합니다. 정적 핸들러는 코드에서 미리 결정된 동작을 실행하며, 동적 핸들러는 실행 중에 결정되는 동작을 실행합니다.
+
+다음은 핸들러 예제 코드입니다.
+
+예제 17-3 Chain/02/Handler.php
+```php
+&lt;?php
+// 클래스 선언
+class Handler
+{
+    public function event($message)
+    {
+        if($message == "action01") {
+            return "버튼 동작 01입니다."; // 책임 동작1
+        } else
+        if ($message == "action02") {
+            return "버튼 동작 02입니다."; // 책임 동작2
+        } else
+        if ($message == "action03") {
+            return "버튼 동작 03입니다."; // 책임 동작3
+        }
+
+        return "동작이 없습니다.";
+    }
+}
+
+// 객체 생성
+$obj = new Handler;
+
+// 이벤트를 실행
+echo $obj-&gt;event("action02");
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php Handler.php
+버튼 동작 02입니다.
+</code></pre></div></div>
+
+<p>코드에서 Handler 클래스는 Event 메서드를 갖고 있으며, 입력된 상태값에 따라 다른 동작을 수행합니다.</p>
+
+<p>17장 체인 패턴 389</p>
+
+<p>이벤트를 기반으로 동작을 분리하는 방식을 이벤트 주도<sup>Event Driven</sup> 개발이라고 합니다. 이벤트는 멀티태스킹, 대화형 프로그램 개발 시 많이 사용되는 방식입니다.</p>
+
+<h2 id="173-행동-분리">17.3 행동 분리</h2>
+
+<p>핸들러는 이벤트의 처리 로직을 분리합니다. 이벤트 처리 로직을 분리하면 행동을 독립적으로 관리할 수 있습니다. 이벤트의 행동은 단일 책임을 적용하여 독립 객체로 설계합니다.</p>
+
+<h3 id="1731-단일-책임">17.3.1 단일 책임</h3>
+
+<p>단일 책임은 객체지향 설계 원칙 중 하나입니다. 객체는 하나의 책임과 동작을 가지며, 잘못된 설계 객체는 하나의 객체에 여러 가지 행동과 책임이 포함됩니다.</p>
+
+<p>핸들러는 분리된 이벤트의 처리 로직으로서 다양한 동작을 선택적으로 처리합니다. 이러한 점에서 핸들러 객체는 객체지향의 단일 책임 원칙이 위반(핸들러가 여러 책임을 가짐)되고, 체인 패턴은 단일 책임의 원칙을 위반한 핸들러 객체를 보완합니다.</p>
+
+<h3 id="1732-행동-분리">17.3.2 행동 분리</h3>
+
+<p>단일 책임 원칙을 위반한 핸들러를 보완하기 위해 이벤트 처리 로직과 실제 동작을 분리합니다.</p>
+
+<p>[예제 17-4]의 핸들러는 요청된 이벤트를 처리하며 결과에 따라 직접 메시지를 출력합니다. 이는 이벤트 핸들러 객체가 처리 로직과 출력 동작을 모두 갖고 있기 때문입니다. 이벤트 핸들러의 출력 메시지를 독립된 객체로 분리합니다. 다음은 메시지를 출력하는 객체입니다.</p>
+
+<p>예제 17-4 Chain/03/Order.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Order</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">execute</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>390 3부 행동 패턴</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">"주문을 처리합니다."</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>예제 17-5 Chain/03/Cancel.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Cancel</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">execute</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">"주문을 취소합니다."</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>분리된 실제 동작 객체를 핸들러 객체와 결합합니다. 핸들러는 전송 받은 상태값에 따라 객체를 생성하고 메시지를 출력합니다. 다음은 수정된 핸들러입니다.</p>
+
+<p>예제 17-6 Chain/03/Handler.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require_once</span> <span class="s2">"Order.php"</span><span class="p">;</span>
+<span class="k">require_once</span> <span class="s2">"Cancel.php"</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">Handler</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">event</span><span class="p">(</span><span class="nv">$message</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nv">$message</span> <span class="o">==</span> <span class="s2">"order"</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="k">new</span> <span class="nc">Order</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">execute</span><span class="p">();</span>
+        <span class="p">}</span> <span class="k">else</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$message</span> <span class="o">==</span> <span class="s2">"cancel"</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="k">new</span> <span class="nc">Cancel</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">execute</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="s2">"동작이 없습니다."</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>// 객체 생성
+17장 체인 패턴 391</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Handler</span><span class="p">;</span>
+
+<span class="c1">// 이벤트를 실행</span>
+<span class="k">echo</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">event</span><span class="p">(</span><span class="s2">"order"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php Handler.php
+주문을 처리합니다.
+</code></pre></div></div>
+
+<h4 id="그림-17-5-핸들러-객체와-실제-객체">그림 17-5 핸들러 객체와 실제 객체</h4>
+
+<p><img src="./img/fig_17_5.svg" alt="그림 17-5" /></p>
+
+<h2 id="174-사슬-연결">17.4 사슬 연결</h2>
+
+<p>이벤트 핸들러의 처리 동작을 단일 사슬 형태로 변경합니다. 사슬 연결을 통해 하나의 상태값에 따라 복수의 행동을 실행할 수 있습니다.</p>
+
+<h3 id="1741-조건-검사-흐름">17.4.1 조건 검사 흐름</h3>
+
+<p>핸들러는 발생된 이벤트에 대해 조건을 검사합니다. 이벤트 조건은 작성한 코드 순서대로 검사가 이뤄집니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">function</span> <span class="n">event</span><span class="p">(</span><span class="nv">$message</span><span class="p">)</span>
+<span class="p">{</span>
+</code></pre></div></div>
+
+<p>392 3부 행동 패턴</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">if</span><span class="p">(</span><span class="nv">$message</span> <span class="o">==</span> <span class="s2">"order"</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="k">new</span> <span class="nc">Order</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">execute</span><span class="p">();</span>
+    <span class="p">}</span> <span class="k">else</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$message</span> <span class="o">==</span> <span class="s2">"cancel"</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="k">new</span> <span class="nc">Cancel</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">execute</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="s2">"동작이 없습니다."</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>제일 먼저 “order” 상태를 검사하고 조건이 맞지 않으면 “cancel” 상태를 처리합니다. 조건문을 검사하는 순서는 코드 작성 방법에 따라 다르므로, 조건 상태마다 객체가 생성되고 실행되는 시점이 서로 다릅니다.</p>
+
+<p>상태값에 따른 핸들러의 실제 동작을 독립된 객체로 분리하여 개선했습니다. 하지만 핸들러 안에는 여전히 조건을 판단하는 로직이 존재합니다. 다음에는 핸들러의 조건을 판단하는 수신부를 분리하여 개선하겠습니다.</p>
+
+<h3 id="1742-송수신-분리">17.4.2 송수신 분리</h3>
+
+<p>체인 패턴의 아이디어는 핸들러에서 순차적으로 이벤트를 검사하는 조건들을 분리하는 것입니다.</p>
+
+<p>핸들러 객체에서 검사하던 조건 처리 로직이 분리된 실제 동작 객체로 이동시킵니다. 핸들러 객체 안에 있는 조건 처리 로직을 분리하면, 핸들러는 단일 책임 원칙을 유지할 수 있습니다. 또한 실제 객체로 분리된 처리 로직은 보다 구체적이고 세분화하여 동작할 수 있다는 장점을 가집니다.</p>
+
+<p>다음은 예제를 변경해봅시다. 핸들러에서 검사하던 if문의 조건을 이동시킵니다.</p>
+
+<p>예제 17-7 Chain/04/Order.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Order</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">execute</span><span class="p">(</span><span class="nv">$event</span><span class="p">)</span>
+    <span class="p">{</span>
+</code></pre></div></div>
+
+<p>17장 체인 패턴 393</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="k">if</span> <span class="p">(</span><span class="nv">$event</span> <span class="o">==</span> <span class="s2">"order"</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="s2">"주문을 처리합니다."</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>예제 17-8 Chain/04/Cancel.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Cancel</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">execute</span><span class="p">(</span><span class="nv">$event</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$event</span> <span class="o">==</span> <span class="s2">"cancel"</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="s2">"취소 처리합니다."</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>핸들러의 처리 로직도 변경합니다. 상태값을 판별하는 코드 대신 객체를 생성하고 메시지를 전송합니다. 전송된 메시지의 결과가 있으면 이벤트 동작을 수행합니다.</p>
+
+<p>예제 17-9 Chain/04/Dispatch.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require_once</span> <span class="s2">"Order.php"</span><span class="p">;</span>
+<span class="k">require_once</span> <span class="s2">"Cancel.php"</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">Handler</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">event</span><span class="p">(</span><span class="nv">$event</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nv">$message</span> <span class="o">=</span> <span class="p">(</span><span class="k">new</span> <span class="nc">Order</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">execute</span><span class="p">(</span><span class="nv">$event</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nv">$message</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span> <span class="nv">$message</span> <span class="o">=</span> <span class="p">(</span><span class="k">new</span> <span class="nc">Cancel</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">execute</span><span class="p">(</span><span class="nv">$event</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nv">$message</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="s2">"동작이 없습니다."</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>394 3부 행동 패턴</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 객체 생성</span>
+<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Handler</span><span class="p">;</span>
+
+<span class="c1">// 이벤트를 실행</span>
+<span class="k">echo</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">event</span><span class="p">(</span><span class="s2">"cancel"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php Handler.php
+취소 처리합니다.
+</code></pre></div></div>
+
+<h4 id="그림-17-6-조건-처리를-실제-객체로-이동">그림 17-6 조건 처리를 실제 객체로 이동</h4>
+
+<p><img src="./img/fig_17_6.svg" alt="그림 17-6" /></p>
+
+<p>[예제 17-9]에서 핸들러는 별로 개선되지 않았습니다. 여전히 조건을 처리한 문장이 남아 있습니다. 또한 이벤트 동작을 검출하기 위해서는 모든 객체를 순차적으로 실행해야 됩니다.</p>
+
+<h3 id="1743-인터페이스">17.4.3 인터페이스</h3>
+
+<p>체인 패턴은 행동의 요청과 처리를 분리하며 핸들러에서 분리된 동작 객체에 독립성을 부여합니다.</p>
+
+<p>핸들러로부터 독립된 객체는 자신만의 동작을 갖습니다. 독립된 객체의 실제 처리는 핸들러에서 분리되고 외부에 노출되지 않으므로 독립적인 개발 진행이 가능합니다.</p>
+
+<p>일반적으로 이벤트 핸들러는 하나의 상태값에 하나의 동작 객체를 지정하는데, 하나의 상태값</p>
+
+<p>17장 체인 패턴 395</p>
+
+<p>에 복수의 동작 객체를 지정할 경우 처리 로직이 복잡해집니다. 체인 패턴은 하나의 상태값에 복수의 동작 객체를 처리할 수 있도록 객체를 하나의 사슬 형태로 묶어서 처리합니다.</p>
+
+<p>객체를 하나의 사슬 형태로 연결하기 위해 객체 정보와 연결을 위한 몇 개의 메서드가 필요합니다. 추상 클래스를 이용하여 객체를 연결할 수 있는 골격을 설계합니다.</p>
+
+<p>예제 17-10 Chain/05/Chain.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">abstract</span> <span class="kd">class</span> <span class="nc">Chain</span>
+<span class="p">{</span>
+    <span class="k">protected</span> <span class="nv">$Next</span><span class="p">;</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">setNext</span><span class="p">(</span><span class="nv">$obj</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nc">Next</span> <span class="o">=</span> <span class="nv">$obj</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">abstract</span> <span class="k">function</span> <span class="n">execute</span><span class="p">(</span><span class="nv">$event</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>추상 클래스는 객체 연결을 위한 프로퍼티와 설정 메서드를 갖고 있으며, 실제 객체에서 실행되는 추상 메서드도 같이 선언합니다. 추상 메서드의 역할은 하위 클래스에 적용되는 인터페이스입니다.</p>
+
+<p>체인 패턴은 다음 처리를 위한 객체 정보를 갖고 있습니다. <code class="language-plaintext highlighter-rouge">setNext()</code> 메서드를 이용하여 위임되는 객체의 정보를 사슬 형태로 설정합니다.</p>
+
+<h3 id="1744-사슬-형성">17.4.4 사슬 형성</h3>
+<p>핸들러는 이벤트 행동 조건을 검사하지 않습니다. 이벤트 조건은 실제 동작하는 객체가 판단하며, 만약 자신이 처리해야 하는 조건이 아니라면 다음 객체로 행동을 위임합니다.</p>
+
+<p>체인 패턴으로 동작 객체를 변경해봅시다. 추상 클래스를 상속함으로써 동작 객체가 복합 객체로 변경됩니다.</p>
+
+<hr />
+<p><strong>396</strong> 3부 행동 패턴</p>
+
+<p>예제 17-11 Chain/05/Order.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Order</span> <span class="kd">extends</span> <span class="nc">Chain</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">execute</span><span class="p">(</span><span class="nv">$event</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$event</span> <span class="o">==</span> <span class="s2">"order"</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="s2">"주문을 처리합니다."</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nc">Next</span><span class="o">-&gt;</span><span class="nf">execute</span><span class="p">(</span><span class="nv">$event</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>추상 메서드인 <code class="language-plaintext highlighter-rouge">execute()</code>를 구현합니다. 추상 메서드는 반드시 구현해야 하는 인터페이스와 같은 역할을 합니다.</p>
+
+<p>예제 17-12 Chain/05/Cancel.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Cancel</span> <span class="kd">extends</span> <span class="nc">Chain</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">execute</span><span class="p">(</span><span class="nv">$event</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$event</span> <span class="o">==</span> <span class="s2">"cancel"</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="s2">"취소 처리합니다."</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nc">Next</span><span class="o">-&gt;</span><span class="nf">execute</span><span class="p">(</span><span class="nv">$event</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>구현된 추상 메서드 내에는 다음 사슬로 연결되는 객체를 실행합니다. 객체가 순차적으로 연결되어 있고, 조건이 만족할 때까지 재귀적으로 실행됩니다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">Handler</code> 클래스의 코드는 다음과 같이 변경합니다.</p>
+
+<hr />
+<p>17장 체인 패턴 <strong>397</strong></p>
+
+<p>예제 17-13 Chain/05/Handler.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require_once</span> <span class="s2">"Chain.php"</span><span class="p">;</span>
+<span class="k">require_once</span> <span class="s2">"Order.php"</span><span class="p">;</span>
+<span class="k">require_once</span> <span class="s2">"Cancel.php"</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">Handler</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">event</span><span class="p">(</span><span class="nv">$event</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// 체인 설정</span>
+        <span class="nv">$First</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Order</span><span class="p">;</span>
+        <span class="nv">$First</span><span class="o">-&gt;</span><span class="nf">setNext</span><span class="p">(</span><span class="k">new</span> <span class="nc">Cancel</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="nv">$First</span><span class="o">-&gt;</span><span class="nf">execute</span><span class="p">(</span><span class="nv">$event</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 객체 생성</span>
+<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Handler</span><span class="p">;</span>
+
+<span class="c1">// 이벤트를 실행</span>
+<span class="k">echo</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">event</span><span class="p">(</span><span class="s2">"cancel"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>php Handler.php
+취소 처리합니다.
+</code></pre></div></div>
+
+<p>핸들러에 포함됐던 기존 조건문이 제거됐습니다. 사슬로 연결된 객체의 첫 번째 객체만 실행합니다.</p>
+
+<h4 id="그림-17-7-체인으로-연결된-실체-객체">그림 17-7 체인으로 연결된 실체 객체</h4>
+
+<p><img src="./img/fig_17_7.svg" alt="그림 17-7" /></p>
+
+<hr />
+<p><strong>398</strong> 3부 행동 패턴</p>
+
+<p>체인 패턴으로 연결된 객체는 상태값을 스스로 판별하여 자신의 행동을 실행합니다. 실행이 완료되면 다음 객체를 재귀적으로 실행합니다. 조건이 만족스러운 상태로 될 때까지 실행을 계속합니다.</p>
+
+<h2 id="175-체인-패턴">17.5 체인 패턴</h2>
+
+<p>체인 패턴은 조건을 판별하는 코드를 포함하지 않습니다. 메시지를 전달 받으면 상태값이 만족할 때까지 복수의 이벤트를 처리합니다. 체인 패턴의 특징을 다시 한번 살펴봅시다.</p>
+
+<h3 id="1751-순차적-행동">17.5.1 순차적 행동</h3>
+<p>체인 패턴은 하나의 상태값에 여러 객체를 묶어 실행하는 방법입니다. 묶은 모양이 마치 체인의 연결 고리 같다고 해서 체인 패턴이라고 부릅니다.</p>
+
+<p>체인 패턴은 이벤트의 조건에 맞는 행동을 찾을 필요가 없습니다. 처음 객체부터 순차적으로 자신에게 맞는 행동을 판단하고 실행을 계속합니다. 자신의 객체가 처리할 수 있는 상태값이면 동작을 실행하고, 자신의 객체와 맞지 않는 상태값이면 다음 객체로 행동을 위임합니다.</p>
+
+<h4 id="그림-17-8-객체의-사슬-호출">그림 17-8 객체의 사슬 호출</h4>
+
+<p><img src="./img/fig_17_8.svg" alt="그림 17-8" /></p>
+
+<p>이러한 객체의 순차적 행동은 요청된 이벤트를 특정하여 지정할 수 없을 때 유용하게 활용할 수 있는 방법입니다.</p>
+
+<hr />
+<p>17장 체인 패턴 <strong>399</strong></p>
+
+<h3 id="1752-행동-위임">17.5.2 행동 위임</h3>
+<p>체인 패턴은 처리 로직을 요청하는 송신부와 처리를 검사하는 수신부를 분리하는 효과가 있습니다. 패턴으로 분리된 객체의 송신부는 이벤트 상태값의 판단 조건 로직을 수신부의 객체로 위임합니다. 그리고 핸들러로부터 송신된 요청을 분리하여 결합도를 제거합니다.</p>
+
+<p>체인 패턴은 객체들의 상호 작용을 단순하게 만들고 책임을 여러 객체에 분산함으로써 보다 유연한 이벤트 동작을 처리합니다.</p>
+
+<p>체인 패턴은 여러 객체에 요청된 이벤트를 처리할 수 있도록 균등한 기회를 제공합니다. 또한 새로운 이벤트 동작이 추가돼도 기존의 처리 로직을 변경하지 않고 새로운 사슬만 추가하면 됩니다.</p>
+
+<h3 id="1753-재귀적-호출">17.5.3 재귀적 호출</h3>
+<p>체인 패턴은 이벤트에 대한 모든 객체를 사슬로 엮어 작업하며, 핸들러는 제일 처음 사슬만 시작합니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 체인 설정</span>
+<span class="nv">$First</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Order</span><span class="p">;</span>
+<span class="nv">$First</span><span class="o">-&gt;</span><span class="nf">setNext</span><span class="p">(</span><span class="k">new</span> <span class="nc">Cancel</span><span class="p">);</span>
+
+<span class="k">return</span> <span class="nv">$First</span><span class="o">-&gt;</span><span class="nf">execute</span><span class="p">(</span><span class="nv">$event</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>사슬로 연결된 객체는 순차적으로 실행됩니다. 첫 번째 사슬 동작을 실행한 후 두 번째 사슬 동작을 실행합니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">function</span> <span class="n">execute</span><span class="p">(</span><span class="nv">$event</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$event</span> <span class="o">==</span> <span class="s2">"order"</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">"주문을 처리합니다."</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nc">Next</span><span class="o">-&gt;</span><span class="nf">execute</span><span class="p">(</span><span class="nv">$event</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+<p><strong>400</strong> 3부 행동 패턴</p>
+
+<p>자신이 처리하지 못한 경우 다음 객체의 실행 메서드를 호출합니다. 메서드가 다음으로 동일한 메서드를 계속 호출하는 구조입니다.</p>
+
+<p>실제 요청이 처리되는 객체를 만날 때까지 복합 객체로 연결된 <code class="language-plaintext highlighter-rouge">$Next</code>를 따라 재귀적으로 처리합니다. 체인 패턴은 모든 연결된 객체의 실행이 완료됐을 때 결과를 반환합니다.</p>
+
+<p>체인 패턴으로 연결되는 메서드의 이름은 동일한데, 그 이유는 추상 클래스를 적용해 동일한 인터페이스 형태로 메서드를 구현했기 때문입니다. 하지만 실제 객체의 메서드 구현 내용은 다릅니다.</p>
+
+<p>체인 패턴의 특징은 자신이 요청한 이벤트의 상태를 어떤 객체가 처리할지 모른다는 것입니다.</p>
+
+<h3 id="1754-복수-행동">17.5.4 복수 행동</h3>
+<p>체인 패턴은 좀 더 확장된 구조이며 하나의 상태값에 따라 복수의 객체 실행을 요청할 수 있습니다.</p>
+
+<p>하나 이상의 객체에 요청을 전송하는 경우, 우선순위 설정이 필요할 수 있습니다. 우선순위는 체인 패턴의 메서드를 통해 확정할 수 있습니다. 체인 패턴은 하나의 요청을 세부적으로 분리하거나 복수의 동작을 처리할 때 유용합니다.</p>
+
+<h2 id="176-미들웨어">17.6 미들웨어</h2>
+<p>체인 패턴은 미들웨어 기능을 구현할 때 많이 응용됩니다. 미들웨어는 객체의 행동을 수행하기 전에 미리 실행되어야 하는 기능을 말합니다. 체인 패턴을 이용해 객체의 행동을 연결합니다.</p>
+
+<h3 id="1761-사전-동작">17.6.1 사전 동작</h3>
+<p>프레임워크의 코어와 비즈니스 사이에 일정한 동작이 반복해서 추가되는 경우가 있습니다. 이를 해결하기 위해 프레임워크는 복잡한 구현을 사전에 미리 정의해둡니다. 코어를 감싸는 계층을 한 단계 더 만들어 반복되는 동작을 수행하도록 사전에 제공합니다.</p>
+
+<hr />
+<p>17장 체인 패턴 <strong>401</strong></p>
+
+<p>코어와 비즈니스 사이의 중간 단계에서 동작하는 코드를 미들웨어라고 합니다. 이러한 사전 동작들은 비즈니스 로직 구현에 더 집중해서 개발할 수 있도록 도와줍니다.</p>
+
+<h3 id="1762-미들웨어">17.6.2 미들웨어</h3>
+<p>미들웨어는 여러 개의 동작을 묶어 순차적으로 처리합니다. 프레임워크는 사전에 특정 동작들을 파이프라인 형태로 처리한 후 실제 동작을 호출합니다. 미들웨어는 비즈니스 동작이 실행되기 이전과 이후로 구분하여 정의합니다.</p>
+
+<p>미들웨어는 처리의 흐름이 통과될 때 중간에 걸쳐서 동작하는 계층을 말하며, 체인 패턴으로 많이 사용됩니다. <sup id="fnref:1"><a href="#fn:1" class="footnote" rel="footnote" role="doc-noteref">1</a></sup> 또한 객체를 변경하지 않고 확장해서 새로운 기능을 쉽게 추가합니다.</p>
+
+<h2 id="177-관련-패턴">17.7 관련 패턴</h2>
+<p>체인 패턴은 다음 패턴과 유사한 특징을 가지고 있습니다.</p>
+
+<h3 id="1771-복합체-패턴">17.7.1 복합체 패턴</h3>
+<p>체인 패턴의 구조는 복합적인 사슬 구조로 엮여 있고 내부 구조는 복합체 패턴과 유사합니다.</p>
+
+<h3 id="1772-명령-패턴">17.7.2 명령 패턴</h3>
+<p>핸들러를 통해 위임된 객체의 메서드를 호출할 때 명령 패턴이 같이 사용됩니다.</p>
+
+<hr />
+
+<p><strong>402</strong> 3부 행동 패턴</p>
+
+<h2 id="178-정리">17.8 정리</h2>
+
+<p>체인 패턴에서는 실제로 동작하는 객체를 선택하여 호출하지 않고, 사슬의 첫 고리를 호출한 후 따라가면서 해당 객체를 만납니다.</p>
+
+<p>체인 패턴은 객체의 의존성 주입을 통해 위임을 설정합니다. 상태값에 따른 실행 유무는 위임된 객체에서 판단하므로 프로그램 실행 중에도 언제든지 객체의 사슬을 추가하거나 변경할 수 있습니다. 실제 동작을 체인 속에 숨기는 기능도 있습니다.</p>
+
+<p>체인 패턴은 사슬로 묶인 객체를 순차적으로 탐색하면서 요청된 객체를 수행합니다. 순차적으로 모든 객체를 처리하기 때문에 다소 지연 시간이 발생합니다. 이는 체인 패턴의 단점입니다.</p>
+
+<p>체인 패턴의 특징은 하나의 객체를 처리할 때 클래스 객체 한 개의 메서드에서 책임을 지는 것이 아니라 여러 객체의 메서드에서 동시에 책임을 처리합니다.</p>
+
+<hr />
+<p>17장 체인 패턴 <strong>403</strong></p>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1">
+      <p>체인 패턴을 다른 말로 미들웨어 패턴이라고도 합니다. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+
+            <!-- 다음/이전 학습 페이지네이션 -->
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+    
+    
+
+<div class="d-flex justify-content-between align-items-center mt-5 mb-4 py-3 border-top border-bottom">
+  <div>
+    
+      <span class="text-muted small me-2">이전 학습</span>
+      <a href="/ch16/" class="text-decoration-none fw-semibold">
+        &laquo; CHAPTER 16 방문자 패턴
+      </a>
+    
+  </div>
+
+  <div class="text-end">
+    
+      <span class="text-muted small me-2">다음 학습</span>
+      <a href="/ch18/" class="text-decoration-none fw-semibold">
+        CHAPTER 18 감시자 패턴 &raquo;
+      </a>
+    
+  </div>
+</div>
+
+
+            <div class="mt-10">
+                <!-- 구글 에스센스 광고 -->
+                <script async
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3321560028329475"
+                    crossorigin="anonymous"></script>
+                <!-- jinydev-java -->
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3321560028329475"
+                    data-ad-slot="9323221865" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+
+        </div>
+
+        <div class="bd-toc mt-3 mb-5 my-lg-0 ps-xl-3 mb-lg-5 text-body-secondary">
+
+  <button class="btn btn-link p-md-0 mb-2 mb-md-0 text-decoration-none bd-toc-toggle d-md-none" type="button"
+    data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents">
+    서브목차
+    <svg class="bi d-md-none ms-2" aria-hidden="true">
+      <use xlink:href="#chevron-expand"></use>
+    </svg>
+  </button>
+
+  <strong class="d-none d-md-block h6 my-2">서브목차</strong>
+
+  <div class="collapse bd-toc-collapse" id="tocContents">
+    <nav id="TableOfContents">
+      <!--
+      <ul>
+        <li><a href="#quick-start">Quick start</a></li>
+        <li><a href="#cdn-links">CDN links</a></li>
+        <li><a href="#next-steps">Next steps</a></li>
+        <li><a href="#js-components">JS components</a></li>
+        <li><a href="#important-globals">Important globals</a>
+          <ul>
+            <li><a href="#html5-doctype">HTML5 doctype</a></li>
+            <li><a href="#responsive-meta-tag">Responsive meta tag</a></li>
+            <li><a href="#box-sizing">Box-sizing</a></li>
+            <li><a href="#reboot">Reboot</a></li>
+          </ul>
+        </li>
+        <li><a href="#community">Community</a></li>
+      </ul>
+      -->
+    </nav>
+  </div>
+</div>
+    </main>
+
+
+</div>
+
+  <footer class="container">
+  <hr class="mt-5 mb-3">
+  <div class="row align-items-center pb-3">
+    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+      <p class="mb-0 text-secondary">Copyright 2017~2026 JinyDev. All Rights Reserved.</p>
+    </div>
+    <div class="col-md-6 text-center text-md-end">
+      
+      <a href="https://datas.jiny.dev" class="text-decoration-none text-secondary ms-3">빅데이터</a>
+      
+      <a href="https://mysql.jiny.dev" class="text-decoration-none text-secondary ms-3">MySQL</a>
+      
+      <a href="https://php.jiny.dev" class="text-decoration-none text-secondary ms-3">PHP</a>
+      
+      <a href="https://java.jiny.dev" class="text-decoration-none text-secondary ms-3">자바</a>
+      
+      <a href="https://git.jiny.dev" class="text-decoration-none text-secondary ms-3">깃&깃허브</a>
+      
+      <a href="https://linux.jiny.dev" class="text-decoration-none text-secondary ms-3">리눅스</a>
+      
+    </div>
+  </div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+    window.addEventListener('load', async function () {
+      mermaid.initialize({ startOnLoad: false });
+
+      const mermaidCodes = document.querySelectorAll('pre code.language-mermaid');
+      const mermaidDivs = [];
+
+      mermaidCodes.forEach(codeBlock => {
+        const mermaidDefinition = codeBlock.textContent.trim();
+        const container = codeBlock.closest('div.highlighter-rouge');
+
+        const mermaidDiv = document.createElement('div');
+        mermaidDiv.className = 'mermaid';
+        mermaidDiv.textContent = mermaidDefinition;
+
+        if (container) {
+          container.replaceWith(mermaidDiv);
+        } else {
+          const pre = codeBlock.parentElement;
+          if (pre) pre.replaceWith(mermaidDiv);
+        }
+        mermaidDivs.push(mermaidDiv);
+      });
+
+      if (mermaidDivs.length > 0) {
+        await mermaid.run({ nodes: mermaidDivs });
+      }
+    });
+  </script>
+  <script src="/assets/js/toc.js"></script>
+  <script src="/assets/js/sidebar.js"></script>
+
+</body>
+
+</html>

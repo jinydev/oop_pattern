@@ -1,0 +1,2135 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- 기본 메타데이터 --><meta name="description" content="Jiny linux"><meta name="author" content="HojinLee"><!-- 제목 설정 --><title>CHAPTER 20 상태 패턴</title>
+  <meta name="title" content="CHAPTER 20 상태 패턴" /><!-- 키워드 설정 --><!-- Open Graph 메타데이터 --><meta property="og:title" content="CHAPTER 20 상태 패턴"><meta property="og:description" content="Jiny linux"><meta property="og:type" content="website"><meta property="og:locale" content="ko">
+  <meta property="og:site_name" content="linux">
+  <meta property="og:url" content="http://0.0.0.0:4000/ch20/">
+  <!-- 대표 URL (캐노니컬) -->
+  <link rel="canonical" href="http://0.0.0.0:4000/ch20/">
+
+  <!-- Twitter 카드 메타데이터 --><meta name="twitter:card" content="summary"><meta property="twitter:title" content="CHAPTER 20 상태 패턴"><!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="CHAPTER 20 상태 패턴" />
+<meta name="author" content="Hojin" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="24가지 패턴으로 알아보는 객체지향의 원리" />
+<meta name="twitter:description" property="og:description" content="24가지 패턴으로 알아보는 객체지향의 원리" />
+<link rel="canonical" href="http://0.0.0.0:4000/ch20/" />
+<meta property="og:url" content="http://0.0.0.0:4000/ch20/" />
+<meta property="og:site_name" content="쉽게 배워 바로 써먹는 디자인 패턴" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="CHAPTER 20 상태 패턴" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Hojin"},"description":"24가지 패턴으로 알아보는 객체지향의 원리","headline":"CHAPTER 20 상태 패턴","url":"http://0.0.0.0:4000/ch20/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/assets/css/docs.css" rel="stylesheet" />
+  <link href="/assets/css/highlight.css" rel="stylesheet" />
+
+  <style>
+    blockquote {
+      border-left: solid 5px #dee2e6;
+      padding: 5px 10px;
+      background-color: #f8f9fa;
+    }
+  </style>
+
+  <style>
+    h1 a {
+      text-decoration: none;
+    }
+
+    h2 a {
+      text-decoration: none;
+    }
+
+    h3 a {
+      text-decoration: none;
+    }
+
+    h4 a {
+      text-decoration: none;
+    }
+
+    h5 a {
+      text-decoration: none;
+    }
+
+    h6 a {
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      vertical-align: top
+    }
+
+    strong a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* 스크롤바 커스텀 */
+    /* 임의의 영역 생성 */
+    .scrollBar {}
+
+    /* 아래의 모든 코드는 영역::코드로 사용 */
+    .scrollBar::-webkit-scrollbar {
+      width: 7px;
+      /* 스크롤바의 너비 */
+    }
+
+    .scrollBar::-webkit-scrollbar-thumb {
+      height: 30%;
+      /* 스크롤바의 길이 */
+      background: #cccccc;
+      /* 스크롤바의 색상 */
+
+      border-radius: 5px;
+    }
+
+    .scrollBar::-webkit-scrollbar-track {
+      background: rgba(33, 122, 244, .1);
+      /*스크롤바 뒷 배경 색상*/
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4VBPCT3CR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-R4VBPCT3CR');
+  </script>
+
+
+</head>
+
+<body>
+  <header class="navbar navbar-expand-lg bd-navbar sticky-top">
+    <nav class="container bd-gutter flex-wrap flex-lg-nowrap position-relative" aria-label="Main navigation">
+
+      <!-- Mobile: Left Toggle (Browse) -->
+      <div class="bd-navbar-toggle d-lg-none">
+        <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdSidebar"
+          aria-controls="bdSidebar" aria-label="Toggle docs navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="bi" fill="currentColor"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z">
+            </path>
+          </svg>
+          <span class="d-none fs-6 pe-1">Browse</span>
+        </button>
+      </div>
+
+      <!-- Brand: Desktop (Static), Mobile (Absolute Center) -->
+      <a class="navbar-brand p-0 me-0 me-lg-2 ms-lg-0 d-none d-lg-inline-block" href="/" aria-label="jinydev">
+        <svg width="32" height="26" viewBox="0 0 32 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M24.2746 5.33377C25.8486 7.33981 25.1183 11.1792 24.3961 13.0177C24.4028 13.0199 24.4094 13.0221 24.4161 13.0243L24.4013 13.0248L22.649 12.9082C22.649 12.9053 22.6488 12.9013 22.649 12.8993C22.9902 8.93373 22.5975 7.34575 22.2147 7.07677C17.6316 10.3896 13.5379 9.33658 12.2725 9.01111C11.928 8.9225 11.7932 8.88781 11.9152 9.00988C12.2872 9.38185 13.1336 9.82821 13.7371 10.1465H13.7372L13.7376 10.1467C13.8743 10.2188 13.9985 10.2843 14.1019 10.3409C9.12673 10.3984 7.12659 8.00279 6.53855 7.29846C6.47859 7.22664 6.4333 7.1724 6.40105 7.14015C6.11408 6.85318 4.49961 5.87252 3.99256 7.74227C3.50142 9.55335 3.81246 11.6775 3.97665 12.7988C3.99089 12.896 3.99257 12.8981 3.99257 12.9298L2.37635 13.0248L2.37213 13.0247C0.223493 8.05534 1.83854 5.26971 3.29536 4.2246C3.29536 1.78444 6.27428 -0.592359 10.0455 0.263262C14.8768 1.64043 16.3468 1.18409 18.0759 0.647278C18.774 0.430562 19.5143 0.200726 20.5351 0.073124C25.2219 -0.512739 26.7993 2.56612 27 4.16122C26.2141 3.70487 24.8556 4.73165 24.2746 5.33377ZM12.3374 1.5872C11.1225 1.16466 7.99257 0.717209 6.3478 2.41116C5.98397 2.78587 5.55554 3.48864 5.55554 3.48864C5.55554 3.48864 4.82665 4.81961 4.25622 4.24919C3.68579 3.67878 5.0168 1.96749 6.06259 1.46044C7.10838 0.953388 9.70703 0.0660505 12.3374 1.5872Z"
+            fill="currentColor" />
+          <path
+            d="M10.078 13.5002H3.10601C2.2309 13.5002 1.52148 14.2097 1.52148 15.0848V18.3172C1.52148 19.1923 2.2309 19.9018 3.10601 19.9018H10.078C10.9531 19.9018 11.6625 19.1923 11.6625 18.3172V15.0848C11.6625 14.2097 10.9531 13.5002 10.078 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M0.823513 14.6094H0.379847C0.187322 14.6094 0.03125 14.7654 0.03125 14.958V15.9721C0.03125 16.1646 0.187322 16.3207 0.379847 16.3207H0.823513C1.01604 16.3207 1.17211 16.1646 1.17211 15.9721V14.958C1.17211 14.7654 1.01604 14.6094 0.823513 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M16.7326 13.5002H23.7045C24.5796 13.5002 25.2891 14.2097 25.2891 15.0848V18.3172C25.2891 19.1923 24.5796 19.9018 23.7045 19.9018H16.7326C15.8575 19.9018 15.1481 19.1923 15.1481 18.3172V15.0848C15.1481 14.2097 15.8575 13.5002 16.7326 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M25.9861 14.6094H26.4297C26.6222 14.6094 26.7783 14.7654 26.7783 14.958V15.9721C26.7783 16.1646 26.6222 16.3207 26.4297 16.3207H25.9861C25.7935 16.3207 25.6375 16.1646 25.6375 15.9721V14.958C25.6375 14.7654 25.7935 14.6094 25.9861 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M12.2954 15.5601H14.5137C14.7062 15.5601 14.8623 15.7161 14.8623 15.9087V16.9228C14.8623 17.1153 14.7062 17.2713 14.5137 17.2713H12.2954C12.1028 17.2713 11.9468 17.1153 11.9468 16.9228V15.9087C11.9468 15.7161 12.1028 15.5601 12.2954 15.5601Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M9.93343 16.3937C9.93343 16.7087 9.76317 16.9641 9.55314 16.9641C9.34311 16.9641 9.17285 16.7087 9.17285 16.3937C9.17285 16.0786 9.34311 15.8232 9.55314 15.8232C9.76317 15.8232 9.93343 16.0786 9.93343 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M16.9688 16.3937C16.9688 16.7087 17.139 16.9641 17.3491 16.9641C17.5591 16.9641 17.7293 16.7087 17.7293 16.3937C17.7293 16.0786 17.5591 15.8232 17.3491 15.8232C17.139 15.8232 16.9688 16.0786 16.9688 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M14.2758 20.1016C13.642 20.6086 12.7863 20.3551 12.5645 20.1016C12.6278 20.4185 12.8687 20.8622 13.4518 20.8622C14.0349 20.8622 14.2441 20.3551 14.2758 20.1016Z"
+            fill="currentColor" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.1312 22.411C12.1575 22.2914 12.2759 22.2157 12.3956 22.2421L14.6347 22.735C14.7544 22.7614 14.83 22.8797 14.8036 22.9994C14.7773 23.119 14.659 23.1947 14.5393 23.1683L12.3002 22.6753C12.1805 22.649 12.1049 22.5307 12.1312 22.411Z"
+            fill="currentColor" />
+          <path
+            d="M13.4203 27.6754C9.00897 27.7261 5.77228 23.6613 4.70536 21.6225C4.54691 21.3197 4.42016 21.2739 4.32509 21.3373C4.17297 21.4387 4.28282 21.6437 4.32507 21.7493C4.85747 22.9916 5.58213 24.0416 5.87791 24.4113C4.83846 26.1353 4.49409 27.855 4.45183 28.4994C6.1758 26.8008 7.91668 26.8832 8.57162 27.1367C13.7055 29.7987 16.5577 27.929 18.1739 27.1367C19.4669 26.5029 21.4803 27.7388 22.3254 28.436C22.224 26.8642 21.3747 25.1402 20.9627 24.4747C21.6282 23.5873 22.1669 22.5099 22.4522 21.9711C22.6803 21.5401 22.6106 21.369 22.5472 21.3373C22.3951 21.2613 22.2092 21.4958 22.1353 21.6225C21.6599 22.4148 18.9345 27.6121 13.4203 27.6754Z"
+            fill="currentColor" />
+        </svg>
+      </a>
+      <a class="navbar-brand p-0 me-0 position-absolute top-50 start-50 translate-middle d-lg-none" href="/"
+        aria-label="jinydev">
+        <svg width="100" height="26" viewBox="0 0 112 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M24.2746 5.33377C25.8486 7.33981 25.1183 11.1792 24.3961 13.0177C24.4028 13.0199 24.4094 13.0221 24.4161 13.0243L24.4013 13.0248L22.649 12.9082C22.649 12.9053 22.6488 12.9013 22.649 12.8993C22.9902 8.93373 22.5975 7.34575 22.2147 7.07677C17.6316 10.3896 13.5379 9.33658 12.2725 9.01111C11.928 8.9225 11.7932 8.88781 11.9152 9.00988C12.2872 9.38185 13.1336 9.82821 13.7371 10.1465H13.7372L13.7376 10.1467C13.8743 10.2188 13.9985 10.2843 14.1019 10.3409C9.12673 10.3984 7.12659 8.00279 6.53855 7.29846C6.47859 7.22664 6.4333 7.1724 6.40105 7.14015C6.11408 6.85318 4.49961 5.87252 3.99256 7.74227C3.50142 9.55335 3.81246 11.6775 3.97665 12.7988C3.99089 12.896 3.99257 12.8981 3.99257 12.9298L2.37635 13.0248L2.37213 13.0247C0.223493 8.05534 1.83854 5.26971 3.29536 4.2246C3.29536 1.78444 6.27428 -0.592359 10.0455 0.263262C14.8768 1.64043 16.3468 1.18409 18.0759 0.647278C18.774 0.430562 19.5143 0.200726 20.5351 0.073124C25.2219 -0.512739 26.7993 2.56612 27 4.16122C26.2141 3.70487 24.8556 4.73165 24.2746 5.33377ZM12.3374 1.5872C11.1225 1.16466 7.99257 0.717209 6.3478 2.41116C5.98397 2.78587 5.55554 3.48864 5.55554 3.48864C5.55554 3.48864 4.82665 4.81961 4.25622 4.24919C3.68579 3.67878 5.0168 1.96749 6.06259 1.46044C7.10838 0.953388 9.70703 0.0660505 12.3374 1.5872Z"
+            fill="currentColor" />
+          <path
+            d="M10.078 13.5002H3.10601C2.2309 13.5002 1.52148 14.2097 1.52148 15.0848V18.3172C1.52148 19.1923 2.2309 19.9018 3.10601 19.9018H10.078C10.9531 19.9018 11.6625 19.1923 11.6625 18.3172V15.0848C11.6625 14.2097 10.9531 13.5002 10.078 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M0.823513 14.6094H0.379847C0.187322 14.6094 0.03125 14.7654 0.03125 14.958V15.9721C0.03125 16.1646 0.187322 16.3207 0.379847 16.3207H0.823513C1.01604 16.3207 1.17211 16.1646 1.17211 15.9721V14.958C1.17211 14.7654 1.01604 14.6094 0.823513 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M16.7326 13.5002H23.7045C24.5796 13.5002 25.2891 14.2097 25.2891 15.0848V18.3172C25.2891 19.1923 24.5796 19.9018 23.7045 19.9018H16.7326C15.8575 19.9018 15.1481 19.1923 15.1481 18.3172V15.0848C15.1481 14.2097 15.8575 13.5002 16.7326 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M25.9861 14.6094H26.4297C26.6222 14.6094 26.7783 14.7654 26.7783 14.958V15.9721C26.7783 16.1646 26.6222 16.3207 26.4297 16.3207H25.9861C25.7935 16.3207 25.6375 16.1646 25.6375 15.9721V14.958C25.6375 14.7654 25.7935 14.6094 25.9861 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M12.2954 15.5601H14.5137C14.7062 15.5601 14.8623 15.7161 14.8623 15.9087V16.9228C14.8623 17.1153 14.7062 17.2713 14.5137 17.2713H12.2954C12.1028 17.2713 11.9468 17.1153 11.9468 16.9228V15.9087C11.9468 15.7161 12.1028 15.5601 12.2954 15.5601Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M9.93343 16.3937C9.93343 16.7087 9.76317 16.9641 9.55314 16.9641C9.34311 16.9641 9.17285 16.7087 9.17285 16.3937C9.17285 16.0786 9.34311 15.8232 9.55314 15.8232C9.76317 15.8232 9.93343 16.0786 9.93343 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M16.9688 16.3937C16.9688 16.7087 17.139 16.9641 17.3491 16.9641C17.5591 16.9641 17.7293 16.7087 17.7293 16.3937C17.7293 16.0786 17.5591 15.8232 17.3491 15.8232C17.139 15.8232 16.9688 16.0786 16.9688 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M14.2758 20.1016C13.642 20.6086 12.7863 20.3551 12.5645 20.1016C12.6278 20.4185 12.8687 20.8622 13.4518 20.8622C14.0349 20.8622 14.2441 20.3551 14.2758 20.1016Z"
+            fill="currentColor" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.1312 22.411C12.1575 22.2914 12.2759 22.2157 12.3956 22.2421L14.6347 22.735C14.7544 22.7614 14.83 22.8797 14.8036 22.9994C14.7773 23.119 14.659 23.1947 14.5393 23.1683L12.3002 22.6753C12.1805 22.649 12.1049 22.5307 12.1312 22.411Z"
+            fill="currentColor" />
+          <path
+            d="M13.4203 27.6754C9.00897 27.7261 5.77228 23.6613 4.70536 21.6225C4.54691 21.3197 4.42016 21.2739 4.32509 21.3373C4.17297 21.4387 4.28282 21.6437 4.32507 21.7493C4.85747 22.9916 5.58213 24.0416 5.87791 24.4113C4.83846 26.1353 4.49409 27.855 4.45183 28.4994C6.1758 26.8008 7.91668 26.8832 8.57162 27.1367C13.7055 29.7987 16.5577 27.929 18.1739 27.1367C19.4669 26.5029 21.4803 27.7388 22.3254 28.436C22.224 26.8642 21.3747 25.1402 20.9627 24.4747C21.6282 23.5873 22.1669 22.5099 22.4522 21.9711C22.6803 21.5401 22.6106 21.369 22.5472 21.3373C22.3951 21.2613 22.2092 21.4958 22.1353 21.6225C21.6599 22.4148 18.9345 27.6121 13.4203 27.6754Z"
+            fill="currentColor" />
+          <text x="32" y="21" font-family="Arial, sans-serif" font-weight="bold" font-size="22"
+            fill="currentColor">Jiny</text>
+        </svg>
+      </a>
+
+      <!-- Mobile: Right Toggle (Menu) -->
+      <div class="d-flex d-lg-none ms-auto">
+        <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdNavbar"
+          aria-controls="bdNavbar" aria-label="Toggle navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid"
+            viewBox="0 0 16 16">
+            <path
+              d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- OffCanvas -->
+      <div class="offcanvas-lg offcanvas-end flex-grow-1" tabindex="-1" id="bdNavbar"
+        aria-labelledby="bdNavbarOffcanvasLabel" data-bs-scroll="true">
+        <!-- OffCanver Header -->
+        <div class="offcanvas-header px-4 pb-0">
+          <h5 class="offcanvas-title text-white" id="bdNavbarOffcanvasLabel">Jiny</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"
+            data-bs-target="#bdNavbar">
+          </button>
+        </div>
+
+        <!-- OffCanver Body -->
+        <div class="offcanvas-body p-4 pt-0 p-lg-0">
+          <hr class="d-lg-none text-white-50">
+
+          <ul class="navbar-nav flex-column flex-lg-row bd-navbar-nav">
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/ch00/">패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part01/">생성패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part02/">구조패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part03/">행동패턴</a>
+            </li>
+            
+          </ul>
+
+          <hr class="d-lg-none text-white-50">
+
+          <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
+            <li class="nav-item col-6 col-lg-auto">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://github.com/jinydev/datas" target="_blank"
+                rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
+                  viewBox="0 0 512 499.36" role="img">
+                  <title>GitHub</title>
+                  <path fill="currentColor" fill-rule="evenodd"
+                    d="M256 0C114.64 0 0 114.61 0 256c0 113.09 73.34 209 175.08 242.9 12.8 2.35 17.47-5.56 17.47-12.34 0-6.08-.22-22.18-.35-43.54-71.2 15.49-86.2-34.34-86.2-34.34-11.64-29.57-28.42-37.45-28.42-37.45-23.27-15.84 1.73-15.55 1.73-15.55 25.69 1.81 39.21 26.38 39.21 26.38 22.84 39.12 59.92 27.82 74.5 21.27 2.33-16.54 8.94-27.82 16.25-34.22-56.84-6.43-116.6-28.43-116.6-126.49 0-27.95 10-50.8 26.35-68.69-2.63-6.48-11.42-32.5 2.51-67.75 0 0 21.49-6.88 70.4 26.24a242.65 242.65 0 0 1 128.18 0c48.87-33.13 70.33-26.24 70.33-26.24 14 35.25 5.18 61.27 2.55 67.75 16.41 17.9 26.31 40.75 26.31 68.69 0 98.35-59.85 120-116.88 126.32 9.19 7.9 17.38 23.53 17.38 47.41 0 34.22-.31 61.83-.31 70.23 0 6.85 4.61 14.81 17.6 12.31C438.72 464.97 512 369.08 512 256.02 512 114.62 397.37 0 256 0z">
+                  </path>
+                </svg>
+                <small class="d-lg-none ms-2">GitHub</small>
+              </a>
+            </li>
+
+            <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+              <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+              <hr class="d-lg-none my-2 text-white-50">
+            </li>
+
+            <li class="nav-item col-6 col-lg-auto">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://jiny.dev" aria-label="Home">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
+                  viewBox="0 0 16 16" role="img">
+                  <title>Home</title>
+                  <path fill="currentColor"
+                    d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z" />
+                </svg>
+                <small class="d-lg-none ms-2">Home</small>
+              </a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container bd-gutter mt-3 my-md-4 bd-layout">
+    <aside class="bd-sidebar scrollBar">
+        <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="bdSidebar"
+            aria-labelledby="bdSidebarOffcanvasLabel">
+            <div class="offcanvas-header border-bottom">
+                <h5 class="offcanvas-title" id="bdSidebarOffcanvasLabel">학습목차</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"
+                    data-bs-target="#bdSidebar"></button>
+            </div>
+
+            <div class="offcanvas-body">
+                <!-- 네비게이션 -->
+                <nav class="bd-links w-100" id="bd-docs-nav" aria-label="Docs navigation">
+  <ul class="bd-links-nav list-unstyled mb-0 pb-3 pb-md-2 pe-lg-2">
+    <li class="bd-links-group py-2">
+      <strong class="bd-links-heading d-flex w-100 align-items-center fw-semibold">
+        디자인 패턴 목차
+      </strong>
+      <ul class="list-unstyled fw-normal pb-2 small">
+        
+        
+
+        
+        <li>
+          
+          <a href="/part03/"
+            class="bd-links-link d-inline-block rounded ">
+            Part 3 행동 패턴
+          </a>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-2"
+            aria-expanded="false">
+            CHAPTER 14 반복자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-2">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch14/#141-객체의-집합"
+                  class="bd-links-link d-inline-block rounded">
+                  14.1 객체의 집합
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#142-배열"
+                  class="bd-links-link d-inline-block rounded">
+                  14.2 배열
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#143-집합체"
+                  class="bd-links-link d-inline-block rounded">
+                  14.3 집합체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#144-반복자"
+                  class="bd-links-link d-inline-block rounded">
+                  14.4 반복자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#145-작업-분할"
+                  class="bd-links-link d-inline-block rounded">
+                  14.5 작업 분할
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#146-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  14.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch14/#147-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  14.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-3"
+            aria-expanded="false">
+            CHAPTER 15 명령 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-3">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch15/#151-명령-처리"
+                  class="bd-links-link d-inline-block rounded">
+                  15.1 명령 처리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#152-명령-패턴의-구성과-특징"
+                  class="bd-links-link d-inline-block rounded">
+                  15.2 명령 패턴의 구성과 특징
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#153-인터페이스"
+                  class="bd-links-link d-inline-block rounded">
+                  15.3 인터페이스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#154-명령"
+                  class="bd-links-link d-inline-block rounded">
+                  15.4 명령
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#155-리시버"
+                  class="bd-links-link d-inline-block rounded">
+                  15.5 리시버
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#156-인보커"
+                  class="bd-links-link d-inline-block rounded">
+                  15.6 인보커
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#157-클라이언트"
+                  class="bd-links-link d-inline-block rounded">
+                  15.7 클라이언트
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#158-undo"
+                  class="bd-links-link d-inline-block rounded">
+                  15.8 undo
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#159-장단점"
+                  class="bd-links-link d-inline-block rounded">
+                  15.9 장단점
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#1510-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  15.10 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch15/#1511-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  15.11 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-4"
+            aria-expanded="false">
+            CHAPTER 16 방문자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-4">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch16/#161-데이터-처리"
+                  class="bd-links-link d-inline-block rounded">
+                  16.1 데이터 처리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#162-분리"
+                  class="bd-links-link d-inline-block rounded">
+                  16.2 분리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#163-원소-객체"
+                  class="bd-links-link d-inline-block rounded">
+                  16.3 원소 객체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#164-방문자"
+                  class="bd-links-link d-inline-block rounded">
+                  16.4 방문자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#165-반복자"
+                  class="bd-links-link d-inline-block rounded">
+                  16.5 반복자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#166-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  16.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch16/#167-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  16.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-5"
+            aria-expanded="false">
+            CHAPTER 17 체인 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-5">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch17/#171-제어문"
+                  class="bd-links-link d-inline-block rounded">
+                  17.1 제어문
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#172-동작-조건"
+                  class="bd-links-link d-inline-block rounded">
+                  17.2 동작 조건
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#173-행동-분리"
+                  class="bd-links-link d-inline-block rounded">
+                  17.3 행동 분리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#174-사슬-연결"
+                  class="bd-links-link d-inline-block rounded">
+                  17.4 사슬 연결
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#175-체인-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  17.5 체인 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#176-미들웨어"
+                  class="bd-links-link d-inline-block rounded">
+                  17.6 미들웨어
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#177-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  17.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch17/#178-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  17.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-6"
+            aria-expanded="false">
+            CHAPTER 18 감시자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-6">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch18/#observer"
+                  class="bd-links-link d-inline-block rounded">
+                  ob·ser·ver
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#181-감시자"
+                  class="bd-links-link d-inline-block rounded">
+                  18.1 감시자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#182-구성"
+                  class="bd-links-link d-inline-block rounded">
+                  18.2 구성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#183-관계"
+                  class="bd-links-link d-inline-block rounded">
+                  18.3 관계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#184-주체"
+                  class="bd-links-link d-inline-block rounded">
+                  18.4 주체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#185-감시자"
+                  class="bd-links-link d-inline-block rounded">
+                  18.5 감시자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#186-동작-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  18.6 동작 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#187-활용"
+                  class="bd-links-link d-inline-block rounded">
+                  18.7 활용
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#188-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  18.8 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch18/#189-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  18.9 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-7"
+            aria-expanded="false">
+            CHAPTER 19 중재자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-7">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch19/#191-중재"
+                  class="bd-links-link d-inline-block rounded">
+                  19.1 중재
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#192-중재자"
+                  class="bd-links-link d-inline-block rounded">
+                  19.2 중재자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#193-동료-객체"
+                  class="bd-links-link d-inline-block rounded">
+                  19.3 동료 객체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#194-기본-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  19.4 기본 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#195-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  19.5 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch19/#196-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  19.6 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0  w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-8"
+            aria-expanded="true">
+            CHAPTER 20 상태 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse show" id="collapse-8">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch20/#201-상태란"
+                  class="bd-links-link d-inline-block rounded">
+                  20.1 상태란
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#202-상태-처리"
+                  class="bd-links-link d-inline-block rounded">
+                  20.2 상태 처리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#203-패턴-구현"
+                  class="bd-links-link d-inline-block rounded">
+                  20.3 패턴 구현
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#204-객체-생성"
+                  class="bd-links-link d-inline-block rounded">
+                  20.4 객체 생성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#205-상태-전환"
+                  class="bd-links-link d-inline-block rounded">
+                  20.5 상태 전환
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#206-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  20.6 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#207-효과"
+                  class="bd-links-link d-inline-block rounded">
+                  20.7 효과
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#208-패턴-유사성"
+                  class="bd-links-link d-inline-block rounded">
+                  20.8 패턴 유사성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#209-적용-사례"
+                  class="bd-links-link d-inline-block rounded">
+                  20.9 적용 사례
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch20/#2010-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  20.10 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-9"
+            aria-expanded="false">
+            CHAPTER 21 메멘토 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-9">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch21/#211-상태-저장"
+                  class="bd-links-link d-inline-block rounded">
+                  21.1 상태 저장
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#212-캡슐화"
+                  class="bd-links-link d-inline-block rounded">
+                  21.2 캡슐화
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#213-메멘토"
+                  class="bd-links-link d-inline-block rounded">
+                  21.3 메멘토
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#214-originator-클래스"
+                  class="bd-links-link d-inline-block rounded">
+                  21.4 Originator 클래스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#215-caretaker-클래스"
+                  class="bd-links-link d-inline-block rounded">
+                  21.5 CareTaker 클래스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#216-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  21.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch21/#217-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  21.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-10"
+            aria-expanded="false">
+            CHAPTER 22 템플릿 메서드 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-10">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch22/#221-프로그램의-구조"
+                  class="bd-links-link d-inline-block rounded">
+                  22.1 프로그램의 구조
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#222-템플릿"
+                  class="bd-links-link d-inline-block rounded">
+                  22.2 템플릿
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#223-일반화"
+                  class="bd-links-link d-inline-block rounded">
+                  22.3 일반화
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#224-추상화"
+                  class="bd-links-link d-inline-block rounded">
+                  22.4 추상화
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#225-템플릿-메서드"
+                  class="bd-links-link d-inline-block rounded">
+                  22.5 템플릿 메서드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#226-의존성-디자인"
+                  class="bd-links-link d-inline-block rounded">
+                  22.6 의존성 디자인
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#227-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  22.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch22/#228-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  22.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-11"
+            aria-expanded="false">
+            CHAPTER 23 전략 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-11">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch23/#231-문제"
+                  class="bd-links-link d-inline-block rounded">
+                  23.1 문제
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#232-알고리즘"
+                  class="bd-links-link d-inline-block rounded">
+                  23.2 알고리즘
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#233-분리"
+                  class="bd-links-link d-inline-block rounded">
+                  23.3 분리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#234-인터페이스"
+                  class="bd-links-link d-inline-block rounded">
+                  23.4 인터페이스
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#235-전략"
+                  class="bd-links-link d-inline-block rounded">
+                  23.5 전략
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#236-전략-실행"
+                  class="bd-links-link d-inline-block rounded">
+                  23.6 전략 실행
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#237-적용-사례"
+                  class="bd-links-link d-inline-block rounded">
+                  23.7 적용 사례
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#238-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  23.8 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch23/#239-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  23.9 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-12"
+            aria-expanded="false">
+            CHAPTER 24 인터프리터 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-12">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch24/#241-언어"
+                  class="bd-links-link d-inline-block rounded">
+                  24.1 언어
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#242-언어-설계"
+                  class="bd-links-link d-inline-block rounded">
+                  24.2 언어 설계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#243-처리계"
+                  class="bd-links-link d-inline-block rounded">
+                  24.3 처리계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#244-중간-코드"
+                  class="bd-links-link d-inline-block rounded">
+                  24.4 중간 코드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#245-해석"
+                  class="bd-links-link d-inline-block rounded">
+                  24.5 해석
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#246-클래스-표현"
+                  class="bd-links-link d-inline-block rounded">
+                  24.6 클래스 표현
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#247-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  24.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch24/#248-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  24.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+      </ul>
+    </li>
+  </ul>
+</nav>
+            </div>
+        </div>
+    </aside>
+
+    <main class="bd-main order-1">
+        <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        
+        
+        
+        
+        
+        
+        <li class="breadcrumb-item active" aria-current="page">CHAPTER 20 상태 패턴</li>
+        
+        
+        
+    </ol>
+</nav>
+
+        <div class="bd-content ps-lg-2">
+            
+<p>sta·tus
+[ ‘steɪtəs ] 🔊</p>
+
+<p>CHAPTER <strong>20</strong></p>
+<h1 id="상태-패턴">상태 패턴</h1>
+
+<p>상태 패턴은 조건에 따른 별개의 동작을 제어문으로 사용하지 않습니다. 그 대신 객체를 캡슐화하여 독립된 동작으로 구분하는 패턴입니다. 상태 패턴은 상태 표현 객체<sup id="fnref:1"><a href="#fn:1" class="footnote" rel="footnote" role="doc-noteref">1</a></sup>라고 부르기도 합니다.</p>
+
+<h2 id="201-상태란">20.1 상태란</h2>
+
+<p>프로그램은 조건에 따라 분기해 다양한 동작을 처리합니다. 제어문은 조건<sup id="fnref:2"><a href="#fn:2" class="footnote" rel="footnote" role="doc-noteref">2</a></sup>의 상태값을 참과 거짓으로 판단하여 상태를 처리합니다.</p>
+
+<h3 id="2011-값을-조건으로-사용">20.1.1 값을 조건으로 사용</h3>
+<p>제어문은 주어진 조건을 비교하여 동작을 다르게 처리합니다. 제어문의 조건은 값을 이용해 참과 거짓으로 상태를 구분하고 동작을 제어하는 것입니다.</p>
+
+<p>다음은 if 조건 제어문을 사용하는 예시 코드입니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$status</span> <span class="o">==</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"참 입니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<hr />
+
+<p><strong>438</strong> 3부 행동 패턴</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"거짓 입니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>위 코드에서는 <code class="language-plaintext highlighter-rouge">$status</code> 변수를 상수 <code class="language-plaintext highlighter-rouge">true</code> 값과 비교합니다. 제어문은 변수값 비교에 의해 ‘참’ 동작과 ‘거짓’ 동작으로 나뉘며, 이처럼 2가지 형태로 값의 상태를 구별하는 것을 플래그<sup id="fnref:1:1"><a href="#fn:1" class="footnote" rel="footnote" role="doc-noteref">1</a></sup>라고도 합니다.</p>
+
+<h3 id="2012-동작을-구분하는-상태값">20.1.2 동작을 구분하는 상태값</h3>
+<p>제어문은 주어진 값을 비교해 결과를 논리값으로 반환하거나, 논리값을 직접 0과 1로 입력하여 동작을 구분할 수 있습니다. 따라서 제어문은 단순한 상태값이 아닌 논리 연산을 통해 조건의 상태를 확장할 수 있습니다.</p>
+
+<p>예를 들어 온라인 쇼핑몰에서 주문을 처리할 때 결제와 주문 상태에 따라 값을 구별합니다. 실제 운용되는 쇼핑몰은 이보다 더 복잡한 상태일 것입니다.</p>
+
+<h4 id="그림-20-1-상태값-비교">그림 20-1 상태값 비교</h4>
+
+<p><img src="./img/fig_20_1.svg" alt="그림 20-1" /></p>
+
+<p>주문 상태별로 값을 다르게 지정하고 이를 비교합니다. 주문 상태를 처리하기 위해 비교할 수 있는 값의 표현을 ‘상태’라고 합니다. 즉 상태값은 처리 로직을 구별할 수 있는 특정한 값이라고 생각하면 됩니다.</p>
+
+<h3 id="2013-상수값을-사용하여-비교하기">20.1.3 상수값을 사용하여 비교하기</h3>
+<p>다양한 종류의 상태가 있는 경우 값을 미리 정의합니다. 코드에 직접 리터럴값을 작성하여 상태를 사용하는 것보다 상수를 정의하여 사용하는 것이 편리합니다.</p>
+
+<hr />
+
+<p>20장 상태 패턴 <strong>439</strong></p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">const</span> <span class="no">OPEN</span>     <span class="o">=</span> <span class="mh">0x01</span><span class="p">;</span>  <span class="c1">// 주문</span>
+<span class="k">const</span> <span class="no">PAY</span>      <span class="o">=</span> <span class="mh">0x02</span><span class="p">;</span>  <span class="c1">// 결제중</span>
+<span class="k">const</span> <span class="no">ORDERED</span>  <span class="o">=</span> <span class="mh">0x04</span><span class="p">;</span>  <span class="c1">// 주문완료</span>
+</code></pre></div></div>
+
+<p>상수로 상태값을 정의하면 수정 시 소스코드를 직접 수정하지 않고도 일괄 변경할 수 있습니다.</p>
+
+<h2 id="202-상태-처리">20.2 상태 처리</h2>
+
+<p>상태값은 조건 비교를 통해 동작을 분리합니다. 전형적으로는 상태를 처리하기 위해 제어문(if)을 사용합니다.</p>
+
+<h3 id="2021-제어문">20.2.1 제어문</h3>
+<p>제어문은 조건을 구별하는 프로그래밍 언어 문법입니다. 대표적인 제어문으로 if문과 switch문이 있습니다.</p>
+
+<p>if문은 값을 비교하거나 값의 대소 관계를 구별합니다. 그리고 switch문은 if문 제어 기능 중 단순한 값 비교만 처리하므로 조건 비교 속도가 빠릅니다.</p>
+
+<h3 id="2022-if문-상태-처리">20.2.2 if문 상태 처리</h3>
+<p>if문을 사용하여 상태에 따른 동작을 구별해봅시다. 다음은 가장 전형적인 상태 처리 로직입니다.</p>
+
+<p>예제 20-1 State/01/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">const</span> <span class="no">OPEN</span>     <span class="o">=</span> <span class="mh">0x01</span><span class="p">;</span>  <span class="c1">// 주문</span>
+<span class="k">const</span> <span class="no">PAY</span>      <span class="o">=</span> <span class="mh">0x02</span><span class="p">;</span>  <span class="c1">// 결제중</span>
+<span class="k">const</span> <span class="no">ORDERED</span>  <span class="o">=</span> <span class="mh">0x04</span><span class="p">;</span>  <span class="c1">// 주문완료</span>
+</code></pre></div></div>
+
+<p><strong>440</strong> 3부 행동 패턴</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$state</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">;</span>
+
+<span class="nv">$state</span> <span class="o">=</span> <span class="no">OPEN</span><span class="p">;</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nv">$state</span> <span class="o">==</span> <span class="no">OPEN</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"주문</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$state</span> <span class="o">==</span> <span class="no">PAY</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"결제중</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$state</span> <span class="o">==</span> <span class="no">ORDERED</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"주문완료</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>3가지 상태를 구별하기 위해 중첩된 if문 코드를 사용합니다. 각 상태에 따라서 else if문을 사용해 체인 형태로 제어문을 연결합니다.</p>
+
+<h3 id="2023-상태-추가">20.2.3 상태 추가</h3>
+<p>[예제 20-1]에서 작성한 코드에 상태가 추가될 수도 있습니다. 새로운 상태가 추가되면 코드를 변경해야 합니다. 새로운 상태를 추가해봅시다.</p>
+
+<p>예제 20-2 State/02/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">const</span> <span class="no">OPEN</span>     <span class="o">=</span> <span class="mh">0x01</span><span class="p">;</span>  <span class="c1">// 주문</span>
+<span class="k">const</span> <span class="no">PAY</span>      <span class="o">=</span> <span class="mh">0x02</span><span class="p">;</span>  <span class="c1">// 결제중</span>
+<span class="k">const</span> <span class="no">ORDERED</span>  <span class="o">=</span> <span class="mh">0x04</span><span class="p">;</span>  <span class="c1">// 주문완료</span>
+<span class="k">const</span> <span class="no">FINISH</span>   <span class="o">=</span> <span class="mh">0x08</span><span class="p">;</span>  <span class="c1">// 처리완료</span>
+
+<span class="nv">$state</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">;</span>
+<span class="nv">$state</span> <span class="o">=</span> <span class="no">PAY</span><span class="p">;</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nv">$state</span> <span class="o">==</span> <span class="no">OPEN</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"주문</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$state</span> <span class="o">==</span> <span class="no">PAY</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"결제중</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$state</span> <span class="o">==</span> <span class="no">ORDERED</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"주문완료</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$state</span> <span class="o">==</span> <span class="no">FINISH</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"처리완료</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>20장 상태 패턴 <strong>441</strong></p>
+
+<p>[예제 20-2]에 ‘처리완료’ 상태값 하나를 추가했습니다. 새로운 상태값을 처리하기 위해 [그림 20-2]와 같이 조건 제어문도 함께 변경됩니다.</p>
+
+<h4 id="그림-20-2-if문-조건-추가">그림 20-2 if문 조건 추가</h4>
+
+<p><img src="./img/fig_20_2.svg" alt="그림 20-2" /></p>
+
+<p>이처럼 상태가 추가되면 제어문은 계속 확장되고 코드가 복잡해집니다. 실제 개발 현장에서는 이러한 수정과 변경 작업들이 빈번히 발생하며, 매번 코드를 변경해야 하는 유지 보수 빈도가 늘어납니다.</p>
+
+<h3 id="2024-switch문">20.2.4 switch문</h3>
+<p>상태를 처리하는 대부분의 로직은 값의 비교(==)입니다. 동일한 값을 비교할 경우 if문보다 switch문이 더 효율적이며 높은 성능을 발휘합니다.</p>
+
+<p>예제 20-3 State/03/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">const</span> <span class="no">OPEN</span>     <span class="o">=</span> <span class="mh">0x01</span><span class="p">;</span>  <span class="c1">// 주문</span>
+<span class="k">const</span> <span class="no">PAY</span>      <span class="o">=</span> <span class="mh">0x02</span><span class="p">;</span>  <span class="c1">// 결제중</span>
+<span class="k">const</span> <span class="no">ORDERED</span>  <span class="o">=</span> <span class="mh">0x04</span><span class="p">;</span>  <span class="c1">// 주문완료</span>
+<span class="k">const</span> <span class="no">FINISH</span>   <span class="o">=</span> <span class="mh">0x08</span><span class="p">;</span>  <span class="c1">// 처리완료</span>
+
+<span class="nv">$state</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">;</span>
+<span class="nv">$state</span> <span class="o">=</span> <span class="no">ORDERED</span><span class="p">;</span>
+
+<span class="k">switch</span> <span class="p">(</span><span class="nv">$state</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="no">OPEN</span><span class="o">:</span>
+        <span class="k">echo</span> <span class="s2">"주문</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="no">PAY</span><span class="o">:</span>
+</code></pre></div></div>
+
+<p><strong>442</strong> 3부 행동 패턴</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="k">echo</span> <span class="s2">"결제중</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="no">ORDERED</span><span class="o">:</span>
+        <span class="k">echo</span> <span class="s2">"주문완료</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="no">FINISH</span><span class="o">:</span>
+        <span class="k">echo</span> <span class="s2">"처리완료</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="k">break</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>[예제 20-2]의 if문을 switch문으로 변경했습니다.</p>
+
+<h4 id="그림-20-3-switch문-조건-추가">그림 20-3 switch문 조건 추가</h4>
+
+<p><img src="./img/fig_20_3.svg" alt="그림 20-3" /></p>
+
+<p>하지만 코드 가독성과 처리 측면에서는 모두 별다른 개선점이 없습니다.</p>
+
+<h3 id="2025-가변-함수-응용">20.2.5 가변 함수 응용</h3>
+<p>가변 함수는 변수를 이용해 함수를 호출하는 프로그래밍 문법입니다. 변수명에 함수명을 설정한 후 변수값과 동일한 함수를 호출합니다.</p>
+
+<h4 id="그림-20-4-가변-함수-호출">그림 20-4 가변 함수 호출</h4>
+
+<p><img src="./img/fig_20_4.svg" alt="그림 20-4" /></p>
+
+<p>20장 상태 패턴 <strong>443</strong></p>
+
+<p>이처럼 상태 패턴의 원리는 [그림 20-4]와 같이 상태값에 따라 처리 로직을 각각의 함수로 분리합니다.</p>
+
+<p>예제 20-4 State/03/func.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="nv">$state</span> <span class="o">=</span> <span class="s2">"ordered"</span><span class="p">;</span>
+<span class="k">if</span><span class="p">(</span><span class="nv">$state</span> <span class="o">&amp;&amp;</span> <span class="nb">function_exists</span><span class="p">(</span><span class="nv">$state</span><span class="p">)){</span>
+    <span class="nv">$state</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="c1">// 오픈상태</span>
+<span class="k">function</span> <span class="n">open</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"주문</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 결제상태</span>
+<span class="k">function</span> <span class="n">pay</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"결제중</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 주문상태</span>
+<span class="k">function</span> <span class="n">ordered</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"주문완료</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 완료상태</span>
+<span class="k">function</span> <span class="n">finish</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"처리완료</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>복잡한 제어문은 코드 상태를 판단하기 어렵습니다. 규모가 커질수록 코드의 흐름을 이해하고 전체 동작을 파악하는 데 많은 시간이 소요됩니다. 특히 특정 상태가 제어문에 의해 숨겨진 동작일 경우 더욱 더 파악하기 어렵습니다.</p>
+
+<p>앞에 나온 코드를 보면 동일한 상태값과 함수명을 사용해 동작을 구분하고 실행합니다. if문과 switch문을 사용하지 않고 가변 함수를 이용하여 상태값에 따라 동작을 실행할 수 있습니다.</p>
+
+<p><strong>444</strong> 3부 행동 패턴</p>
+
+<h2 id="203-패턴-구현">20.3 패턴 구현</h2>
+
+<p>앞 절에서는 상태 패턴을 학습하기 전에 상태에 대한 개념과 처리 로직에 대해 먼저 학습했습니다.</p>
+
+<h3 id="2031-상태-패턴">20.3.1 상태 패턴</h3>
+<p>[예제 20-4]에서는 상태값과 가변 함수로 동작을 분기 처리하는 실습을 진행했습니다. 상태 패턴은 상태값에 따른 동작을 각각의 함수 형태로 구별하는 것과 달리 객체로 동작을 분리합니다.</p>
+
+<p>객체 형태로 상태를 분리할 경우 상태의 동작을 객체에 위임할 수 있습니다. 그뿐 아니라 해당 객체에 동작을 한정시키는 국지화도 가능합니다. 상태 패턴은 객체의 상태에 따라 위임하는 객체를 변경하기 때문에 객체의 상태값과 직접적인 객체의 상태값에 영향을 받는다.</p>
+
+<h3 id="2032-객체화">20.3.2 객체화</h3>
+<p>상태 패턴을 적용하기 위해 [예제 20-4] 코드를 클래스로 변경합니다.</p>
+
+<p>예제 20-5 State/04/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">JinyOrder</span>
+<span class="p">{</span>
+    <span class="k">const</span> <span class="no">OPEN</span>     <span class="o">=</span> <span class="mh">0x01</span><span class="p">;</span>  <span class="c1">// 주문</span>
+    <span class="k">const</span> <span class="no">PAY</span>      <span class="o">=</span> <span class="mh">0x02</span><span class="p">;</span>  <span class="c1">// 결제중</span>
+    <span class="k">const</span> <span class="no">ORDERED</span>  <span class="o">=</span> <span class="mh">0x04</span><span class="p">;</span>  <span class="c1">// 주문완료</span>
+    <span class="k">const</span> <span class="no">FINISH</span>   <span class="o">=</span> <span class="mh">0x08</span><span class="p">;</span>  <span class="c1">// 처리완료</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">process</span><span class="p">(</span><span class="nv">$state</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="nv">$state</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">case</span> <span class="s2">"OPEN"</span><span class="o">:</span>
+                <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">stateOrder</span><span class="p">();</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="s2">"PAY"</span><span class="o">:</span>
+</code></pre></div></div>
+
+<p>20장 상태 패턴 <strong>445</strong></p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>            <span class="k">case</span> <span class="s2">"PAY"</span><span class="o">:</span>
+                <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">statePAY</span><span class="p">();</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="s2">"ORDERED"</span><span class="o">:</span>
+                <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">stateORDERED</span><span class="p">();</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="s2">"FINISH"</span><span class="o">:</span>
+                <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">stateFINISH</span><span class="p">();</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">stateOrder</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"주문</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">statePAY</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"결제중</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">stateORDERED</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"주문완료</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">stateFINISH</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"처리완료</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JinyOrder</span><span class="p">();</span>
+<span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">process</span><span class="p">(</span><span class="s2">"FINISH"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>클래스로 변경했지만 아직도 복잡한 제어문을 사용하고 있어 별로 나아진 것이 없어 보입니다.</p>
+
+<h3 id="2033-상태-캡슐화">20.3.3 상태 캡슐화</h3>
+<p>[예제 20-5]를 상태 패턴으로 변경하기 위해 각 상태의 동작을 캡슐화합니다.</p>
+
+<p><strong>446</strong> 3부 행동 패턴</p>
+
+<p>앞에서 실습한 가변 함수의 처리 방식을 다시 살펴봅시다. 우리는 가변 함수 처리에서 각 상태의 동작을 함수 형태로 분리했습니다. 상태 패턴에서는 함수 형태가 아니라 서브 클래스 형태로 분리합니다.</p>
+
+<p>상태를 서브 클래스로 캡슐화할 때는 코드가 독립적으로 수행할 수 있도록 작성하는 것이 중요합니다. 독립적인 클래스는 상태를 서로 다른 별개의 행동 객체로 관리합니다. [예제 20-6]은 상태를 클래스화합니다.</p>
+
+<p>예제 20-6 State/05/StateOrder.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">StateOrder</span> <span class="kd">implements</span> <span class="nc">State</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">process</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"주문</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>각 상태의 행동들은 클래스로 형태를 캡슐화합니다. 또한 각 클래스는 상태의 변화에 대응하며 독립적으로 실행 가능합니다. 서브 클래스는 상태에 종속적이면서 독립적인 행동이 가능하도록 구현합니다.</p>
+
+<p>예제 20-7 State/05/StatePay.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">StatePAY</span> <span class="kd">implements</span> <span class="nc">State</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">process</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"결제중</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>예제 20-8 State/05/StateOrdered.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">StateOrdered</span> <span class="kd">implements</span> <span class="nc">State</span>
+</code></pre></div></div>
+
+<p>20장 상태 패턴 <strong>447</strong></p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">process</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"주문완료</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>예제 20-9 State/05/StateFinish.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">StateFinish</span> <span class="kd">implements</span> <span class="nc">State</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">process</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"처리완료</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>[예제 20-6 ~ 예제 20-9]는 각 조건의 행동을 클래스로 캡슐화하여 분리하며 상태값에 따라 객체를 달리 호출합니다.</p>
+
+<p>상태 패턴에서는 각각의 상태를 객체로 캡슐화하기 때문에 클래스 파일이 늘어난다는 단점이 있습니다. 그러나 상태 패턴을 사용하지 않고 수많은 조건문을 사용하는 것보다는 유연하게 확장할 수 있습니다.</p>
+
+<h3 id="2034-단일-상태">20.3.4 단일 상태</h3>
+<p>상태 패턴에서 객체를 생성할 때는 단일 상태값으로 캡슐화합니다. 1개의 객체는 1개의 상태만 구현합니다.</p>
+
+<p>때로는 1개의 상태 객체가 2개 이상의 상태값을 처리하는 경우도 있습니다. 복수의 상태값을 처리하려면 별도의 조건 제어문을 추가해야 합니다. 그러나 복수의 상태값을 처리하는 경우 상태 객체의 동작이 불분명해지는 상황이 발생합니다.</p>
+
+<p><strong>448</strong> 3부 행동 패턴</p>
+
+<h3 id="2035-국지화">20.3.5 국지화</h3>
+<p>1개의 상태를 하나의 단일 객체로 생성하면 코드가 국지화되는 효과를 얻을 수 있습니다. 객체 국지화의 장점은 해당 객체에만 영향이 미친다는 것입니다. 따라서 각각의 상태를 하나의 객체로 국지화하면 상태에 따른 코드를 보다 쉽게 이해하고 수정할 수 있습니다.</p>
+
+<h3 id="2036-인터페이스">20.3.6 인터페이스</h3>
+<p>상태 패턴은 서브 클래스 생성 시 인터페이스를 적용하는데, 이 인터페이스는 서브 클래스의 통일성을 유지하기 위해 사용합니다. 인터페이스는 모든 객체에 대응해 동일한 형태의 서브 클래스를 생성하도록 규약을 적용합니다.</p>
+
+<p>상태 패턴은 모든 상태에 인터페이스를 적용하여 객체를 캡슐화합니다. 다음은 상태 인터페이스의 예제 코드입니다. 앞의 캡슐화된 상태 클래스를 보면 ‘implements State’로 인터페이스가 적용된 것을 확인할 수 있습니다.</p>
+
+<p>예제 20-10 State/05/State.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 상태 인터페이스를 선언합니다.</span>
+<span class="kd">interface</span> <span class="nc">State</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">process</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>또한 각 상태 서브 클래스는 동일한 <code class="language-plaintext highlighter-rouge">process()</code> 메서드를 구현해야 합니다.</p>
+
+<blockquote>
+  <p>[!NOTE]
+인터페이스 대신 추상화(Abstract)를 상속받아 처리할 수도 있습니다. 추상화는 인터페이스와 달리 공통된 메서드를 같이 포함하여 설계할 수 있습니다.</p>
+</blockquote>
+
+<p>인터페이스로 구현된 <code class="language-plaintext highlighter-rouge">process()</code> 메서드는 상태 패턴의 상태값만 바라보고 처리하는 실행 동작입니다.</p>
+
+<p>20장 상태 패턴 <strong>449</strong></p>
+
+<h4 id="그림-20-5-상태값-바라보기">그림 20-5 상태값 바라보기</h4>
+
+<p><img src="./img/fig_20_5.svg" alt="그림 20-5" /></p>
+
+<p>따라서 상태 객체는 특정한 상태에 종속된 동작을 가지는 의존성이 발생하게 됩니다.</p>
+
+<h2 id="204-객체-생성">20.4 객체 생성</h2>
+
+<p>상태 패턴은 상태별로 구분된 객체에 동작을 위임합니다. 위임하기 위해서는 각 상태별 객체의 생성 관리가 필요합니다.</p>
+
+<h3 id="2041-서브-클래스">20.4.1 서브 클래스</h3>
+<p>각 상태에 따라 동작하는 서브 클래스를 생성합니다. 상태 패턴은 상태마다 동작할 서브 클래스의 객체 정보를 가지고 있습니다.</p>
+
+<h4 id="그림-20-6-상태-객체의-정보-및-위임-처리">그림 20-6 상태 객체의 정보 및 위임 처리</h4>
+
+<p><img src="./img/fig_20_6.svg" alt="그림 20-6" /></p>
+
+<p><strong>450</strong> 3부 행동 패턴</p>
+
+<p>상태에 따른 객체 정보를 변경하여 동작을 위임합니다. 상태 객체는 구체적으로 행동하는 파생 클래스와 같습니다.</p>
+
+<h3 id="2042-인스턴스">20.4.2 인스턴스</h3>
+<p>캡슐화된 상태 클래스를 실제 객체로 생성합니다. 초기화 과정에서 상태별로 클래스의 객체를 생성합니다.</p>
+
+<p>예제 20-11 State/05/Order.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">JinyOrder</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="nv">$state</span><span class="p">;</span>
+
+    <span class="c1">// 객체 초기화</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// 상태의 서브 클래스 객체의 인스턴스를 생성합니다.</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">'ORDER'</span> <span class="o">=&gt;</span> <span class="k">new</span> <span class="nc">StateOrder</span><span class="p">(),</span>
+            <span class="s1">'PAY'</span> <span class="o">=&gt;</span> <span class="k">new</span> <span class="nc">StatePay</span><span class="p">(),</span>
+            <span class="s1">'ORDERED'</span> <span class="o">=&gt;</span> <span class="k">new</span> <span class="nc">StateOrdered</span><span class="p">(),</span>
+            <span class="s1">'FINISH'</span> <span class="o">=&gt;</span> <span class="k">new</span> <span class="nc">StateFinish</span><span class="p">()</span>
+        <span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 상태의 서브 클래스를 호출합니다.</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">process</span><span class="p">(</span><span class="nv">$status</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">state</span><span class="p">[</span><span class="nv">$status</span><span class="p">]</span><span class="o">-&gt;</span><span class="nf">process</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>상태의 객체를 저장하기 위해 배열 또는 여러 변수를 사용합니다. 각 상태에 따라 여러 변수를 추가로 사용하는 것은 상태 패턴의 단점입니다.</p>
+
+<p>20장 상태 패턴 <strong>451</strong></p>
+
+<h3 id="2043-객체-생성">20.4.3 객체 생성</h3>
+<p>상태 패턴은 모든 상태에 대해 객체를 생성하고 관리하는데, 새로운 상태 객체를 생성하는 것은 시스템의 메모리 자원을 할당하는 일입니다. 객체를 생성하는 과정에서 중복된 객체가 생성될 우려도 있습니다.</p>
+
+<p>중복된 객체가 생성되는 것을 방지하기 위한 방법으로 싱글턴 패턴이 있습니다. 서브 클래스를 싱글턴으로 변경하여 처리하는 것도 좋은 아이디어입니다. 이처럼 하나의 패턴만 사용하지 않고 다른 패턴과 결합해서 사용하는 경우가 많습니다.</p>
+
+<h2 id="205-상태-전환">20.5 상태 전환</h2>
+
+<p>상태 패턴은 상태값에 따라 실제 동작되는 상태 객체를 결정하고 호출합니다. 이러한 호출의 선택과 변화는 상태 전이를 통해 관리합니다.</p>
+
+<h3 id="2051-상태-호출">20.5.1 상태 호출</h3>
+<p>상태 패턴은 객체의 상태값을 갖고 있습니다. 상태값은 동작에 의해 변경될 수 있으며, 상태값에 따라 객체를 다르게 호출할 수도 있습니다.</p>
+
+<p>다음은 상태를 지정하여 객체를 호출하는 예제입니다. 주문은 각 상태에 따른 객체 동작을 실행합니다.</p>
+
+<p>예제 20-12 State/05/index2.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require</span> <span class="s2">"State.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"StateOrder.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"StatePay.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"StateOrdered.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"StateFinish.php"</span><span class="p">;</span>
+
+<span class="k">require</span> <span class="s2">"Order.php"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>452</strong> 3부 행동 패턴</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JinyOrder</span><span class="p">();</span>
+<span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">process</span><span class="p">(</span><span class="s2">"ORDERED"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>php index2.php
+주문완료
+</code></pre></div></div>
+
+<p>상태 패턴은 상태에 따라 동작하는 서브 클래스를 선택합니다. 상태값에 따라 실시간으로 객체를 변경하여 동작을 다르게 처리합니다.</p>
+
+<h3 id="2052-상태-전이">20.5.2 상태 전이</h3>
+<p>상태 패턴에서 상태값은 고정되지 않습니다. 상태값은 동작에 따라서 변하는데 이를 상태 전이<sup id="fnref:1:2"><a href="#fn:1" class="footnote" rel="footnote" role="doc-noteref">1</a></sup>라고 합니다. 상태 전이는 통합 모델링 언어<sup id="fnref:2:1"><a href="#fn:2" class="footnote" rel="footnote" role="doc-noteref">2</a></sup>(UML)의 상태 머신 다이어그램으로도 자주 나타냅니다.</p>
+
+<p>상태 전이는 특정한 규칙에 의해 변동됩니다. 상태 전이는 객체의 행동과 조건 상황을 표현한 것이고, 상태 패턴은 객체를 상태별로 만들어 위임하므로 상태 전이를 명확하게 표현하는 효과가 있습니다. 이러한 규칙을 명확히 함으로써 오류 상태의 행동을 방지하는 효과도 있습니다.</p>
+
+<h3 id="2053-상태-결정">20.5.3 상태 결정</h3>
+<p>상태 전환은 코드의 흐름에 따라 상태를 처리하며 현재 자신의 상태를 유지합니다. 상태를 공유할 때는 정적 변수를 응용하는 것이 좋습니다.</p>
+
+<p>상태 처리는 주어진 상태를 처리하고 다음 상태로 이동합니다. 대부분의 상태는 스스로 알아서 다음 상태를 결정하며, 다음 상태가 결정되면 어떤 조건이나 이벤트에 따라 상태를 처리합니다.</p>
+
+<p>상태 객체는 자기 자신의 상태값을 보관하지 않지만, 다음 상태로 전환되는 값은 구현되는 상태 객체에 추가로 포함할 수 있습니다. 상태 객체가 다음 상태값을 갖고 있을 때 상태 객체 간 의존성이 발생합니다.</p>
+
+<hr />
+
+<p>20장 상태 패턴 <strong>453</strong></p>
+
+<h2 id="206-실습">20.6 실습</h2>
+
+<p>다음은 전구의 on/off 기능 상태를 통해 상태 패턴의 원리를 다시 한 번 학습해보겠습니다.</p>
+
+<h3 id="2061-상태-인터페이스">20.6.1 상태 인터페이스</h3>
+<p>먼저 상태 패턴에 대한 인터페이스를 생성합니다. 상태 클래스가 많을수록 인터페이스가 중요해집니다.</p>
+
+<p>예제 20-13 State/06/lightState.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 상태 인터페이스를 선언합니다.</span>
+<span class="kd">interface</span> <span class="nc">LightState</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">lightOn</span><span class="p">();</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">lightOff</span><span class="p">();</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">lightState</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>상태 인터페이스에 메서드 3개를 정의합니다. 전구를 켜는 메서드, 끄는 메서드, 전구 상태를 가져오는 메서드입니다.</p>
+
+<h3 id="2062-상태-객체">20.6.2 상태 객체</h3>
+<p>다음에는 상태를 처리하는 객체를 생성합니다.</p>
+
+<p>예제 20-14 State/06/LightLamp.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 객체를 구현합니다.</span>
+<span class="kd">class</span> <span class="nc">LightLamp</span> <span class="kd">implements</span> <span class="nc">LightState</span>
+<span class="p">{</span>
+    <span class="c1">// private 속성을 이용하여</span>
+    <span class="c1">// 외부에서 상태에 직접 접근할 수 없도록 정의합니다.</span>
+    <span class="k">private</span> <span class="nv">$_lightstate</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>454</strong> 3부 행동 패턴</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__CLASS__</span><span class="mf">.</span><span class="s2">" 객체를 생성합니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="c1">// 전구의 초기 상태는 off입니다.</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_lightstate</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 전구(LED)를 on 합니다.</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">lightOn</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"전구를 on 합니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_lightstate</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 전구(LED)를 off 합니다.</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">lightOff</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"전구를 off 합니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_lightstate</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 전구(LED)의 상태값을 반환합니다.</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">lightState</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_lightstate</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="2063-객체-구현">20.6.3 객체 구현</h3>
+<p>앞의 객체를 이용하여 상태를 실습해보겠습니다.</p>
+
+<p>예제 20-15 State/06/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require</span> <span class="s2">"LightState.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"LightLamp.php"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>20장 상태 패턴 <strong>455</strong></p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LightLamp</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">lightOn</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">lightState</span><span class="p">()</span><span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">lightOff</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">lightState</span><span class="p">()</span><span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+
+<span class="k">echo</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">lightOn</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">lightState</span><span class="p">()</span><span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">lightOn</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">lightState</span><span class="p">()</span><span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>php index.php
+LightLamp 객체를 생성합니다.
+전구를 on 합니다.
+1
+전구를 off 합니다.
+
+
+전구를 on 합니다.
+1
+전구를 on 합니다.
+1
+</code></pre></div></div>
+
+<p>상태값을 갖고 있을 때 메서드는 상태 체크 부분을 같이 구현해야 합니다. 상태 패턴은 if문이나 switch문과 같은 제어문을 사용하지 않아도 메서드를 이용해 상태를 처리할 수 있습니다.</p>
+
+<h2 id="207-효과">20.7 효과</h2>
+
+<p>상태 패턴은 거대한 구조의 코드를 구조화하는 데 유용합니다.</p>
+
+<h3 id="2071-조건문-해결">20.7.1 조건문 해결</h3>
+<p>프로그램에서 제어문은 코드를 실행하는 데 많은 부하를 발생시키고, 코드의 가독성 또한 떨어뜨립니다. 상태 패턴은 소스 코드에서 복잡한 if문과 switch문을 제거하고 조건 분기 없이 상태값을 이용해 객체의 동작을 처리합니다.</p>
+
+<p><strong>456</strong> 3부 행동 패턴</p>
+
+<h3 id="2072-런타임">20.7.2 런타임</h3>
+<p>상태 패턴은 상태값에 따라 객체의 동작을 수행하며 내부 상태값을 조사해 상태 객체의 행위를 위임합니다.</p>
+
+<p>상태별로 위임 객체를 변경합니다. 런타임으로 위임 객체를 변경해 동적으로 행동을 변화합니다.</p>
+
+<h3 id="2073-확장성">20.7.3 확장성</h3>
+<p>상태 패턴은 새로운 상태를 쉽게 추가해서 구현할 수 있습니다. 상태의 로직을 상태 객체로 변경하고, 상태에 따른 동작을 상태 객체에 위임합니다.</p>
+
+<p>상태 패턴은 상태값에 따라 행동을 위임함으로써 동작을 간편하게 확장할 수 있습니다. 이렇게 확장과 변경이 간편한 것은 상태 객체가 동일한 인터페이스를 적용하고 있기 때문입니다.</p>
+
+<h3 id="2074-변화">20.7.4 변화</h3>
+<p>상태 패턴은 변경된 상태에 따라 행동을 위임합니다. 이것은 마치 상태값에 따라 자신의 클래스가 변경되는 것처럼 보입니다. 실제 클래스가 변경되는 것이 아니라 구성에 따라서 상태 객체가 변경되는 것입니다.</p>
+
+<h2 id="208-패턴-유사성">20.8 패턴 유사성</h2>
+
+<p>상태 패턴을 전략 패턴과 비교하면서 살펴보겠습니다.</p>
+
+<h3 id="2081-구조의-유사성">20.8.1 구조의 유사성</h3>
+<p>상태 패턴은 구조적으로 전략 패턴과 매우 유사합니다. 또한 UML 표현도 비슷합니다. 두 패턴 모두 런타임으로 객체를 위임해 동작을 변경합니다. 전략 패턴은 위임된 객체를 알고리즘으로</p>
+
+<p>20장 상태 패턴 <strong>457</strong></p>
+
+<p>생각하지만, 상태 패턴에서는 위임된 객체를 상태값의 처리로 생각합니다.</p>
+
+<h3 id="2082-목적의-차별성">20.8.2 목적의 차별성</h3>
+<p>상태 패턴과 전략 패턴은 구조가 유사하지만 목적성으로 두 패턴을 구별할 수 있습니다.</p>
+
+<p>전략 패턴은 객체의 상태값에 관심이 없으며, 알고리즘을 교체하고 동작을 변경시키는 것만 생각합니다. 그러나 상태 패턴은 동작하는 객체의 변경이 상태에 따라 달라집니다. 상태 패턴에서는 상태값이 매우 중요하며 다음 동작과 객체의 위임을 결정합니다.</p>
+
+<p>전략 패턴은 객체를 이용해 적용 알고리즘을 변경하고, 상태 패턴은 이벤트로 발생하는 상태에 따라 객체를 변경해줍니다.</p>
+
+<h2 id="209-적용-사례">20.9 적용 사례</h2>
+
+<p>상태 패턴은 다양한 응용프로그램에서 적용하는 디자인 패턴 중 하나입니다.</p>
+
+<h3 id="2091-tcp-프로토콜">20.9.1 TCP 프로토콜</h3>
+<p>상태 패턴을 실제 적용한 분야는 TCP 연결 프로토콜입니다. 존슨과 츠바이그는 상태 패턴을 정의하면서 인터넷 TCP 연결 통신 프로토콜 설계 시 실제 이 패턴을 적용했다고 합니다.</p>
+
+<h3 id="2092-그래픽">20.9.2 그래픽</h3>
+<p>그래픽 응용프로그램에도 상태 패턴을 적용합니다. 보통 그림 도구를 선택하면 선택한 도형으로 계속 그릴 수 있습니다. 이는 도형을 선택하는 것이 객체의 상태값을 변경하는 것이며, 변경된 상태값이 유지되는 것과 같습니다. 다른 도형을 선택할 경우 생성되는 도형의 모양이 변경됩니다. 상태값을 변경하면 그림 그리는 작업 객체를 변경할 수 있습니다.</p>
+
+<p><strong>458</strong> 3부 행동 패턴</p>
+
+<h2 id="2010-정리">20.10 정리</h2>
+
+<p>상태 패턴은 행동 패턴으로 분류되고 객체 내부 상태에 따른 동작 객체를 결정합니다. 상태별로 분리된 동작 객체는 독립적이며, 각 상태값에 따라 국지화된 객체 행위를 위임합니다.</p>
+
+<p>상태값은 시스템 내부 또는 단계별로 변경되며, 조건 판별 없이 객체를 직접 호출하여 동작시킨다는 장점이 있습니다. 상태 패턴은 상태값을 설정 또는 변경함으로써 객체 실행을 다르게 할 수 있습니다.</p>
+
+<p>20장 상태 패턴 <strong>459</strong></p>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1">
+      <p>state transition <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a> <a href="#fnref:1:1" class="reversefootnote" role="doc-backlink">&#8617;<sup>2</sup></a> <a href="#fnref:1:2" class="reversefootnote" role="doc-backlink">&#8617;<sup>3</sup></a></p>
+    </li>
+    <li id="fn:2">
+      <p>Unified Modeling Language <a href="#fnref:2" class="reversefootnote" role="doc-backlink">&#8617;</a> <a href="#fnref:2:1" class="reversefootnote" role="doc-backlink">&#8617;<sup>2</sup></a></p>
+    </li>
+  </ol>
+</div>
+
+
+            <!-- 다음/이전 학습 페이지네이션 -->
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+    
+    
+
+<div class="d-flex justify-content-between align-items-center mt-5 mb-4 py-3 border-top border-bottom">
+  <div>
+    
+      <span class="text-muted small me-2">이전 학습</span>
+      <a href="/ch19/" class="text-decoration-none fw-semibold">
+        &laquo; CHAPTER 19 중재자 패턴
+      </a>
+    
+  </div>
+
+  <div class="text-end">
+    
+      <span class="text-muted small me-2">다음 학습</span>
+      <a href="/ch21/" class="text-decoration-none fw-semibold">
+        CHAPTER 21 메멘토 패턴 &raquo;
+      </a>
+    
+  </div>
+</div>
+
+
+            <div class="mt-10">
+                <!-- 구글 에스센스 광고 -->
+                <script async
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3321560028329475"
+                    crossorigin="anonymous"></script>
+                <!-- jinydev-java -->
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3321560028329475"
+                    data-ad-slot="9323221865" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+
+        </div>
+
+        <div class="bd-toc mt-3 mb-5 my-lg-0 ps-xl-3 mb-lg-5 text-body-secondary">
+
+  <button class="btn btn-link p-md-0 mb-2 mb-md-0 text-decoration-none bd-toc-toggle d-md-none" type="button"
+    data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents">
+    서브목차
+    <svg class="bi d-md-none ms-2" aria-hidden="true">
+      <use xlink:href="#chevron-expand"></use>
+    </svg>
+  </button>
+
+  <strong class="d-none d-md-block h6 my-2">서브목차</strong>
+
+  <div class="collapse bd-toc-collapse" id="tocContents">
+    <nav id="TableOfContents">
+      <!--
+      <ul>
+        <li><a href="#quick-start">Quick start</a></li>
+        <li><a href="#cdn-links">CDN links</a></li>
+        <li><a href="#next-steps">Next steps</a></li>
+        <li><a href="#js-components">JS components</a></li>
+        <li><a href="#important-globals">Important globals</a>
+          <ul>
+            <li><a href="#html5-doctype">HTML5 doctype</a></li>
+            <li><a href="#responsive-meta-tag">Responsive meta tag</a></li>
+            <li><a href="#box-sizing">Box-sizing</a></li>
+            <li><a href="#reboot">Reboot</a></li>
+          </ul>
+        </li>
+        <li><a href="#community">Community</a></li>
+      </ul>
+      -->
+    </nav>
+  </div>
+</div>
+    </main>
+
+
+</div>
+
+  <footer class="container">
+  <hr class="mt-5 mb-3">
+  <div class="row align-items-center pb-3">
+    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+      <p class="mb-0 text-secondary">Copyright 2017~2026 JinyDev. All Rights Reserved.</p>
+    </div>
+    <div class="col-md-6 text-center text-md-end">
+      
+      <a href="https://datas.jiny.dev" class="text-decoration-none text-secondary ms-3">빅데이터</a>
+      
+      <a href="https://mysql.jiny.dev" class="text-decoration-none text-secondary ms-3">MySQL</a>
+      
+      <a href="https://php.jiny.dev" class="text-decoration-none text-secondary ms-3">PHP</a>
+      
+      <a href="https://java.jiny.dev" class="text-decoration-none text-secondary ms-3">자바</a>
+      
+      <a href="https://git.jiny.dev" class="text-decoration-none text-secondary ms-3">깃&깃허브</a>
+      
+      <a href="https://linux.jiny.dev" class="text-decoration-none text-secondary ms-3">리눅스</a>
+      
+    </div>
+  </div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+    window.addEventListener('load', async function () {
+      mermaid.initialize({ startOnLoad: false });
+
+      const mermaidCodes = document.querySelectorAll('pre code.language-mermaid');
+      const mermaidDivs = [];
+
+      mermaidCodes.forEach(codeBlock => {
+        const mermaidDefinition = codeBlock.textContent.trim();
+        const container = codeBlock.closest('div.highlighter-rouge');
+
+        const mermaidDiv = document.createElement('div');
+        mermaidDiv.className = 'mermaid';
+        mermaidDiv.textContent = mermaidDefinition;
+
+        if (container) {
+          container.replaceWith(mermaidDiv);
+        } else {
+          const pre = codeBlock.parentElement;
+          if (pre) pre.replaceWith(mermaidDiv);
+        }
+        mermaidDivs.push(mermaidDiv);
+      });
+
+      if (mermaidDivs.length > 0) {
+        await mermaid.run({ nodes: mermaidDivs });
+      }
+    });
+  </script>
+  <script src="/assets/js/toc.js"></script>
+  <script src="/assets/js/sidebar.js"></script>
+
+</body>
+
+</html>

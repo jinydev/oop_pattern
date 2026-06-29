@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 180" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Left Box (Abstract Method) -->
+  <g filter="url(#shadow)">
+    <rect x="30" y="40" width="210" height="70" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="45" y="68" font-family="monospace" font-size="11" font-weight="bold" fill="#475569">abstract public function</text>
+    <text x="45" y="88" font-family="monospace" font-size="11" font-weight="bold" fill="#0f172a">createProduct();</text>
+  </g>
+
+  <!-- Right Box (Overridden Method) -->
+  <g filter="url(#shadow)">
+    <rect x="300" y="65" width="210" height="85" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="315" y="90" font-family="monospace" font-size="11" font-weight="bold" fill="#0f172a">public function createProduct()</text>
+    <text x="315" y="110" font-family="monospace" font-size="11" fill="#64748b">{</text>
+    <text x="330" y="130" font-family="monospace" font-size="11" font-weight="bold" fill="#ea580c">    return new LgProduct();</text>
+    <text x="315" y="145" font-family="monospace" font-size="11" fill="#64748b">}</text>
+  </g>
+
+  <!-- Extends Arrow (Base Class to Sub Class relation) -->
+  <g>
+    <path d="M 240,65 L 270,65 L 270,95 L 300,95" fill="none" stroke="#94a3b8" stroke-width="1.5" />
+    <polygon points="300,91 308,95 300,99" fill="#94a3b8" />
+    <text x="270" y="55" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#64748b" text-anchor="middle">extends</text>
+  </g>
+
+  <!-- Overriding Indicator (Dotted orange arrow) -->
+  <g>
+    <path d="M 135,110 L 135,135 L 295,135" fill="none" stroke="#ea580c" stroke-width="1.5" stroke-dasharray="3,3" />
+    <polygon points="295,131 303,135 295,139" fill="#ea580c" />
+    <text x="210" y="127" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#ea580c" text-anchor="middle">오버라이딩</text>
+  </g>
+</svg>

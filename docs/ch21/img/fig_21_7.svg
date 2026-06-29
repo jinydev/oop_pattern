@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 220" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Client / Target Object (Left) -->
+  <g transform="translate(20, 70)">
+    <circle cx="40" cy="40" r="35" fill="#ffffff" stroke="#3b82f6" stroke-width="2" />
+    <text x="40" y="44" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#1e3a8a" text-anchor="middle">객체</text>
+  </g>
+
+  <!-- Originator Class Box (Middle) -->
+  <g transform="translate(140, 45)" filter="url(#shadow)">
+    <rect width="110" height="90" rx="6" fill="#ffffff" stroke="#475569" stroke-width="1.5" />
+    <path d="M 0,6 A 6,6 0 0 1 6,0 L 104,0 A 6,6 0 0 1 110,6 L 110,25 L 0,25 Z" fill="#475569" />
+    <text x="55" y="16" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">원조본</text>
+    
+    <!-- setState method -->
+    <g transform="translate(10, 40)">
+      <rect width="90" height="36" rx="4" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2" />
+      <text x="45" y="22" font-family="monospace" font-size="10" font-weight="bold" fill="#334155" text-anchor="middle">setState()</text>
+    </g>
+  </g>
+
+  <!-- CareTaker Boundary (Right) -->
+  <g transform="translate(280, 20)" filter="url(#shadow)">
+    <rect width="160" height="180" rx="8" fill="#ffffff" stroke="#ea580c" stroke-width="1.5" />
+    <path d="M 0,8 A 8,8 0 0 1 8,0 L 152,0 A 8,8 0 0 1 160,8 L 160,25 L 0,25 Z" fill="#ea580c" />
+    <text x="80" y="16" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">케어테이커 (CareTaker)</text>
+
+    <!-- Stack of Orange Memento Blocks -->
+    <g transform="translate(30, 40)">
+      <!-- Top -->
+      <rect x="15" y="0" width="70" height="20" rx="3" fill="#ffedd5" stroke="#f97316" stroke-width="1" />
+      <!-- Middle -->
+      <rect x="15" y="24" width="70" height="20" rx="3" fill="#ffedd5" stroke="#f97316" stroke-width="1" />
+      <!-- Bottom -->
+      <rect x="15" y="48" width="70" height="20" rx="3" fill="#ffedd5" stroke="#f97316" stroke-width="1" />
+    </g>
+
+    <!-- undo method box -->
+    <g transform="translate(35, 125)">
+      <rect width="90" height="32" rx="4" fill="#fef2f2" stroke="#ef4444" stroke-width="1.2" />
+      <text x="45" y="20" font-family="monospace" font-size="10" font-weight="bold" fill="#991b1b" text-anchor="middle">undo</text>
+    </g>
+  </g>
+
+  <!-- Sequence Arrows and labels -->
+  <g>
+    <!-- 1. Save (객체 -> setState) -->
+    <path d="M 95,90 L 132,90" fill="none" stroke="#2563eb" stroke-dasharray="2,2" stroke-width="1.2" />
+    <polygon points="132,86 140,90 132,94" fill="#2563eb" />
+    <text x="115" y="82" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#2563eb" text-anchor="middle">① 저장</text>
+
+    <!-- 2. Push (setState -> Stack) -->
+    <path d="M 250,95 L 302,65" fill="none" stroke="#ea580c" stroke-width="1.2" />
+    <polygon points="302,69 310,60 300,61" fill="#ea580c" />
+    <text x="282" y="75" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#ea580c" text-anchor="middle">② push</text>
+
+    <!-- 3. Save (객체 -> setState) - curved line -->
+    <path d="M 90,110 Q 115,125 138,110" fill="none" stroke="#2563eb" stroke-dasharray="2,2" stroke-width="1.2" />
+    <polygon points="138,106 145,110 136,114" fill="#2563eb" />
+    <text x="115" y="128" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#2563eb" text-anchor="middle">③ 저장</text>
+
+    <!-- 4. Push (setState -> Stack) -->
+    <path d="M 230,135 Q 260,130 280,105" fill="none" stroke="#ea580c" stroke-width="1.2" />
+    <polygon points="283,109 285,100 277,104" fill="#ea580c" />
+    <text x="272" y="132" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#ea580c" text-anchor="middle">④ push</text>
+
+    <!-- 5. Read (Stack -> undo) -->
+    <path d="M 370,115 L 370,140" fill="none" stroke="#ea580c" stroke-width="1.2" />
+    <polygon points="366,140 370,148 374,140" fill="#ea580c" />
+    <text x="388" y="133" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#ea580c" text-anchor="middle">⑤ 읽기</text>
+
+    <!-- 6. Restore (undo -> 객체) -->
+    <path d="M 310,165 Q 200,205 85,120" fill="none" stroke="#2563eb" stroke-dasharray="2,2" stroke-width="1.2" />
+    <polygon points="88,117 80,115 82,123" fill="#2563eb" />
+    <text x="195" y="195" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#2563eb" text-anchor="middle">⑥ 복원</text>
+  </g>
+</svg>

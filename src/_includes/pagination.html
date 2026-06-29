@@ -1,0 +1,71 @@
+{% assign part_data = "" %}
+{% if page.url contains '/ch00/' or page.url contains '/author.html' or page.url contains '/preface.html' %}
+  {% assign part_data = site.data.ch00 %}
+{% elsif page.url contains '/part01/' or page.url contains '/ch01/' or page.url contains '/ch02/' or page.url contains '/ch03/' or page.url contains '/ch04/' or page.url contains '/ch05/' or page.url contains '/ch06/' %}
+  {% assign part_data = site.data.creational %}
+{% elsif page.url contains '/part02/' or page.url contains '/ch07/' or page.url contains '/ch08/' or page.url contains '/ch09/' or page.url contains '/ch10/' or page.url contains '/ch11/' or page.url contains '/ch12/' or page.url contains '/ch13/' %}
+  {% assign part_data = site.data.structural %}
+{% elsif page.url contains '/part03/' or page.url contains '/ch14/' or page.url contains '/ch15/' or page.url contains '/ch16/' or page.url contains '/ch17/' or page.url contains '/ch18/' or page.url contains '/ch19/' or page.url contains '/ch20/' or page.url contains '/ch21/' or page.url contains '/ch22/' or page.url contains '/ch23/' or page.url contains '/ch24/' %}
+  {% assign part_data = site.data.behavioral %}
+{% endif %}
+
+{% assign flat_links = "" | split: "" %}
+{% for item in part_data %}
+  {% assign flat_links = flat_links | push: item %}
+{% endfor %}
+
+{% assign page_url_norm = page.url | remove: "index.html" | remove: ".html" %}
+{% if page_url_norm != "/" %}
+  {% assign page_url_norm = page_url_norm | replace: '/$', '' %}
+  {% assign last_char = page_url_norm | slice: -1 %}
+  {% if last_char == '/' %}
+    {% assign size_minus_1 = page_url_norm.size | minus: 1 %}
+    {% assign page_url_norm = page_url_norm | slice: 0, size_minus_1 %}
+  {% endif %}
+{% endif %}
+
+{% assign prev_item = nil %}
+{% assign next_item = nil %}
+{% assign found = false %}
+
+{% for item in flat_links %}
+  {% assign item_url_norm = item.url | remove: "index.html" | remove: ".html" %}
+  {% if item_url_norm != "/" %}
+    {% assign last_char_item = item_url_norm | slice: -1 %}
+    {% if last_char_item == '/' %}
+      {% assign size_minus_1 = item_url_norm.size | minus: 1 %}
+      {% assign item_url_norm = item_url_norm | slice: 0, size_minus_1 %}
+    {% endif %}
+  {% endif %}
+
+  {% if found == true %}
+    {% assign next_item = item %}
+    {% break %}
+  {% endif %}
+
+  {% if item_url_norm == page_url_norm %}
+    {% assign found = true %}
+  {% else %}
+    {% assign prev_item = item %}
+  {% endif %}
+{% endfor %}
+
+<div class="d-flex justify-content-between align-items-center mt-5 mb-4 py-3 border-top border-bottom">
+  <div>
+    {% if prev_item %}
+      <span class="text-muted small me-2">이전 학습</span>
+      <a href="{{ site.baseurl }}{{ prev_item.url }}" class="text-decoration-none fw-semibold">
+        &laquo; {{ prev_item.title }}
+      </a>
+    {% endif %}
+  </div>
+
+  <div class="text-end">
+    {% if next_item %}
+      <span class="text-muted small me-2">다음 학습</span>
+      <a href="{{ site.baseurl }}{{ next_item.url }}" class="text-decoration-none fw-semibold">
+        {{ next_item.title }} &raquo;
+      </a>
+    {% endif %}
+  </div>
+</div>

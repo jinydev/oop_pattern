@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 180" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Code Execution Flow (Left) -->
+  <g transform="translate(40, 20)" filter="url(#shadow)">
+    <rect width="90" height="140" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5" />
+    <text x="45" y="25" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#1e3a8a" text-anchor="middle">코드 실행</text>
+    
+    <!-- Big downward arrow -->
+    <path d="M 45,45 L 45,120" fill="none" stroke="#3b82f6" stroke-width="3" />
+    <polygon points="40,118 45,128 50,118" fill="#3b82f6" />
+  </g>
+
+  <!-- Interrupt Routine (Right) -->
+  <g transform="translate(230, 40)" filter="url(#shadow)">
+    <rect width="110" height="100" rx="6" fill="#f1f5f9" stroke="#475569" stroke-width="1.5" />
+    <text x="55" y="25" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#0f172a" text-anchor="middle">인터럽트 루틴</text>
+
+    <!-- Downward execution in routine -->
+    <path d="M 55,45 L 55,80" fill="none" stroke="#475569" stroke-width="2.5" />
+    <polygon points="51,78 55,86 59,78" fill="#475569" />
+  </g>
+
+  <!-- Control transfer lines -->
+  <g>
+    <!-- Interrupt Occurrence (Transfer control to routine) -->
+    <path d="M 85,75 C 130,75 160,55 224,55" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="220,51 229,55 221,59" fill="#ef4444" />
+    <text x="150" y="50" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#ef4444" text-anchor="middle">인터럽트 발생</text>
+
+    <!-- Interrupt Return (Return control to execution) -->
+    <path d="M 230,120 C 170,120 130,125 88,125" fill="none" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4,2" />
+    <polygon points="92,121 83,125 91,129" fill="#10b981" />
+    <text x="150" y="137" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#10b981" text-anchor="middle">복귀</text>
+  </g>
+</svg>

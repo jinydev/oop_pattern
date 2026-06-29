@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- 클래스A -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="20" width="100" height="36" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="90" y="42" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#475569" text-anchor="middle">클래스 A</text>
+  </g>
+
+  <!-- 클래스B -->
+  <g filter="url(#shadow)">
+    <rect x="100" y="80" width="100" height="36" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="150" y="102" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#475569" text-anchor="middle">클래스 B</text>
+  </g>
+
+  <!-- 클래스 어댑터 -->
+  <g filter="url(#shadow)">
+    <rect x="160" y="140" width="120" height="36" rx="4" fill="#ffffff" stroke="#3b82f6" stroke-width="2" />
+    <text x="220" y="162" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#1e3a8a" text-anchor="middle">클래스 어댑터</text>
+  </g>
+
+  <!-- Stepwise Inheritance Arrows -->
+  <g>
+    <!-- A -> B -->
+    <path d="M 90,56 L 90,98 L 92,98" fill="none" stroke="#64748b" stroke-width="1.5" />
+    <polygon points="90,98 94,94 90,92" fill="#64748b" />
+    <text x="75" y="77" font-family="'Inter', sans-serif" font-size="9" fill="#94a3b8">상속</text>
+
+    <!-- B -> Adapter -->
+    <path d="M 150,116 L 150,158 L 152,158" fill="none" stroke="#64748b" stroke-width="1.5" />
+    <polygon points="150,158 154,154 150,152" fill="#64748b" />
+    <text x="135" y="137" font-family="'Inter', sans-serif" font-size="9" fill="#94a3b8">상속</text>
+  </g>
+</svg>

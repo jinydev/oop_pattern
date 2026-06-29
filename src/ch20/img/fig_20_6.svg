@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 220" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- State Pattern Context Box (Left) -->
+  <g transform="translate(30, 20)" filter="url(#shadow)">
+    <rect width="130" height="180" rx="8" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5" />
+    <path d="M 0,8 A 8,8 0 0 1 8,0 L 122,0 A 8,8 0 0 1 130,8 L 130,30 L 0,30 Z" fill="#3b82f6" />
+    <text x="65" y="19" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">상태 패턴 (Context)</text>
+    
+    <!-- State register stack -->
+    <g transform="translate(25, 45)">
+      <rect x="0" y="0" width="80" height="30" rx="4" fill="#ea580c" stroke="#c2410c" stroke-width="1" />
+      <text x="40" y="18" font-family="monospace" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">0x01</text>
+
+      <rect x="0" y="40" width="80" height="30" rx="4" fill="#ea580c" stroke="#c2410c" stroke-width="1" />
+      <text x="40" y="58" font-family="monospace" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">0x02</text>
+
+      <rect x="0" y="80" width="80" height="30" rx="4" fill="#ea580c" stroke="#c2410c" stroke-width="1" />
+      <text x="40" y="98" font-family="monospace" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">0x04</text>
+    </g>
+  </g>
+
+  <!-- Concrete State Receivers (Right) -->
+  <!-- Receiver 1 -->
+  <g transform="translate(240, 30)" filter="url(#shadow)">
+    <rect width="130" height="36" rx="4" fill="#ffffff" stroke="#64748b" stroke-width="1.2" />
+    <text x="65" y="22" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#334155" text-anchor="middle">상태 객체 (State A)</text>
+  </g>
+
+  <!-- Receiver 2 -->
+  <g transform="translate(240, 90)" filter="url(#shadow)">
+    <rect width="130" height="36" rx="4" fill="#ffffff" stroke="#64748b" stroke-width="1.2" />
+    <text x="65" y="22" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#334155" text-anchor="middle">상태 객체 (State B)</text>
+  </g>
+
+  <!-- Receiver 3 -->
+  <g transform="translate(240, 150)" filter="url(#shadow)">
+    <rect width="130" height="36" rx="4" fill="#ffffff" stroke="#64748b" stroke-width="1.2" />
+    <text x="65" y="22" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#334155" text-anchor="middle">상태 객체 (State C)</text>
+  </g>
+
+  <!-- Delegation Arrows -->
+  <g>
+    <!-- Stack 1 -> Recv 1 -->
+    <path d="M 135,60 C 170,60 190,48 232,48" fill="none" stroke="#ea580c" stroke-width="1.5" />
+    <polygon points="232,44 240,48 232,52" fill="#ea580c" />
+    <text x="185" y="42" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#b91c1c" text-anchor="middle">위임</text>
+
+    <!-- Stack 2 -> Recv 2 -->
+    <path d="M 135,100 M 135,100 L 232,108" fill="none" stroke="#ea580c" stroke-width="1.5" />
+    <polygon points="231,104 239,108 231,112" fill="#ea580c" />
+    <text x="185" y="96" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#b91c1c" text-anchor="middle">위임</text>
+
+    <!-- Stack 3 -> Recv 3 -->
+    <path d="M 135,140 C 170,140 190,168 232,168" fill="none" stroke="#ea580c" stroke-width="1.5" />
+    <polygon points="232,164 240,168 232,172" fill="#ea580c" />
+    <text x="185" y="152" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#b91c1c" text-anchor="middle">위임</text>
+  </g>
+</svg>

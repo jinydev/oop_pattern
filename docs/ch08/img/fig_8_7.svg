@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 220" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Left Side: Integrated Inheritance -->
+  <g>
+    <!-- Circle wrapper -->
+    <circle cx="140" cy="110" r="80" fill="none" stroke="#cbd5e1" stroke-dasharray="4,2" />
+    <text x="140" y="45" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#64748b" text-anchor="middle">상속 결합 구조</text>
+
+    <!-- Integrated Pyramid (Single unified tree) -->
+    <!-- Base -->
+    <polygon points="140,70 90,150 190,150" fill="#475569" opacity="0.8" />
+    <!-- Sub-divisions showing layers of classes -->
+    <line x1="115" y1="110" x2="165" y2="110" stroke="#ffffff" stroke-width="1.5" />
+    <line x1="102" y1="130" x2="178" y2="130" stroke="#ffffff" stroke-width="1.5" />
+  </g>
+
+  <!-- Right Side: Decoupled Abstraction & Implementation -->
+  <g>
+    <!-- Circle wrapper -->
+    <circle cx="380" cy="110" r="80" fill="none" stroke="#cbd5e1" stroke-dasharray="4,2" />
+    <text x="380" y="45" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#64748b" text-anchor="middle">추상-구현 분리 구조 (Bridge)</text>
+
+    <!-- Abstraction Pyramid (Left) -->
+    <polygon points="340,80 310,140 370,140" fill="#0f172a" opacity="0.8" />
+    <text x="340" y="155" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#334155" text-anchor="middle">추상화 계층</text>
+
+    <!-- Implementation Pyramid (Right) -->
+    <polygon points="420,80 390,140 450,140" fill="#3b82f6" opacity="0.8" />
+    <text x="420" y="155" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#1e3a8a" text-anchor="middle">구현 계층</text>
+
+    <!-- Bridge Connection Arrow -->
+    <path d="M 370,110 L 390,110" fill="none" stroke="#ef4444" stroke-width="2" />
+    <polygon points="390,107 396,110 390,113" fill="#ef4444" />
+    <text x="380" y="102" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#ef4444" text-anchor="middle">Bridge</text>
+  </g>
+
+  <!-- Central Transition Arrow -->
+  <g>
+    <path d="M 230,110 L 290,110" fill="none" stroke="#ef4444" stroke-width="2" />
+    <polygon points="290,106 298,110 290,114" fill="#ef4444" />
+    <text x="260" y="98" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#ef4444" text-anchor="middle">분리</text>
+  </g>
+</svg>

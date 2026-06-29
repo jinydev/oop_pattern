@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 220" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- 코드1 -->
+  <g transform="translate(145, 15)" filter="url(#shadow)">
+    <rect width="90" height="26" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+    <text x="45" y="17" font-family="monospace" font-size="10" fill="#475569" text-anchor="middle">코드1</text>
+  </g>
+
+  <!-- Arrow down to decision -->
+  <path d="M 190,41 L 190,60" fill="none" stroke="#64748b" stroke-width="1.2" />
+  <polygon points="187,60 190,65 193,60" fill="#64748b" />
+
+  <!-- 다양성 Diamond -->
+  <g transform="translate(145, 65)" filter="url(#shadow)">
+    <polygon points="45,0 90,20 45,40 0,20" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.2" />
+    <text x="45" y="23" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#1e3a8a" text-anchor="middle">다양성</text>
+  </g>
+
+  <!-- Branch lines from decision to 방법1, 방법2, 방법3 -->
+  <path d="M 145,85 L 65,85 L 65,115" fill="none" stroke="#3b82f6" stroke-width="1.2" />
+  <polygon points="62,115 65,120 68,115" fill="#3b82f6" />
+
+  <path d="M 190,105 L 190,115" fill="none" stroke="#3b82f6" stroke-width="1.2" />
+  <polygon points="187,115 190,120 193,115" fill="#3b82f6" />
+
+  <path d="M 235,85 L 315,85 L 315,115" fill="none" stroke="#3b82f6" stroke-width="1.2" />
+  <polygon points="312,115 315,120 318,115" fill="#3b82f6" />
+
+  <!-- 방법 3 boxes -->
+  <g transform="translate(20, 120)" filter="url(#shadow)">
+    <rect width="90" height="30" rx="3" fill="#ffffff" stroke="#94a3b8" stroke-dasharray="3,2" stroke-width="1" />
+    <text x="45" y="19" font-family="'Inter', sans-serif" font-size="10" fill="#475569" text-anchor="middle">방법1</text>
+  </g>
+
+  <g transform="translate(145, 120)" filter="url(#shadow)">
+    <rect width="90" height="30" rx="3" fill="#ffffff" stroke="#94a3b8" stroke-dasharray="3,2" stroke-width="1" />
+    <text x="45" y="19" font-family="'Inter', sans-serif" font-size="10" fill="#475569" text-anchor="middle">방법2</text>
+  </g>
+
+  <g transform="translate(270, 120)" filter="url(#shadow)">
+    <rect width="90" height="30" rx="3" fill="#ffffff" stroke="#94a3b8" stroke-dasharray="3,2" stroke-width="1" />
+    <text x="45" y="19" font-family="'Inter', sans-serif" font-size="10" fill="#475569" text-anchor="middle">방법3</text>
+  </g>
+  <text x="240" y="113" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#64748b">알고리즘 (Strategies)</text>
+
+  <!-- Branch lines from 방법1,2,3 to 코드5 -->
+  <path d="M 65,150 L 65,175 L 145,175" fill="none" stroke="#cbd5e1" stroke-width="1" />
+  <polygon points="145,172 150,175 145,178" fill="#cbd5e1" />
+
+  <path d="M 190,150 L 190,165" fill="none" stroke="#cbd5e1" stroke-width="1" />
+  <polygon points="187,165 190,170 193,165" fill="#cbd5e1" />
+
+  <path d="M 315,150 L 315,175 L 235,175" fill="none" stroke="#cbd5e1" stroke-width="1" />
+  <polygon points="235,178 230,175 235,172" fill="#cbd5e1" />
+
+  <!-- 코드5 -->
+  <g transform="translate(145, 175)" filter="url(#shadow)">
+    <rect width="90" height="26" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+    <text x="45" y="17" font-family="monospace" font-size="10" fill="#475569" text-anchor="middle">코드5</text>
+  </g>
+</svg>

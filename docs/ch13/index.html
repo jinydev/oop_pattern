@@ -1,0 +1,2219 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- 기본 메타데이터 --><meta name="description" content="Jiny linux"><meta name="author" content="HojinLee"><!-- 제목 설정 --><title>CHAPTER 13 프록시 패턴</title>
+  <meta name="title" content="CHAPTER 13 프록시 패턴" /><!-- 키워드 설정 --><!-- Open Graph 메타데이터 --><meta property="og:title" content="CHAPTER 13 프록시 패턴"><meta property="og:description" content="Jiny linux"><meta property="og:type" content="website"><meta property="og:locale" content="ko">
+  <meta property="og:site_name" content="linux">
+  <meta property="og:url" content="http://0.0.0.0:4000/ch13/">
+  <!-- 대표 URL (캐노니컬) -->
+  <link rel="canonical" href="http://0.0.0.0:4000/ch13/">
+
+  <!-- Twitter 카드 메타데이터 --><meta name="twitter:card" content="summary"><meta property="twitter:title" content="CHAPTER 13 프록시 패턴"><!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="CHAPTER 13 프록시 패턴" />
+<meta name="author" content="Hojin" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="24가지 패턴으로 알아보는 객체지향의 원리" />
+<meta name="twitter:description" property="og:description" content="24가지 패턴으로 알아보는 객체지향의 원리" />
+<link rel="canonical" href="http://0.0.0.0:4000/ch13/" />
+<meta property="og:url" content="http://0.0.0.0:4000/ch13/" />
+<meta property="og:site_name" content="쉽게 배워 바로 써먹는 디자인 패턴" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="CHAPTER 13 프록시 패턴" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Hojin"},"description":"24가지 패턴으로 알아보는 객체지향의 원리","headline":"CHAPTER 13 프록시 패턴","url":"http://0.0.0.0:4000/ch13/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/assets/css/docs.css" rel="stylesheet" />
+  <link href="/assets/css/highlight.css" rel="stylesheet" />
+
+  <style>
+    blockquote {
+      border-left: solid 5px #dee2e6;
+      padding: 5px 10px;
+      background-color: #f8f9fa;
+    }
+  </style>
+
+  <style>
+    h1 a {
+      text-decoration: none;
+    }
+
+    h2 a {
+      text-decoration: none;
+    }
+
+    h3 a {
+      text-decoration: none;
+    }
+
+    h4 a {
+      text-decoration: none;
+    }
+
+    h5 a {
+      text-decoration: none;
+    }
+
+    h6 a {
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      vertical-align: top
+    }
+
+    strong a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* 스크롤바 커스텀 */
+    /* 임의의 영역 생성 */
+    .scrollBar {}
+
+    /* 아래의 모든 코드는 영역::코드로 사용 */
+    .scrollBar::-webkit-scrollbar {
+      width: 7px;
+      /* 스크롤바의 너비 */
+    }
+
+    .scrollBar::-webkit-scrollbar-thumb {
+      height: 30%;
+      /* 스크롤바의 길이 */
+      background: #cccccc;
+      /* 스크롤바의 색상 */
+
+      border-radius: 5px;
+    }
+
+    .scrollBar::-webkit-scrollbar-track {
+      background: rgba(33, 122, 244, .1);
+      /*스크롤바 뒷 배경 색상*/
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4VBPCT3CR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-R4VBPCT3CR');
+  </script>
+
+
+</head>
+
+<body>
+  <header class="navbar navbar-expand-lg bd-navbar sticky-top">
+    <nav class="container bd-gutter flex-wrap flex-lg-nowrap position-relative" aria-label="Main navigation">
+
+      <!-- Mobile: Left Toggle (Browse) -->
+      <div class="bd-navbar-toggle d-lg-none">
+        <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdSidebar"
+          aria-controls="bdSidebar" aria-label="Toggle docs navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="bi" fill="currentColor"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z">
+            </path>
+          </svg>
+          <span class="d-none fs-6 pe-1">Browse</span>
+        </button>
+      </div>
+
+      <!-- Brand: Desktop (Static), Mobile (Absolute Center) -->
+      <a class="navbar-brand p-0 me-0 me-lg-2 ms-lg-0 d-none d-lg-inline-block" href="/" aria-label="jinydev">
+        <svg width="32" height="26" viewBox="0 0 32 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M24.2746 5.33377C25.8486 7.33981 25.1183 11.1792 24.3961 13.0177C24.4028 13.0199 24.4094 13.0221 24.4161 13.0243L24.4013 13.0248L22.649 12.9082C22.649 12.9053 22.6488 12.9013 22.649 12.8993C22.9902 8.93373 22.5975 7.34575 22.2147 7.07677C17.6316 10.3896 13.5379 9.33658 12.2725 9.01111C11.928 8.9225 11.7932 8.88781 11.9152 9.00988C12.2872 9.38185 13.1336 9.82821 13.7371 10.1465H13.7372L13.7376 10.1467C13.8743 10.2188 13.9985 10.2843 14.1019 10.3409C9.12673 10.3984 7.12659 8.00279 6.53855 7.29846C6.47859 7.22664 6.4333 7.1724 6.40105 7.14015C6.11408 6.85318 4.49961 5.87252 3.99256 7.74227C3.50142 9.55335 3.81246 11.6775 3.97665 12.7988C3.99089 12.896 3.99257 12.8981 3.99257 12.9298L2.37635 13.0248L2.37213 13.0247C0.223493 8.05534 1.83854 5.26971 3.29536 4.2246C3.29536 1.78444 6.27428 -0.592359 10.0455 0.263262C14.8768 1.64043 16.3468 1.18409 18.0759 0.647278C18.774 0.430562 19.5143 0.200726 20.5351 0.073124C25.2219 -0.512739 26.7993 2.56612 27 4.16122C26.2141 3.70487 24.8556 4.73165 24.2746 5.33377ZM12.3374 1.5872C11.1225 1.16466 7.99257 0.717209 6.3478 2.41116C5.98397 2.78587 5.55554 3.48864 5.55554 3.48864C5.55554 3.48864 4.82665 4.81961 4.25622 4.24919C3.68579 3.67878 5.0168 1.96749 6.06259 1.46044C7.10838 0.953388 9.70703 0.0660505 12.3374 1.5872Z"
+            fill="currentColor" />
+          <path
+            d="M10.078 13.5002H3.10601C2.2309 13.5002 1.52148 14.2097 1.52148 15.0848V18.3172C1.52148 19.1923 2.2309 19.9018 3.10601 19.9018H10.078C10.9531 19.9018 11.6625 19.1923 11.6625 18.3172V15.0848C11.6625 14.2097 10.9531 13.5002 10.078 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M0.823513 14.6094H0.379847C0.187322 14.6094 0.03125 14.7654 0.03125 14.958V15.9721C0.03125 16.1646 0.187322 16.3207 0.379847 16.3207H0.823513C1.01604 16.3207 1.17211 16.1646 1.17211 15.9721V14.958C1.17211 14.7654 1.01604 14.6094 0.823513 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M16.7326 13.5002H23.7045C24.5796 13.5002 25.2891 14.2097 25.2891 15.0848V18.3172C25.2891 19.1923 24.5796 19.9018 23.7045 19.9018H16.7326C15.8575 19.9018 15.1481 19.1923 15.1481 18.3172V15.0848C15.1481 14.2097 15.8575 13.5002 16.7326 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M25.9861 14.6094H26.4297C26.6222 14.6094 26.7783 14.7654 26.7783 14.958V15.9721C26.7783 16.1646 26.6222 16.3207 26.4297 16.3207H25.9861C25.7935 16.3207 25.6375 16.1646 25.6375 15.9721V14.958C25.6375 14.7654 25.7935 14.6094 25.9861 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M12.2954 15.5601H14.5137C14.7062 15.5601 14.8623 15.7161 14.8623 15.9087V16.9228C14.8623 17.1153 14.7062 17.2713 14.5137 17.2713H12.2954C12.1028 17.2713 11.9468 17.1153 11.9468 16.9228V15.9087C11.9468 15.7161 12.1028 15.5601 12.2954 15.5601Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M9.93343 16.3937C9.93343 16.7087 9.76317 16.9641 9.55314 16.9641C9.34311 16.9641 9.17285 16.7087 9.17285 16.3937C9.17285 16.0786 9.34311 15.8232 9.55314 15.8232C9.76317 15.8232 9.93343 16.0786 9.93343 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M16.9688 16.3937C16.9688 16.7087 17.139 16.9641 17.3491 16.9641C17.5591 16.9641 17.7293 16.7087 17.7293 16.3937C17.7293 16.0786 17.5591 15.8232 17.3491 15.8232C17.139 15.8232 16.9688 16.0786 16.9688 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M14.2758 20.1016C13.642 20.6086 12.7863 20.3551 12.5645 20.1016C12.6278 20.4185 12.8687 20.8622 13.4518 20.8622C14.0349 20.8622 14.2441 20.3551 14.2758 20.1016Z"
+            fill="currentColor" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.1312 22.411C12.1575 22.2914 12.2759 22.2157 12.3956 22.2421L14.6347 22.735C14.7544 22.7614 14.83 22.8797 14.8036 22.9994C14.7773 23.119 14.659 23.1947 14.5393 23.1683L12.3002 22.6753C12.1805 22.649 12.1049 22.5307 12.1312 22.411Z"
+            fill="currentColor" />
+          <path
+            d="M13.4203 27.6754C9.00897 27.7261 5.77228 23.6613 4.70536 21.6225C4.54691 21.3197 4.42016 21.2739 4.32509 21.3373C4.17297 21.4387 4.28282 21.6437 4.32507 21.7493C4.85747 22.9916 5.58213 24.0416 5.87791 24.4113C4.83846 26.1353 4.49409 27.855 4.45183 28.4994C6.1758 26.8008 7.91668 26.8832 8.57162 27.1367C13.7055 29.7987 16.5577 27.929 18.1739 27.1367C19.4669 26.5029 21.4803 27.7388 22.3254 28.436C22.224 26.8642 21.3747 25.1402 20.9627 24.4747C21.6282 23.5873 22.1669 22.5099 22.4522 21.9711C22.6803 21.5401 22.6106 21.369 22.5472 21.3373C22.3951 21.2613 22.2092 21.4958 22.1353 21.6225C21.6599 22.4148 18.9345 27.6121 13.4203 27.6754Z"
+            fill="currentColor" />
+        </svg>
+      </a>
+      <a class="navbar-brand p-0 me-0 position-absolute top-50 start-50 translate-middle d-lg-none" href="/"
+        aria-label="jinydev">
+        <svg width="100" height="26" viewBox="0 0 112 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M24.2746 5.33377C25.8486 7.33981 25.1183 11.1792 24.3961 13.0177C24.4028 13.0199 24.4094 13.0221 24.4161 13.0243L24.4013 13.0248L22.649 12.9082C22.649 12.9053 22.6488 12.9013 22.649 12.8993C22.9902 8.93373 22.5975 7.34575 22.2147 7.07677C17.6316 10.3896 13.5379 9.33658 12.2725 9.01111C11.928 8.9225 11.7932 8.88781 11.9152 9.00988C12.2872 9.38185 13.1336 9.82821 13.7371 10.1465H13.7372L13.7376 10.1467C13.8743 10.2188 13.9985 10.2843 14.1019 10.3409C9.12673 10.3984 7.12659 8.00279 6.53855 7.29846C6.47859 7.22664 6.4333 7.1724 6.40105 7.14015C6.11408 6.85318 4.49961 5.87252 3.99256 7.74227C3.50142 9.55335 3.81246 11.6775 3.97665 12.7988C3.99089 12.896 3.99257 12.8981 3.99257 12.9298L2.37635 13.0248L2.37213 13.0247C0.223493 8.05534 1.83854 5.26971 3.29536 4.2246C3.29536 1.78444 6.27428 -0.592359 10.0455 0.263262C14.8768 1.64043 16.3468 1.18409 18.0759 0.647278C18.774 0.430562 19.5143 0.200726 20.5351 0.073124C25.2219 -0.512739 26.7993 2.56612 27 4.16122C26.2141 3.70487 24.8556 4.73165 24.2746 5.33377ZM12.3374 1.5872C11.1225 1.16466 7.99257 0.717209 6.3478 2.41116C5.98397 2.78587 5.55554 3.48864 5.55554 3.48864C5.55554 3.48864 4.82665 4.81961 4.25622 4.24919C3.68579 3.67878 5.0168 1.96749 6.06259 1.46044C7.10838 0.953388 9.70703 0.0660505 12.3374 1.5872Z"
+            fill="currentColor" />
+          <path
+            d="M10.078 13.5002H3.10601C2.2309 13.5002 1.52148 14.2097 1.52148 15.0848V18.3172C1.52148 19.1923 2.2309 19.9018 3.10601 19.9018H10.078C10.9531 19.9018 11.6625 19.1923 11.6625 18.3172V15.0848C11.6625 14.2097 10.9531 13.5002 10.078 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M0.823513 14.6094H0.379847C0.187322 14.6094 0.03125 14.7654 0.03125 14.958V15.9721C0.03125 16.1646 0.187322 16.3207 0.379847 16.3207H0.823513C1.01604 16.3207 1.17211 16.1646 1.17211 15.9721V14.958C1.17211 14.7654 1.01604 14.6094 0.823513 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M16.7326 13.5002H23.7045C24.5796 13.5002 25.2891 14.2097 25.2891 15.0848V18.3172C25.2891 19.1923 24.5796 19.9018 23.7045 19.9018H16.7326C15.8575 19.9018 15.1481 19.1923 15.1481 18.3172V15.0848C15.1481 14.2097 15.8575 13.5002 16.7326 13.5002Z"
+            stroke="currentColor" stroke-width="1.26763" />
+          <path
+            d="M25.9861 14.6094H26.4297C26.6222 14.6094 26.7783 14.7654 26.7783 14.958V15.9721C26.7783 16.1646 26.6222 16.3207 26.4297 16.3207H25.9861C25.7935 16.3207 25.6375 16.1646 25.6375 15.9721V14.958C25.6375 14.7654 25.7935 14.6094 25.9861 14.6094Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M12.2954 15.5601H14.5137C14.7062 15.5601 14.8623 15.7161 14.8623 15.9087V16.9228C14.8623 17.1153 14.7062 17.2713 14.5137 17.2713H12.2954C12.1028 17.2713 11.9468 17.1153 11.9468 16.9228V15.9087C11.9468 15.7161 12.1028 15.5601 12.2954 15.5601Z"
+            fill="currentColor" stroke="currentColor" stroke-width="0.0633813" />
+          <path
+            d="M9.93343 16.3937C9.93343 16.7087 9.76317 16.9641 9.55314 16.9641C9.34311 16.9641 9.17285 16.7087 9.17285 16.3937C9.17285 16.0786 9.34311 15.8232 9.55314 15.8232C9.76317 15.8232 9.93343 16.0786 9.93343 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M16.9688 16.3937C16.9688 16.7087 17.139 16.9641 17.3491 16.9641C17.5591 16.9641 17.7293 16.7087 17.7293 16.3937C17.7293 16.0786 17.5591 15.8232 17.3491 15.8232C17.139 15.8232 16.9688 16.0786 16.9688 16.3937Z"
+            fill="currentColor" />
+          <path
+            d="M14.2758 20.1016C13.642 20.6086 12.7863 20.3551 12.5645 20.1016C12.6278 20.4185 12.8687 20.8622 13.4518 20.8622C14.0349 20.8622 14.2441 20.3551 14.2758 20.1016Z"
+            fill="currentColor" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.1312 22.411C12.1575 22.2914 12.2759 22.2157 12.3956 22.2421L14.6347 22.735C14.7544 22.7614 14.83 22.8797 14.8036 22.9994C14.7773 23.119 14.659 23.1947 14.5393 23.1683L12.3002 22.6753C12.1805 22.649 12.1049 22.5307 12.1312 22.411Z"
+            fill="currentColor" />
+          <path
+            d="M13.4203 27.6754C9.00897 27.7261 5.77228 23.6613 4.70536 21.6225C4.54691 21.3197 4.42016 21.2739 4.32509 21.3373C4.17297 21.4387 4.28282 21.6437 4.32507 21.7493C4.85747 22.9916 5.58213 24.0416 5.87791 24.4113C4.83846 26.1353 4.49409 27.855 4.45183 28.4994C6.1758 26.8008 7.91668 26.8832 8.57162 27.1367C13.7055 29.7987 16.5577 27.929 18.1739 27.1367C19.4669 26.5029 21.4803 27.7388 22.3254 28.436C22.224 26.8642 21.3747 25.1402 20.9627 24.4747C21.6282 23.5873 22.1669 22.5099 22.4522 21.9711C22.6803 21.5401 22.6106 21.369 22.5472 21.3373C22.3951 21.2613 22.2092 21.4958 22.1353 21.6225C21.6599 22.4148 18.9345 27.6121 13.4203 27.6754Z"
+            fill="currentColor" />
+          <text x="32" y="21" font-family="Arial, sans-serif" font-weight="bold" font-size="22"
+            fill="currentColor">Jiny</text>
+        </svg>
+      </a>
+
+      <!-- Mobile: Right Toggle (Menu) -->
+      <div class="d-flex d-lg-none ms-auto">
+        <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdNavbar"
+          aria-controls="bdNavbar" aria-label="Toggle navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid"
+            viewBox="0 0 16 16">
+            <path
+              d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- OffCanvas -->
+      <div class="offcanvas-lg offcanvas-end flex-grow-1" tabindex="-1" id="bdNavbar"
+        aria-labelledby="bdNavbarOffcanvasLabel" data-bs-scroll="true">
+        <!-- OffCanver Header -->
+        <div class="offcanvas-header px-4 pb-0">
+          <h5 class="offcanvas-title text-white" id="bdNavbarOffcanvasLabel">Jiny</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"
+            data-bs-target="#bdNavbar">
+          </button>
+        </div>
+
+        <!-- OffCanver Body -->
+        <div class="offcanvas-body p-4 pt-0 p-lg-0">
+          <hr class="d-lg-none text-white-50">
+
+          <ul class="navbar-nav flex-column flex-lg-row bd-navbar-nav">
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/ch00/">패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part01/">생성패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part02/">구조패턴</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link py-2 px-0 px-lg-2" href="/part03/">행동패턴</a>
+            </li>
+            
+          </ul>
+
+          <hr class="d-lg-none text-white-50">
+
+          <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
+            <li class="nav-item col-6 col-lg-auto">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://github.com/jinydev/datas" target="_blank"
+                rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
+                  viewBox="0 0 512 499.36" role="img">
+                  <title>GitHub</title>
+                  <path fill="currentColor" fill-rule="evenodd"
+                    d="M256 0C114.64 0 0 114.61 0 256c0 113.09 73.34 209 175.08 242.9 12.8 2.35 17.47-5.56 17.47-12.34 0-6.08-.22-22.18-.35-43.54-71.2 15.49-86.2-34.34-86.2-34.34-11.64-29.57-28.42-37.45-28.42-37.45-23.27-15.84 1.73-15.55 1.73-15.55 25.69 1.81 39.21 26.38 39.21 26.38 22.84 39.12 59.92 27.82 74.5 21.27 2.33-16.54 8.94-27.82 16.25-34.22-56.84-6.43-116.6-28.43-116.6-126.49 0-27.95 10-50.8 26.35-68.69-2.63-6.48-11.42-32.5 2.51-67.75 0 0 21.49-6.88 70.4 26.24a242.65 242.65 0 0 1 128.18 0c48.87-33.13 70.33-26.24 70.33-26.24 14 35.25 5.18 61.27 2.55 67.75 16.41 17.9 26.31 40.75 26.31 68.69 0 98.35-59.85 120-116.88 126.32 9.19 7.9 17.38 23.53 17.38 47.41 0 34.22-.31 61.83-.31 70.23 0 6.85 4.61 14.81 17.6 12.31C438.72 464.97 512 369.08 512 256.02 512 114.62 397.37 0 256 0z">
+                  </path>
+                </svg>
+                <small class="d-lg-none ms-2">GitHub</small>
+              </a>
+            </li>
+
+            <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+              <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+              <hr class="d-lg-none my-2 text-white-50">
+            </li>
+
+            <li class="nav-item col-6 col-lg-auto">
+              <a class="nav-link py-2 px-0 px-lg-2" href="https://jiny.dev" aria-label="Home">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
+                  viewBox="0 0 16 16" role="img">
+                  <title>Home</title>
+                  <path fill="currentColor"
+                    d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z" />
+                </svg>
+                <small class="d-lg-none ms-2">Home</small>
+              </a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container bd-gutter mt-3 my-md-4 bd-layout">
+    <aside class="bd-sidebar scrollBar">
+        <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="bdSidebar"
+            aria-labelledby="bdSidebarOffcanvasLabel">
+            <div class="offcanvas-header border-bottom">
+                <h5 class="offcanvas-title" id="bdSidebarOffcanvasLabel">학습목차</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"
+                    data-bs-target="#bdSidebar"></button>
+            </div>
+
+            <div class="offcanvas-body">
+                <!-- 네비게이션 -->
+                <nav class="bd-links w-100" id="bd-docs-nav" aria-label="Docs navigation">
+  <ul class="bd-links-nav list-unstyled mb-0 pb-3 pb-md-2 pe-lg-2">
+    <li class="bd-links-group py-2">
+      <strong class="bd-links-heading d-flex w-100 align-items-center fw-semibold">
+        디자인 패턴 목차
+      </strong>
+      <ul class="list-unstyled fw-normal pb-2 small">
+        
+        
+
+        
+        <li>
+          
+          <a href="/part02/"
+            class="bd-links-link d-inline-block rounded ">
+            Part 2 구조 패턴
+          </a>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-2"
+            aria-expanded="false">
+            CHAPTER 7 어댑터 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-2">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch07/#71-오래된-코드"
+                  class="bd-links-link d-inline-block rounded">
+                  7.1 오래된 코드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#72-잘못된-코드"
+                  class="bd-links-link d-inline-block rounded">
+                  7.2 잘못된 코드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#73-어댑터"
+                  class="bd-links-link d-inline-block rounded">
+                  7.3 어댑터
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#74-클래스-어댑터"
+                  class="bd-links-link d-inline-block rounded">
+                  7.4 클래스 어댑터
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#75-객체-어댑터"
+                  class="bd-links-link d-inline-block rounded">
+                  7.5 객체 어댑터
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#76-설계"
+                  class="bd-links-link d-inline-block rounded">
+                  7.6 설계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#77-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  7.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch07/#78-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  7.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-3"
+            aria-expanded="false">
+            CHAPTER 8 브리지 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-3">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch08/#81-복잡한-코드"
+                  class="bd-links-link d-inline-block rounded">
+                  8.1 복잡한 코드
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch08/#82-상속"
+                  class="bd-links-link d-inline-block rounded">
+                  8.2 상속
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch08/#83-패턴-설계-1"
+                  class="bd-links-link d-inline-block rounded">
+                  8.3 패턴 설계 1
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch08/#84-패턴-설계-2"
+                  class="bd-links-link d-inline-block rounded">
+                  8.4 패턴 설계 2
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch08/#85-장점과-단점"
+                  class="bd-links-link d-inline-block rounded">
+                  8.5 장점과 단점
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch08/#86-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  8.6 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch08/#87-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  8.7 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-4"
+            aria-expanded="false">
+            CHAPTER 9 복합체 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-4">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch09/#91-객체를-포함하는-객체"
+                  class="bd-links-link d-inline-block rounded">
+                  9.1 객체를 포함하는 객체
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#92-복합체의-구조적-특징"
+                  class="bd-links-link d-inline-block rounded">
+                  9.2 복합체의 구조적 특징
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#93-투명성을-활용한-동일한-설계"
+                  class="bd-links-link d-inline-block rounded">
+                  9.3 투명성을 활용한 동일한 설계
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#94-추상화를-통한-일반화-작업"
+                  class="bd-links-link d-inline-block rounded">
+                  9.4 추상화를 통한 일반화 작업
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#95-leaf"
+                  class="bd-links-link d-inline-block rounded">
+                  9.5 Leaf
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#96-composite"
+                  class="bd-links-link d-inline-block rounded">
+                  9.6 Composite
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#97-패턴-결합"
+                  class="bd-links-link d-inline-block rounded">
+                  9.7 패턴 결합
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#98-적용-사례-1"
+                  class="bd-links-link d-inline-block rounded">
+                  9.8 적용 사례 1
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#99-적용-사례-2"
+                  class="bd-links-link d-inline-block rounded">
+                  9.9 적용 사례 2
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#910-적용-사례-3"
+                  class="bd-links-link d-inline-block rounded">
+                  9.10 적용 사례 3
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#911-장단점-및-결과"
+                  class="bd-links-link d-inline-block rounded">
+                  9.11 장단점 및 결과
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#912-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  9.12 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch09/#913-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  9.13 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-5"
+            aria-expanded="false">
+            CHAPTER 10 장식자 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-5">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch10/#101-기능-추가"
+                  class="bd-links-link d-inline-block rounded">
+                  10.1 기능 추가
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#102-조건-추가"
+                  class="bd-links-link d-inline-block rounded">
+                  10.2 조건 추가
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#103-확장"
+                  class="bd-links-link d-inline-block rounded">
+                  10.3 확장
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#104-객체에-추가-장식하기"
+                  class="bd-links-link d-inline-block rounded">
+                  10.4 객체에 추가 장식하기
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#105-기본-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  10.5 기본 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#106-장단점-및-결과"
+                  class="bd-links-link d-inline-block rounded">
+                  10.6 장단점 및 결과
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#107-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  10.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch10/#108-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  10.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-6"
+            aria-expanded="false">
+            CHAPTER 11 파사드 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-6">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch11/#111-협업을-위한-분리-작업"
+                  class="bd-links-link d-inline-block rounded">
+                  11.1 협업을 위한 분리 작업
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#112-파사드-패턴을-응용한-api"
+                  class="bd-links-link d-inline-block rounded">
+                  11.2 파사드 패턴을 응용한 API
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#113-파사드를-이용한-단순화"
+                  class="bd-links-link d-inline-block rounded">
+                  11.3 파사드를 이용한 단순화
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#114-최소-지식-원칙"
+                  class="bd-links-link d-inline-block rounded">
+                  11.4 최소 지식 원칙
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#115-기본-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  11.5 기본 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#116-파사드-패턴의-효과"
+                  class="bd-links-link d-inline-block rounded">
+                  11.6 파사드 패턴의 효과
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#117-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  11.7 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch11/#118-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  11.8 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0 collapsed w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-7"
+            aria-expanded="false">
+            CHAPTER 12 플라이웨이트 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse " id="collapse-7">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch12/#121-메모리-자원"
+                  class="bd-links-link d-inline-block rounded">
+                  12.1 메모리 자원
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch12/#122-자원-공유"
+                  class="bd-links-link d-inline-block rounded">
+                  12.2 자원 공유
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch12/#123-상태-구분"
+                  class="bd-links-link d-inline-block rounded">
+                  12.3 상태 구분
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch12/#124-패턴-실습"
+                  class="bd-links-link d-inline-block rounded">
+                  12.4 패턴 실습
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch12/#125-관련-패턴"
+                  class="bd-links-link d-inline-block rounded">
+                  12.5 관련 패턴
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch12/#126-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  12.6 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+        <li>
+          
+          
+          
+          <button
+            class="bd-links-link bd-links-btn btn d-inline-flex align-items-center rounded border-0  w-100"
+            data-bs-toggle="collapse" data-bs-target="#collapse-8"
+            aria-expanded="true">
+            CHAPTER 13 프록시 패턴
+            <svg class="bi ms-auto" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <div class="collapse show" id="collapse-8">
+            <ul class="list-unstyled fw-normal pb-1 small ms-3">
+              
+              <li>
+                <a href="/ch13/#131-객체를-대행하는-프록시"
+                  class="bd-links-link d-inline-block rounded">
+                  13.1 객체를 대행하는 프록시
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#132-객체-가로채기"
+                  class="bd-links-link d-inline-block rounded">
+                  13.2 객체 가로채기
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#133-객체-분리"
+                  class="bd-links-link d-inline-block rounded">
+                  13.3 객체 분리
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#134-프록시-생성"
+                  class="bd-links-link d-inline-block rounded">
+                  13.4 프록시 생성
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#135-행위를-처리하는-핸들러"
+                  class="bd-links-link d-inline-block rounded">
+                  13.5 행위를 처리하는 핸들러
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#136-동적-프록시"
+                  class="bd-links-link d-inline-block rounded">
+                  13.6 동적 프록시
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#137-원격-프록시"
+                  class="bd-links-link d-inline-block rounded">
+                  13.7 원격 프록시
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#138-가상-프록시"
+                  class="bd-links-link d-inline-block rounded">
+                  13.8 가상 프록시
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#139-보호용-프록시"
+                  class="bd-links-link d-inline-block rounded">
+                  13.9 보호용 프록시
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#1310-스마트-참조자"
+                  class="bd-links-link d-inline-block rounded">
+                  13.10 스마트 참조자
+                </a>
+              </li>
+              
+              <li>
+                <a href="/ch13/#1311-정리"
+                  class="bd-links-link d-inline-block rounded">
+                  13.11 정리
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+          
+        </li>
+        
+      </ul>
+    </li>
+  </ul>
+</nav>
+            </div>
+        </div>
+    </aside>
+
+    <main class="bd-main order-1">
+        <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        
+        
+        
+        
+        
+        
+        <li class="breadcrumb-item active" aria-current="page">CHAPTER 13 프록시 패턴</li>
+        
+        
+        
+    </ol>
+</nav>
+
+        <div class="bd-content ps-lg-2">
+            
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>proxy
+[ 'pra:ksi ]
+</code></pre></div></div>
+<h1 id="chapter-13-프록시-패턴">CHAPTER 13 프록시 패턴</h1>
+
+<p>프록시 패턴은 객체 접근을 제어하기 위해 중간 단계에 대리자<sup>Surrogate</sup>를 위치시키는 패턴입니다.</p>
+
+<h2 id="131-객체를-대행하는-프록시">13.1 객체를 대행하는 프록시</h2>
+
+<p>프록시는 무슨 일을 직접 처리하지 않고 대리자를 내세워 처리를 위임합니다.</p>
+
+<h3 id="1311-프록시의-특징">13.1.1 프록시의 특징</h3>
+
+<p>프록시의 특징은 하나의 객체를 두 개로 나눠 재구성한다는 것입니다. 분리하는 이유는 직접적인 접근을 막고 대리할 객체를 구현하기 위해서입니다.</p>
+
+<p>프록시에서 분리된 두 개의 객체는 서로 다른 객체가 아닙니다. 두 객체는 동일한 인터페이스 규격을 갖고 있으며, 프록시는 단지 객체의 접근과 동작을 제어하기 위한 중간 제어 구조가 추가된 객체일 뿐입니다.</p>
+
+<h3 id="1312-다양한-프록시">13.1.2 다양한 프록시</h3>
+
+<p>프록시 패턴이 응용되는 범위가 매우 넓기 때문에 하나의 예로 설명하기 어렵습니다. 또한 응</p>
+
+<p>288 2부 구조 패턴</p>
+
+<p>용 범위에 따라 다르게 불리는 파생 프록시들도 많습니다.</p>
+
+<p>대표적인 파생 프록시 패턴은 다음과 같습니다.</p>
+
+<ul>
+  <li>원격 프록시</li>
+  <li>가상 프록시</li>
+  <li>보호 프록시</li>
+  <li>스마트 프록시</li>
+</ul>
+
+<p>이 외에도 방화벽 프록시, 레퍼런스 프록시, 동기화 프록시 등 다양한 프록시 적용 사례가 있습니다.</p>
+
+<h2 id="132-객체-가로채기">13.2 객체 가로채기</h2>
+
+<p>프록시는 실체 객체를 호출하면 행위를 중간에 가로채서 다른 동작을 수행하는 객체로 변경합니다.</p>
+
+<h3 id="1321-실체-객체">13.2.1 실체 객체</h3>
+
+<p>프록시 패턴을 실습하려면 먼저 실제로 동작하는 객체가 필요하므로 객체를 하나 설계합니다.</p>
+
+<p>예제 13-1 Proxy/01/RealSubject.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 실체 객체</span>
+<span class="kd">class</span> <span class="nc">RealSubject</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__CLASS__</span><span class="mf">.</span><span class="s2">" 객체가 생성되었습니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">action1</span><span class="p">()</span>
+    <span class="p">{</span>
+</code></pre></div></div>
+
+<p>13장 프록시 패턴 289</p>
+
+<p>echo <strong>METHOD</strong>.”을(를) 호출합니다.\n”;
+        echo “실제 action1 작업을 처리합니다.\n\n”;
+    }</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public function action2()
+{
+    echo __METHOD__."을(를) 호출합니다.\n";
+    echo "실제 action2 작업을 처리합니다.\n\n";
+} } ```
+</code></pre></div></div>
+
+<h3 id="1322-객체-호출">13.2.2 객체 호출</h3>
+
+<p>[예제 13-2]는 [예제 13-1]에서 생성한 실제 클래스의 객체를 호출하는 코드입니다.</p>
+
+<p>예제 13-2 Proxy/01/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require</span> <span class="s2">"RealSubject.php"</span><span class="p">;</span>
+
+<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">RealSubject</span><span class="p">;</span>
+<span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">action1</span><span class="p">();</span>
+<span class="nv">$obj</span><span class="o">-&gt;</span><span class="nf">action2</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index.php
+RealSubject 객체가 생성되었습니다.
+RealSubject::action1을(를) 호출합니다.
+실제 action1 작업을 처리합니다.
+
+RealSubject::action2을(를) 호출합니다.
+실제 action2 작업을 처리합니다.
+</code></pre></div></div>
+
+<p>실체 객체를 생성하고 action1()과 action2() 행위 메서드를 호출했습니다. 이처럼 선언된 클래스의 객체를 생성하고 메서드를 호출하는 동작이 일반적입니다. 다음에는 이 일반적인 동작을 프록시로 분리 처리하는 방법에 대해 알아보겠습니다.</p>
+
+<p>290 2부 구조 패턴</p>
+
+<h2 id="133-객체-분리">13.3 객체 분리</h2>
+
+<p>객체를 정교하게 제어해야 하거나 객체 참조가 필요한 경우 프록시 패턴을 사용합니다.</p>
+
+<h3 id="1331-대리자">13.3.1 대리자</h3>
+
+<p>프록시<sup>Proxy</sup>는 대리인을 의미하며, 실제 객체에 직접 접근하지 않고 똑같이 동작하는 대리자<sup>Surrogate</sup>를 생성합니다. 프록시는 대리자 객체를 통해 실제 객체를 가로챈 후 대리자 객체로 우회한 접근을 허용합니다.</p>
+
+<h4 id="그림-13-1-대리자">그림 13-1 대리자</h4>
+
+<p><img src="./img/fig_13_1.svg" alt="그림 13-1" /></p>
+
+<p>실제 동작하는 객체는 B입니다. 하지만 객체 B를 직접 호출하지 않고 대리자인 객체 A를 호출합니다. 객체 A는 요청한 동작을 수행하지 않고 객체 B로 처리 요청을 전달합니다.</p>
+
+<p>이처럼 프록시는 우회 접근을 통해 실제 객체를 실행합니다. 우회 접근으로 객체의 정교한 제어 작업이 필요할 때 객체 A를 통해 사전 작업을 수행할 수 있습니다.</p>
+
+<h3 id="1332-인터페이스">13.3.2 인터페이스</h3>
+
+<p>프록시는 동일한 역할을 수행하는 대리자를 생성하고, 대리자는 원본 객체와 동일한 인터페이스를 적용해 투명성을 갖도록 설계됩니다. 두 객체는 인터페이스를 통해 동일한 규약을 가지며 객체 호출 시 중간에서 행위를 가로챌 수 있습니다.</p>
+
+<p>프록시는 투명성의 특징을 이용해 객체 분리 작업을 실행하고, 프록시를 위한 인터페이스를 설계합니다.</p>
+
+<p>13장 프록시 패턴 291</p>
+
+<p>예제 13-3 Proxy/02/Subject.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 프록시 생성을 위한 인터페이스를 정의합니다.</span>
+<span class="kd">interface</span> <span class="nc">Subject</span>
+<span class="p">{</span>
+    <span class="c1">// 작업1</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">action1</span><span class="p">();</span>
+
+    <span class="c1">// 작업2</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">action2</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Subject 인터페이스는 실제 객체와 동일한 설계 규칙을 정의합니다.</p>
+
+<h3 id="1333-인터페이스-적용">13.3.3 인터페이스 적용</h3>
+
+<p>투명성으로 정의된 인터페이스를 실제 객체에 적용합니다. 인터페이스는 실제 객체와 동일하게 선언했습니다.</p>
+
+<p>예제 13-4 Proxy/02/RealSubject.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 실체 객체</span>
+<span class="kd">class</span> <span class="nc">RealSubject</span> <span class="kd">implements</span> <span class="nc">Subject</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__CLASS__</span><span class="mf">.</span><span class="s2">" 객체가 생성되었습니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">action1</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__METHOD__</span><span class="mf">.</span><span class="s2">"을(를) 호출합니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="k">echo</span> <span class="s2">"실제 action1 작업을 처리합니다.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">action2</span><span class="p">()</span>
+    <span class="p">{</span>
+</code></pre></div></div>
+
+<p>292 2부 구조 패턴</p>
+
+<p>{
+        echo <strong>METHOD</strong>.”을(를) 호출합니다.\n”;
+        echo “실제 action2 작업을 처리합니다.\n\n”;
+    }
+}</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+인터페이스를 적용했다고 해서 특정한 변화가 생기는 것은 아닙니다. 인터페이스를 생성한 이유는 실제 객체에 프록시 간의 규약을 전달하기 위해서일 뿐입니다.
+
+
+## 13.4 프록시 생성
+
+인터페이스를 이용해 프록시 객체를 생성합니다. 프록시 객체를 생성할 때 기존의 실제 객체 정보도 같이 필요합니다.
+
+
+### 13.4.1 기능 분리
+
+프록시는 실제 객체의 역할을 대신 수행합니다. 실제 객체와 프록시는 전혀 다른 객체가 아니라 동일한 객체처럼 보이며 그렇게 동작합니다. 그러기 위해 인터페이스를 프록시 객체에도 적용합니다.
+
+프록시는 실제 객체를 대신해 행위를 처리하므로 실제 객체의 정보가 필요합니다. 프록시에 별도로 저장된 실제 객체의 정보를 사용하여 행위를 위임합니다.
+
+
+### 13.4.2 프록시 객체
+
+프록시 객체를 생성합니다. 프록시는 실제 객체에서 선언한 동일 인터페이스를 적용합니다. 인터페이스를 이용해 프록시의 객체를 구현하면 실제 객체와 동일한 메서드를 갖게 됩니다.
+
+예제 13-5 Proxy/02/Proxy.php
+```php
+&lt;?php
+// 프록시 객체
+</code></pre></div></div>
+
+<p>13장 프록시 패턴 293</p>
+
+<p>class Proxy implements Subject
+{
+    public function action1()
+    {
+        echo <strong>METHOD</strong>.”을(를) 호출합니다.\n”;
+        echo “프록시 action1 작업을 처리합니다.\n”;
+    }</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public function action2()
+{
+    echo __METHOD__."을(를) 호출합니다.\n";
+    echo "프록시 action2 작업을 처리합니다.\n";
+} } ```
+</code></pre></div></div>
+
+<p>인터페이스에 정의된 규약에 맞게 프록시를 설계합니다. 정의한 인터페이스 규약에 맞지 않는 메서드를 설계할 경우 오류가 발생합니다.</p>
+
+<h4 id="그림-13-2-프록시-생성">그림 13-2 프록시 생성</h4>
+
+<p><img src="./img/fig_13_2.svg" alt="그림 13-2" /></p>
+
+<p>인터페이스에 맞게 프록시를 생성했습니다. 하지만 프록시는 실제 객체와 분리된 별개의 객체입니다.</p>
+
+<p>또 객체 간 연결도 없습니다. 프록시 객체는 외부와 고립된 객체로 되어 있습니다. 프록시와 실체 객체를 연결하려면 위임이라는 연결 고리가 필요합니다.</p>
+
+<h3 id="1343-실체-객체-위임">13.4.3 실체 객체 위임</h3>
+
+<p>프록시에서 위임은 프록시 객체와 실제 객체를 연결하는 고리입니다. 다음과 같이 의존성 주입</p>
+
+<p>294 2부 구조 패턴</p>
+
+<p>을 통해 실제 객체와 프록시 객체를 연결합니다.</p>
+
+<p>다음은 프록시 객체를 보완한 코드입니다. 분리된 2개의 객체는 동일한 인터페이스를 가집니다.</p>
+
+<p>예제 13-6 Proxy/03/Proxy.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Proxy</span> <span class="kd">implements</span> <span class="nc">Subject</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="nv">$_object</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">(</span><span class="nv">$real</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__CLASS__</span><span class="mf">.</span><span class="s2">" 객체가 생성이 되었습니다.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_object</span> <span class="o">=</span> <span class="nv">$real</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">action1</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__METHOD__</span><span class="mf">.</span><span class="s2">"을(를) 호출합니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="c1">// 행위를 가로챕니다. 실제 객체로 위임합니다.</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_object</span><span class="o">-&gt;</span><span class="nf">action1</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">action2</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__METHOD__</span><span class="mf">.</span><span class="s2">"을(를) 호출합니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="c1">// 행위를 가로챕니다. 실제 객체로 위임합니다.</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_object</span><span class="o">-&gt;</span><span class="nf">action2</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>프록시 객체의 생성자를 통해 원본 객체 정보를 전달 받은 후, 이 객체 정보를 내부 프로퍼티에 저장합니다.</p>
+
+<h4 id="그림-13-3-행위-위임">그림 13-3 행위 위임</h4>
+
+<p><img src="./img/fig_13_3.svg" alt="그림 13-3" /></p>
+
+<p>13장 프록시 패턴 295</p>
+
+<p>프록시 객체가 실체 객체로 행위를 위임하는 것을 봤을 때 프록시 객체는 복합 객체가 됩니다.</p>
+
+<h3 id="1344-프록시-출력">13.4.4 프록시 출력</h3>
+
+<p>이제 생성한 프록시를 통해 실제 객체를 다시 호출해봅시다.</p>
+
+<p>먼저 실제 객체를 생성합니다. 생성된 실제 객체가 프록시 객체로 의존성 주입합니다. 의존성 주입은 프록시 객체의 생성자 인수로 전달합니다.</p>
+
+<p>예제 13-7 Proxy/03/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require</span> <span class="s2">"Subject.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"Proxy.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"RealSubject.php"</span><span class="p">;</span>
+
+<span class="nv">$real</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">RealSubject</span><span class="p">;</span>
+<span class="nv">$proxy</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Proxy</span><span class="p">(</span><span class="nv">$real</span><span class="p">);</span>
+<span class="nv">$proxy</span><span class="o">-&gt;</span><span class="nf">action1</span><span class="p">();</span>
+<span class="nv">$proxy</span><span class="o">-&gt;</span><span class="nf">action2</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>프록시 객체로 이전 실습과 동일한 메서드를 호출합니다. 프록시는 전달받은 메서드의 동작을 중간에 가로채고, 위임된 실제 객체로 행위 처리를 다시 요청합니다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index.php
+RealSubject 객체가 생성되었습니다.
+Proxy 객체가 생성이 되었습니다.
+
+Proxy::action1을(를) 호출합니다.
+RealSubject::action1을(를) 호출합니다.
+실제 action1 작업을 처리합니다.
+
+Proxy::action2을(를) 호출합니다.
+RealSubject::action2을(를) 호출합니다.
+실제 action2 작업을 처리합니다.
+</code></pre></div></div>
+
+<p>출력 결과는 [예제 13-2]의 출력 결과와 동일합니다. 클라이언트 코드는 실제 객체에 직접 접</p>
+
+<p>296 2부 구조 패턴</p>
+
+<p>근하지 않고 프록시 객체로 대신 실행한다는 것이 차이점입니다.</p>
+
+<h3 id="1345-투과적-특성">13.4.5 투과적 특성</h3>
+
+<p>프록시의 객체는 실제 객체와 동일한 동작을 수행합니다. 프록시는 요청된 동작을 실제 객체로 위임함으로써 동일한 결과를 반환하게 됩니다.</p>
+
+<p>프록시와 실제 객체는 투명성을 보장하기 위해 동일한 인터페이스를 적용받습니다. 실제 객체와 동일한 동작을 그대로 대신하는 것을 투과적 특성이라고 합니다.</p>
+
+<h4 id="그림-13-4-투과성">그림 13-4 투과성</h4>
+
+<p><img src="./img/fig_13_4.svg" alt="그림 13-4" /></p>
+
+<p>프록시는 실제적으로 동작을 수행하지 않고 투과적 특성만 갖습니다. 즉 실제 동작을 다시 호출하는 역할만 수행합니다.</p>
+
+<h2 id="135-행위를-처리하는-핸들러">13.5 행위를 처리하는 핸들러</h2>
+
+<p>핸들러는 투과적 특성을 이용하여 요청된 행위를 처리하는 프록시 동작을 말합니다.</p>
+
+<h3 id="1351-간접-통로">13.5.1 간접 통로</h3>
+
+<p>프록시는 간접화된 객체의 접근 통로를 제공합니다. 간접 통로는 프록시의 투과적 특성을 이용하여 실제 객체의 행위를 위임하고 처리를 요청합니다.</p>
+
+<p>네트워크같은 공간에서는 프록시의 투과적 특성을 이용해 원래 객체의 존재를 숨기기도 합니다. 그렇다고 해도 실제 객체와 프록시는 동일 객체입니다.</p>
+
+<p>13장 프록시 패턴 297</p>
+
+<h3 id="1352-핸들러-설계">13.5.2 핸들러 설계</h3>
+
+<p>개발 중에는 실제 객체를 수정하는 경우도 발생합니다. 프록시에서 실제 객체가 변경되면 인터페이스도 같이 바뀝니다. 인터페이스가 변경되면 프록시 객체에도 다시 변경된 인터페이스를 적용해야 합니다.</p>
+
+<p>두 객체의 동일성을 유지하기 위해 같은 인터페이스를 유지하는 것이 중요합니다. 인터페이스에 맞게 프록시 객체에도 변경된 메서드를 생성해야 합니다. 이처럼 프록시 객체의 내부 설계를 동일하게 유지하는 작업은 매우 번거롭습니다.</p>
+
+<p>이를 쉽게 처리하기 위해 핸들러를 프록시 안에 추가합니다. 다음은 핸들러를 추가한 프록시 코드입니다.</p>
+
+<p>예제 13-8 Proxy/04/Proxy.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Proxy</span> <span class="kd">implements</span> <span class="nc">Subject</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="nv">$_object</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">(</span><span class="nv">$real</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__CLASS__</span><span class="mf">.</span><span class="s2">" 객체가 생성이 되었습니다.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_object</span> <span class="o">=</span> <span class="nv">$real</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">action1</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__METHOD__</span><span class="mf">.</span><span class="s2">"을(를) 호출합니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_object</span><span class="o">-&gt;</span><span class="nf">action1</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">action2</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__METHOD__</span><span class="mf">.</span><span class="s2">"을(를) 호출합니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_object</span><span class="o">-&gt;</span><span class="nf">action2</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__call</span><span class="p">(</span><span class="nv">$method</span><span class="p">,</span> <span class="nv">$args</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">method_exists</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_object</span><span class="p">,</span> <span class="nv">$method</span><span class="p">))</span> <span class="p">{</span>
+</code></pre></div></div>
+
+<p>288 2부 구조 패턴</p>
+
+<p>$this-&gt;_object-&gt;$method($args);
+        } else {
+            print $method.”는 실제 존재하는 메서드가 아닙니다.\n”;
+            var_dump($args);
+        }
+    }
+}</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+핸들러 설계를 위해 매직 메서드 `__call()`을 사용합니다. `__call()` 메서드는 객체 내부에 존재하지 않는 메서드가 호출될 때 자동 실행되는 매직 메서드입니다.
+
+클라이언트 사용자가 프록시에 없는 메서드를 호출할 경우 `__call()` 메서드가 대신 실행되고, `__call()` 메서드는 요청된 메서드가 있는 실제 객체를 탐색합니다. 실제 객체에 요청된 메서드가 있으면 위임 처리합니다.
+
+`__call()` 매직 메서드는 2개의 인자값을 전달 받는데, 바로 호출되는 메서드명과 전달된 인수값의 배열입니다.
+
+
+### 13.5.3 실체 객체 변경
+
+핸들러 동작을 실습하기 위해 실제 객체를 변경해봅시다. 실제 객체에 action3() 메서드를 추가합니다.
+
+예제 13-9 Proxy/04/RealSubject.php
+```php
+&lt;?php
+// 실제 객체
+class RealSubject implements Subject
+{
+    public function __construct()
+    {
+        echo __CLASS__." 객체가 생성되었습니다.\n";
+    }
+
+    public function action1()
+    {
+</code></pre></div></div>
+
+<p>13장 프록시 패턴 299</p>
+
+<p>echo <strong>METHOD</strong>.”을(를) 호출합니다.\n”;
+        echo “실제 action1 작업을 처리합니다.\n\n”;
+    }</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public function action2()
+{
+    echo __METHOD__."을(를) 호출합니다.\n";
+    echo "실제 action2 작업을 처리합니다.\n\n";
+}
+
+public function action3()
+{
+    echo __METHOD__."을(를) 호출합니다.\n";
+    echo "실제 action3 작업을 처리합니다.\n\n";
+} } ```
+</code></pre></div></div>
+
+<p>프록시 객체에는 아직 실제 객체에 추가한 action3() 메서드가 선언되지 않았습니다.</p>
+
+<h3 id="1354-핸들러-실습">13.5.4 핸들러 실습</h3>
+
+<p>설계한 핸들러를 실습해보겠습니다. 실제 객체에 있는 메서드와 실제 객체에 없는 메서드를 각각 호출합니다.</p>
+
+<p>예제 13-10 Proxy/04/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require</span> <span class="s2">"Subject.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"Proxy.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"RealSubject.php"</span><span class="p">;</span>
+
+<span class="nv">$real</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">RealSubject</span><span class="p">;</span>
+<span class="nv">$proxy</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Proxy</span><span class="p">(</span><span class="nv">$real</span><span class="p">);</span>
+<span class="nv">$proxy</span><span class="o">-&gt;</span><span class="nf">action1</span><span class="p">();</span>
+<span class="nv">$proxy</span><span class="o">-&gt;</span><span class="nf">action2</span><span class="p">();</span>
+
+<span class="nv">$proxy</span><span class="o">-&gt;</span><span class="nf">action3</span><span class="p">();</span>
+<span class="nv">$proxy</span><span class="o">-&gt;</span><span class="nf">action4</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>300 2부 구조 패턴</p>
+
+<p>action3() 메서드의 경우 실제 객체에는 존재하지만 프록시와 인터페이스에는 존재하지 않습니다. 프록시는 정의되지 않은 메서드 호출에 대해 <code class="language-plaintext highlighter-rouge">__call()</code> 매직 메서드로 핸들러를 처리합니다. <code class="language-plaintext highlighter-rouge">__call()</code> 메서드는 실제 객체에 요청한 메서드가 있는지 검사하여 호출을 위임 처리합니다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index.php
+RealSubject 객체가 생성되었습니다.
+Proxy 객체가 생성이 되었습니다.
+
+Proxy::action1을(를) 호출합니다.
+RealSubject::action1을(를) 호출합니다.
+실제 action1 작업을 처리합니다.
+
+Proxy::action2을(를) 호출합니다.
+RealSubject::action2을(를) 호출합니다.
+실제 action2 작업을 처리합니다.
+
+RealSubject::action3을(를) 호출합니다.
+실제 action3 작업을 처리합니다.
+
+action4는 실제 존재하는 메서드가 아닙니다.
+array(0) {
+}
+</code></pre></div></div>
+
+<p>action4() 메서드는 프록시와 실제 객체에 모두 존재하지 않는 메서드입니다. 프록시의 핸들러는 존재하지 않는 메서드 호출을 중단합니다. 이처럼 핸들러를 이용하면 프록시의 호출을 동적으로 처리할 수 있습니다.</p>
+
+<h2 id="136-동적-프록시">13.6 동적 프록시</h2>
+
+<p>프록시에는 실제 객체를 숨기는 효과가 있습니다. 객체를 호출하는 쪽에서는 실행되는 객체가 실제 객체인지 프록시인지 몰라야 합니다.</p>
+
+<p>13장 프록시 패턴 301</p>
+
+<h3 id="1361-동적-클래스">13.6.1 동적 클래스</h3>
+
+<p>우리는 앞에서 프록시의 객체를 생성했습니다. 클라이언트 코드에서는 행동을 처리하기 위해 프록시와 실제 객체를 구별하지 않습니다. 즉 프록시 객체를 생성할지 실제 객체를 생성할지 판단하지 않고 객체를 생성해서 사용할 수 있어야 합니다.</p>
+
+<p>그러면 어떻게 프록시와 실제 객체를 구별하지 않고 접근하는 객체의 인스턴스를 만들 수 있을까요? 이를 해결하는 방법은 팩토리 패턴을 같이 사용해 객체를 동적으로 생성하는 것입니다.</p>
+
+<p>이처럼 패턴은 하나만 사용하지 않으며 다른 패턴과 결합해 문제를 보다 유연하게 해결합니다.</p>
+
+<h3 id="1362-팩토리-패턴">13.6.2 팩토리 패턴</h3>
+
+<p>팩토리 패턴을 적용하여 프록시 객체를 생성해봅시다. 팩토리 패턴으로 객체의 생성을 대신 처리하도록 요청하겠습니다.</p>
+
+<p>예제 13-11 Proxy/05/ProxyFactory.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 프록시 팩토리</span>
+<span class="kd">class</span> <span class="nc">ProxyFactory</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">getObject</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$real</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">RealSubject</span><span class="p">;</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nc">Proxy</span><span class="p">(</span><span class="nv">$real</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>클라이언트는 팩토리에 객체 생성만 요청할 뿐이며 반환되는 객체가 프록시인지 실제 객체인지 알 수 없습니다. 또한 실시간으로 프록시 객체를 동적 생성할 수도 있습니다.</p>
+
+<p>동적 생성되는 프록시 객체를 적용해보겠습니다.</p>
+
+<p>예제 13-12 Proxy/05/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require</span> <span class="s2">"Subject.php"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>302 2부 구조 패턴</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">require</span> <span class="s2">"Proxy.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"RealSubject.php"</span><span class="p">;</span>
+
+<span class="k">require</span> <span class="s2">"ProxyFactory.php"</span><span class="p">;</span>
+
+<span class="nv">$factory</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ProxyFactory</span><span class="p">;</span>
+<span class="nv">$proxy</span> <span class="o">=</span> <span class="nv">$factory</span><span class="o">-&gt;</span><span class="nf">getObject</span><span class="p">();</span> <span class="c1">// 프록시 동적 생성</span>
+<span class="nv">$proxy</span><span class="o">-&gt;</span><span class="nf">action1</span><span class="p">();</span>
+<span class="nv">$proxy</span><span class="o">-&gt;</span><span class="nf">action2</span><span class="p">();</span>
+
+<span class="nv">$proxy</span><span class="o">-&gt;</span><span class="nf">action3</span><span class="p">();</span>
+<span class="nv">$proxy</span><span class="o">-&gt;</span><span class="nf">action4</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>출력 결과는 이전과 동일합니다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index.php
+RealSubject 객체가 생성되었습니다.
+Proxy 객체가 생성이 되었습니다.
+
+Proxy::action1을(를) 호출합니다.
+RealSubject::action1을(를) 호출합니다.
+실제 action1 작업을 처리합니다.
+
+Proxy::action2을(를) 호출합니다.
+RealSubject::action2을(를) 호출합니다.
+실제 action2 작업을 처리합니다.
+
+RealSubject::action3을(를) 호출합니다.
+실제 action3 작업을 처리합니다.
+
+action4는 실제 존재하는 메서드가 아닙니다.
+array(0) {
+}
+</code></pre></div></div>
+
+<h3 id="1363-프록시-확인">13.6.3 프록시 확인</h3>
+
+<p>팩토리 패턴을 같이 사용할 경우 클라이언트에서는 실제 객체를 사용하는지 팩토리 객체를 사용하는지 구별할 수 없습니다.</p>
+
+<p>13장 프록시 패턴 303</p>
+
+<p>필요에 따라 이를 확인할 수 있도록 프록시 클래스에 전용 메서드를 하나 더 추가합니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">function</span> <span class="n">isProxy</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>이처럼 팩토리 클래스에 추가 메서드를 넣어두면 객체를 구별할 수 있습니다.</p>
+
+<h2 id="137-원격-프록시">13.7 원격 프록시</h2>
+
+<p>원격 프록시<sup>Remote Proxy</sup>는 프록시 패턴을 가장 많이 응용하는 적용 사례이며 주로 데이터 전달을 목적으로 사용합니다.</p>
+
+<h3 id="1371-프록시-vs-어댑터">13.7.1 프록시 vs. 어댑터</h3>
+
+<p>두 개의 객체를 이어준다는 역할적인 측면에서 두 패턴은 서로 유사합니다. 어댑터 패턴은 서로 다른 인터페이스를 맞춰주는 반면, 프록시는 투과적 특성으로 동일한 인터페이스를 유지합니다.</p>
+
+<p>프록시 패턴은 객체를 분리하는 역할을 하고, 원격 프록시는 분리된 객체에 투과적 특성을 결합해 객체의 연결을 제어합니다.</p>
+
+<p>[예제 13-13]을 보면서 학습해봅시다. 앞에서 작성한 [예제 13-9]를 수정해보겠습니다.</p>
+
+<p>예제 13-13 Proxy/06/RealSubject.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// 실체 객체</span>
+<span class="kd">class</span> <span class="nc">RealSubject</span> <span class="kd">implements</span> <span class="nc">Subject</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">()</span>
+    <span class="p">{</span>
+</code></pre></div></div>
+
+<p>304 2부 구조 패턴</p>
+
+<p>echo <strong>CLASS</strong>.” 객체가 생성되었습니다.\n”;
+    }</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public function action1()
+{
+    echo __METHOD__."을(를) 호출합니다.\n";
+    return "실제 action1 작업을 처리합니다.\n\n";
+}
+
+public function action2()
+{
+    echo __METHOD__."을(를) 호출합니다.\n";
+    return "실제 action2 작업을 처리합니다.\n\n";
+}
+
+public function action3()
+{
+    echo __METHOD__."을(를) 호출합니다.\n";
+    return "실제 action3 작업을 처리합니다.\n\n";
+} } ```
+</code></pre></div></div>
+
+<p>변경된 실제 객체는 메시지를 직접 출력하지 않고 출력 문자열을 반환합니다.</p>
+
+<h3 id="1372-캐싱-처리">13.7.2 캐싱 처리</h3>
+
+<p>웹 HTTP에서 프록시라는 단어를 많이 들어봤을 것입니다. 프록시는 HTTP에서 웹페이지를 캐시 처리함으로써 속도를 개선하고 우회 접속을 시도합니다.</p>
+
+<p>우리도 이와 유사한 방법으로 프록시 코드를 변경해봅시다.</p>
+
+<p>예제 13-14 Proxy/06/proxy.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Proxy</span> <span class="kd">implements</span> <span class="nc">Subject</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="nv">$_object</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">(</span><span class="nv">$real</span><span class="p">)</span>
+    <span class="p">{</span>
+</code></pre></div></div>
+
+<p>13장 프록시 패턴 305</p>
+
+<p>echo <strong>CLASS</strong>.” 객체가 생성되었습니다.\n\n”;
+        $this-&gt;_object = $real;
+    }</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public function action1()
+{
+    echo __METHOD__."을(를) 호출합니다.\n";
+    return "action1은 기능이 대체되었습니다.\n";
+}
+
+public function action2()
+{
+    echo __METHOD__."을(를) 호출합니다.\n";
+    if($msg = $this-&gt;_object-&gt;action2()) {
+        return $msg;
+    } else {
+        return "실체 객체에서 문자열을 반환 받지 못하였습니다.";
+    }
+}
+
+public function __call($method, $args)
+{
+    if(method_exists($this-&gt;_object, $method)) {
+        if($msg = $this-&gt;_object-&gt;$method($args)) {
+            return $msg;
+        } else {
+            return "실체 객체에서 문자열을 반환 받지 못하였습니다.";
+        }
+
+    } else {
+        print $method."는 실제 존재하는 메서드가 아닙니다.\n";
+        var_dump($args);
+    }
+} } ```
+</code></pre></div></div>
+
+<p>action2()는 실제 객체에서 출력 문자열을 반환 받으며, 반환값이 없는 경우 대체 오류 문자열을 반환 받습니다.</p>
+
+<p>306 2부 구조 패턴</p>
+
+<h3 id="1373-원격-프록시-실습">13.7.3 원격 프록시 실습</h3>
+
+<p>원격 프록시 패턴을 적용하여 동작을 출력해보겠습니다.</p>
+
+<p>예제 13-15 Proxy/06/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require</span> <span class="s2">"Subject.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"Proxy.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"RealSubject.php"</span><span class="p">;</span>
+
+<span class="k">require</span> <span class="s2">"ProxyFactory.php"</span><span class="p">;</span>
+
+<span class="nv">$factory</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ProxyFactory</span><span class="p">;</span>
+<span class="nv">$proxy</span> <span class="o">=</span> <span class="nv">$factory</span><span class="o">-&gt;</span><span class="nf">getObject</span><span class="p">();</span>
+
+<span class="k">echo</span> <span class="nv">$proxy</span><span class="o">-&gt;</span><span class="nf">action1</span><span class="p">();</span>
+<span class="k">echo</span> <span class="nv">$proxy</span><span class="o">-&gt;</span><span class="nf">action2</span><span class="p">();</span>
+
+<span class="k">echo</span> <span class="nv">$proxy</span><span class="o">-&gt;</span><span class="nf">action3</span><span class="p">();</span>
+<span class="k">echo</span> <span class="nv">$proxy</span><span class="o">-&gt;</span><span class="nf">action4</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>원격 프록시는 투과적인 특징을 활용해 원격 객체의 접근과 결과값을 반환합니다.</p>
+
+<h3 id="1374-대체-처리">13.7.4 대체 처리</h3>
+
+<p>프록시 패턴을 적용할 때는 실제 객체와 프록시 객체로 분리됩니다. 객체 분리가 가능한 이유는 동일한 인터페이스를 모두 적용했기 때문입니다.</p>
+
+<p>실체 객체와 프록시 객체는 서로 다르지만 유사한 객체입니다. 이러한 유사점을 이용하여 특정한 기능은 다르게 행동하도록 처리할 수도 있습니다. 다른 행동으로 처리가 변경된 것은 프록시 객체에서 대체하고, 원래의 행동은 실제 객체로 위임하여 처리합니다. 다음은 [예제 13-15]의 출력 결과입니다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index.php
+RealSubject 객체가 생성되었습니다.
+Proxy 객체가 생성이 되었습니다.
+</code></pre></div></div>
+
+<p>13장 프록시 패턴 307</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Proxy::action1을(를) 호출합니다.
+action1은 기능이 대체되었습니다.
+Proxy::action2을(를) 호출합니다.
+RealSubject::action2을(를) 호출합니다.
+실제 action2 작업을 처리합니다.
+
+RealSubject::action3을(를) 호출합니다.
+실제 action3 작업을 처리합니다.
+
+action4는 실제 존재하는 메서드가 아닙니다.
+array(0) {
+}
+</code></pre></div></div>
+
+<p>출력 결과를 보면 action1 프록시는 대체된 메시지로 확인되는데, 그 이유는 프록시 내부에서 동작을 변경했기 때문입니다.</p>
+
+<p>action2 프록시 호출 동작은 프록시에서 처리하지 않고 실제 객체로 위임하며 결과값을 받아 화면에 출력합니다.</p>
+
+<h3 id="1375-객체의-대리">13.7.5 객체의 대리</h3>
+
+<p>이처럼 프록시는 어떠한 일을 대신해서 처리합니다. 객체의 동작을 위임할 수도 있고 변경된 행위를 대신할 수도 있습니다. 하지만 프록시가 행위를 대리하는 데는 한계가 있습니다. 모든 것을 대신해서 처리할 수는 없습니다.</p>
+
+<p>대리로 처리할 수 없는 동작은 본래의 객체로 접근해서 처리해야 합니다. 이는 프록시의 투과성을 의미합니다.</p>
+
+<h2 id="138-가상-프록시">13.8 가상 프록시</h2>
+
+<p>가상 프록시<sup>Virtual Proxy</sup>는 프로그램의 실행 속도를 개선하기 위한 패턴입니다. 프록시 패턴을 이용하여 무거운 객체 생성을 잠시 유보합니다.</p>
+
+<p>308 2부 구조 패턴</p>
+
+<h3 id="1381-초기화-로딩">13.8.1 초기화 로딩</h3>
+
+<p>프로그램은 수많은 객체를 생성하고, 생성된 객체에 접근하기도 합니다. 일부 프로그램은 내부에서 필요한 객체를 미리 생성하는 작업을 하기도 합니다. 이를 부트스트랩핑 과정이라고 합니다.</p>
+
+<p>초기화 작업은 프로그램이 시작될 때 관련성 있는 객체 생성들을 처리해야 하므로 실행 지연이 발생합니다. 사실 기동 시 모든 객체를 생성하는 것보다 필요할 때마다 객체를 생성해 사용하는 것이 더 효과적입니다.</p>
+
+<p>가상 프록시 패턴은 실제로 동작하는 객체를 생성하지 않고, 필요 시점에서 객체를 동적으로 생성하도록 프록시 객체로 대신 연결합니다. 가상 프록시는 게으른 초기화<sup>lazy initialization</sup>와 유사합니다.</p>
+
+<h3 id="1382-게으른-초기화">13.8.2 게으른 초기화</h3>
+
+<p>프로그램 실행 시 객체를 초기화하는 작업은 많은 시간을 소모합니다. 객체 생성 수가 많을수록 기동시간이 느려집니다. 하지만, 프로그램 초기화에서 생성된 모든 객체를 즉시 사용하지는 않습니다.</p>
+
+<p>사용빈도가 낮은 객체 생성까지 초기화 과정에서 실행됨으로써 불필요한 지연시간이 발생하기도 합니다. 게으른 초기화는 이러한 단점을 보완하기 위해 가상 프록시를 사용합니다. 실제 객체를 생성하지 않고 가상의 프록시만 생성 반환합니다. 가상의 프록시는 실제 객체 생성보다 더 빨리 객체를 생성, 반환할 수 있습니다.</p>
+
+<p>가상 프록시는 프로그램에 껍데기만 있는 객체를 전달합니다. 가상 프록시를 통해 실제 객체의 접근이 필요할 때 원본 객체를 동적으로 생성하여 프록시와 연결합니다. 이러한 동적 객체 연결 방식은 초기화 작업에서 오래 걸리는 객체를 처리할 때 유용합니다. 객체의 초기화 작업으로 지연되는 시간 없이 빠르게 코드 작업을 수행할 수 있습니다.</p>
+
+<h3 id="1383-속도-개선">13.8.3 속도 개선</h3>
+
+<p>다수의 초기화 작업은 프로그램이 처음 실행될 때 속도에 영향을 주는데, 가상화된 프록시를</p>
+
+<p>13장 프록시 패턴 309</p>
+
+<p>통해 객체 생성을 임시 처리함으로써 시스템 성능을 최적화할 수 있습니다.</p>
+
+<p>인스턴스화는 객체를 생성하고 메모리 자원을 할당 받기 위해 컴퓨터 내부 연산을 필요로 합니다.</p>
+
+<p>객체를 생성하는 연산량에 따라서 약간의 지연 시간이 발생하는데, 가상 프록시를 사용하면 즉시 실행이 필요한 객체를 제외하고는 객체의 실행 시간을 줄일 수 있습니다.</p>
+
+<h3 id="1384-실습">13.8.4 실습</h3>
+
+<p>[예제 13-16]에서는 이전에 실습한 [예제 13-15]를 가상 프록시 패턴으로 변경해보겠습니다.</p>
+
+<p>예제 13-16 Proxy/07/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require</span> <span class="s2">"Subject.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"Proxy.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"RealSubject.php"</span><span class="p">;</span>
+
+<span class="nv">$proxy</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Proxy</span><span class="p">();</span>
+<span class="nv">$proxy</span><span class="o">-&gt;</span><span class="nf">action1</span><span class="p">();</span>
+<span class="nv">$proxy</span><span class="o">-&gt;</span><span class="nf">action2</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>프록시 객체는 실제 객체를 인자값으로 넘겨받아 의존성 결합을 실행합니다. 하지만 가상 프록시에서는 프록시 객체만 생성하고 원본의 실제 객체는 프록시 안에서 관리합니다.</p>
+
+<h3 id="1385-플라이웨이트-패턴-결합">13.8.5 플라이웨이트 패턴 결합</h3>
+
+<p>가상 프록시를 구현하기 위해 프록시의 내부 구조를 약간 변경하겠습니다.</p>
+
+<p>프록시 객체 외부에서 주입되는 의존 객체의 설정을 삭제합니다. 가상 프록시는 내부적으로 의존된 객체를 생성하도록 설계합니다.</p>
+
+<p>예제 13-17 Proxy/07/Proxy.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+</code></pre></div></div>
+
+<p>310 2부 구조 패턴</p>
+
+<p>class Proxy implements Subject
+{
+    private $_object;</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public function __construct()
+{
+    echo __CLASS__." 객체가 생성되었습니다.\n";
+}
+
+public function action1()
+{
+    echo __METHOD__."을(를) 호출합니다.\n";
+    echo "action1 작업을 처리합니다.\n\n";
+}
+
+public function action2()
+{
+    echo __METHOD__."을(를) 호출합니다.\n";
+    // 게으른 객체 생성
+    if(!$this-&gt;_object) $this-&gt;real();
+    $this-&gt;_object-&gt;action2();
+}
+
+private function real()
+{
+    echo "실체 객체를 생성합니다.\n";
+    $this-&gt;_object = new RealSubject;
+} } ```
+</code></pre></div></div>
+
+<p>가상 프록시는 내부적으로 실제 객체의 정보를 직접 생성 관리합니다. 이때 같이 사용되는 패턴으로 플라이웨이트가 있습니다.</p>
+
+<p>action2()는 실제 객체와 연결돼 있습니다. 만일 실제 객체가 없다면 가상 프록시 내부에서 실제 객체를 생성합니다. 조건문을 이용하여 객체의 존재 유무를 판단 처리합니다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 게으른 객체 생성</span>
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_object</span><span class="p">)</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">real</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>가상 프록시의 action2()가 처음 실행될 경우 실제 객체의 정보가 없으므로 real() 메서드를 호출하여 객체를 생성합니다. 실제 객체는 공유를 위한 프로퍼티에 저장합니다.</p>
+
+<p>13장 프록시 패턴 311</p>
+
+<p>두 번째 action2()가 호출될 때는 실제 객체를 다시 생성하지 않고 내부에 저장된 프로퍼티를 참조하여 실제 객체를 사용합니다. 처음으로 action2()가 실행될 때는 다소 지연시간이 발생할 수 있습니다. 하지만 두 번째 호출부터는 실제 객체를 생성하지 않으므로 빠르게 동작합니다.</p>
+
+<p>객체 생성을 real() 메서드 형태로 분리했습니다. real()은 간단 팩토리 패턴을 응용한 것입니다.</p>
+
+<h3 id="1386-결과-확인">13.8.6 결과 확인</h3>
+
+<p>원격 프록시와 가상 프록시의 결과는 동일합니다. 다만 RealSubject의 객체 생성 단계에 차이가 있을 뿐입니다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index.php
+Proxy 객체가 생성되었습니다.
+Proxy::action1을(를) 호출합니다.
+action1 작업을 처리합니다.
+
+Proxy::action2을(를) 호출합니다.
+실체 객체를 생성합니다.
+RealSubject 객체가 생성되었습니다.
+RealSubject::action2을(를) 호출합니다.
+실제 action2 작업을 처리합니다.
+</code></pre></div></div>
+
+<h3 id="1387-프레임워크-응용">13.8.7 프레임워크 응용</h3>
+
+<p>최신 프레임워크는 실행 시 필요한 클래스의 인스턴스를 미리 생성하여 사용하는 경우가 많습니다. 이를 컨테이너라는 배열로 저장해 객체를 관리합니다.</p>
+
+<p>하지만 이렇게 생성된 모든 객체를 코드에서 전부 사용하는 것은 아닙니다. 필요한 객체와 불필요한 객체가 동시에 생성되며, 불필요한 객체는 코드의 기동 시간만 늦추게 됩니다.</p>
+
+<p>객체의 배열을 초기화할 때 가상 프록시 패턴을 이용하면 보다 효율적으로 자원을 관리할 수 있습니다.</p>
+
+<p>312 2부 구조 패턴</p>
+
+<h2 id="139-보호용-프록시">13.9 보호용 프록시</h2>
+
+<p>프록시 패턴의 또 다른 적용 사례로 통제 제어 목적이 있습니다. 객체 접근을 제어하기 위해 객체의 대리자<sup>surrogate</sup> 또는 표시자<sup>placeholder</sup>를 제공합니다.</p>
+
+<h3 id="1391-통제">13.9.1 통제</h3>
+
+<p>객체를 사용하기 위해서는 생성 과정과 자원 할당이 필요합니다. 하지만 객체에 접근 권한이 없는 사람이 프로그램을 사용하고자 할 때 제한된 객체 생성까지 할 필요는 없습니다. 권한이 없는 객체를 생성 과정에서 배제하면 자원 낭비를 줄일 수 있습니다.</p>
+
+<p>프록시를 통해 먼저 제어권을 확인한 후 실제적인 객체를 생성하는 것이 더 좋습니다. 이 경우 보호용 프록시 패턴을 적용합니다.</p>
+
+<h3 id="1392-권한-추가">13.9.2 권한 추가</h3>
+
+<p>프록시는 실제 객체로 접근을 시도할 때 접근을 관리하는 책임을 같이 부여하며 권한 정보는 프록시 인자로 전달합니다.</p>
+
+<p>예제 13-18 Proxy/08/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require</span> <span class="s2">"Subject.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"Proxy.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"RealSubject.php"</span><span class="p">;</span>
+
+<span class="k">const</span> <span class="no">ACT1</span> <span class="o">=</span> <span class="mh">0x01</span><span class="p">;</span>
+<span class="k">const</span> <span class="no">ACT2</span> <span class="o">=</span> <span class="mh">0x02</span><span class="p">;</span>
+<span class="nv">$permit</span> <span class="o">=</span> <span class="no">ACT1</span><span class="p">;</span>
+
+<span class="nv">$proxy</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Proxy</span><span class="p">(</span><span class="nv">$permit</span><span class="p">);</span>
+<span class="nv">$proxy</span><span class="o">-&gt;</span><span class="nf">action1</span><span class="p">();</span>
+<span class="nv">$proxy</span><span class="o">-&gt;</span><span class="nf">action2</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>프록시는 전달받은 권한에 따라서 내부를 설정합니다. 프록시는 실제 객체와 동일한 메서드를</p>
+
+<p>13장 프록시 패턴 313</p>
+
+<p>갖고 있으며, 프록시의 동일한 메서드를 호출할 때 권한 정보를 같이 검사하여 객체를 생성합니다. 권한이 없으면 실제 연결 객체도 생성하지 않습니다.</p>
+
+<p>예제 13-19 Proxy/08/Proxy.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Proxy</span> <span class="kd">implements</span> <span class="nc">Subject</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="nv">$_object</span><span class="p">;</span>
+    <span class="k">private</span> <span class="nv">$_permit</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">(</span><span class="nv">$permit</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__CLASS__</span><span class="mf">.</span><span class="s2">" 객체가 생성되었습니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_permit</span> <span class="o">=</span> <span class="nv">$permit</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">action1</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__METHOD__</span><span class="mf">.</span><span class="s2">"을(를) 호출합니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="k">echo</span> <span class="s2">"action1 작업을 처리합니다.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">action2</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__METHOD__</span><span class="mf">.</span><span class="s2">"을(를) 호출합니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_permit</span> <span class="o">&amp;</span> <span class="mh">0x02</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// 게으른 객체 생성</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_object</span><span class="p">)</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">real</span><span class="p">();</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_object</span><span class="o">-&gt;</span><span class="nf">action2</span><span class="p">();</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">echo</span> <span class="s2">"action2 실행 권한이 없습니다."</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="k">function</span> <span class="n">real</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"실체 객체를 생성합니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_object</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">RealSubject</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>314 2부 구조 패턴</p>
+
+<p>보호용 프록시 패턴을 응용하면 자원을 효율적으로 관리할 수 있습니다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index.php
+Proxy 객체가 생성되었습니다.
+Proxy::action1을(를) 호출합니다.
+action1 작업을 처리합니다.
+
+Proxy::action2을(를) 호출합니다.
+action2 실행 권한이 없습니다.
+</code></pre></div></div>
+
+<h3 id="1393-보호용-프록시-vs-장식자">13.9.3 보호용 프록시 vs. 장식자</h3>
+
+<p>2개의 패턴은 객체를 동적으로 확장하여 실행할 수 있다는 점에서 유사합니다. 장식자 패턴의 목적이 새로운 기능을 추가하는 것이라면, 보호용 프록시는 접근을 제어하기 위해 코드를 추가하는 것입니다. 접근을 통제한 후 실제 객체로 접속을 중개합니다.</p>
+
+<h2 id="1310-스마트-참조자">13.10 스마트 참조자</h2>
+
+<p>프록시는 실제 객체에 접근할 때 추가 행위를 부여하여 호출할 수 있습니다. 스마트 참조자<sup>smart reference</sup>는 장식자 패턴과 유사하게 객체를 동적으로 확장 응용하는 기법입니다.</p>
+
+<h3 id="13101-확장">13.10.1 확장</h3>
+
+<p>프록시 패턴은 구조를 응용하여 객체를 확장할 수 있습니다. 실제 객체를 호출하여 행동을 수행하기 전에 프록시 내부에 어떤 작업을 같이 추가해서 실행하는 경우입니다. 이를 스마트 참조자 프록시라고 합니다.</p>
+
+<h3 id="13102-응용">13.10.2 응용</h3>
+
+<p>기존에 동작을 처리하던 실제 객체가 있습니다. 이 객체가 동작을 수행하기 전 또는 후에 추가</p>
+
+<p>13장 프록시 패턴 315</p>
+
+<p>동작을 삽입합니다.</p>
+
+<p>예제 13-20 Proxy/09/Proxy.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="kd">class</span> <span class="nc">Proxy</span> <span class="kd">implements</span> <span class="nc">Subject</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="nv">$_object</span><span class="p">;</span>
+    <span class="k">private</span> <span class="nv">$_permit</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nv">$_action1</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">(</span><span class="nv">$permit</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__CLASS__</span><span class="mf">.</span><span class="s2">" 객체가 생성이 되었습니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_permit</span> <span class="o">=</span> <span class="nv">$permit</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">action1</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__METHOD__</span><span class="mf">.</span><span class="s2">"을(를) 호출합니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_action1</span><span class="o">++</span><span class="p">;</span> <span class="c1">// 추가 동작</span>
+        <span class="k">echo</span> <span class="s2">"action1 작업을 처리합니다.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">action2</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="k">__METHOD__</span><span class="mf">.</span><span class="s2">"을(를) 호출합니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_permit</span> <span class="o">&amp;</span> <span class="mh">0x02</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// 게으른 객체 생성</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_object</span><span class="p">)</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">real</span><span class="p">();</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_object</span><span class="o">-&gt;</span><span class="nf">action2</span><span class="p">();</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">echo</span> <span class="s2">"action2 실행 권한이 없습니다."</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="k">function</span> <span class="n">real</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">"실체 객체를 생성합니다.</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">_object</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">RealSubject</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>316 2부 구조 패턴</p>
+
+<p>실체 객체를 직접 수정하는 것보다 프록시 패턴을 통해 추가 행동을 대신 처리하도록 하는 것이 좋습니다.</p>
+
+<p>프록시의 action1() 메서드 호출 횟수를 카운트하는 기능을 추가했습니다.</p>
+
+<p>예제 13-21 Proxy/09/index.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require</span> <span class="s2">"Subject.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"Proxy.php"</span><span class="p">;</span>
+<span class="k">require</span> <span class="s2">"RealSubject.php"</span><span class="p">;</span>
+
+<span class="k">const</span> <span class="no">ACT1</span> <span class="o">=</span> <span class="mh">0x01</span><span class="p">;</span>
+<span class="k">const</span> <span class="no">ACT2</span> <span class="o">=</span> <span class="mh">0x02</span><span class="p">;</span>
+<span class="nv">$permit</span> <span class="o">=</span> <span class="no">ACT1</span><span class="p">;</span>
+
+<span class="nv">$proxy</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Proxy</span><span class="p">(</span><span class="nv">$permit</span><span class="p">);</span>
+<span class="nv">$proxy</span><span class="o">-&gt;</span><span class="nf">action1</span><span class="p">();</span>
+<span class="nv">$proxy</span><span class="o">-&gt;</span><span class="nf">action1</span><span class="p">();</span>
+
+<span class="k">echo</span> <span class="s2">"Action1 실행횟수="</span><span class="mf">.</span><span class="nv">$proxy</span><span class="o">-&gt;</span><span class="n">_action1</span><span class="mf">.</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>프록시를 통해 action1() 메서드를 여러 번 호출한 후 호출 횟수를 읽어옵니다. 이처럼 프록시 패턴을 이용하면 실제 코드를 변경하지 않고도 추가 작업을 부여할 수 있습니다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ php index.php
+Proxy 객체가 생성이 되었습니다.
+Proxy::action1을(를) 호출합니다.
+action1 작업을 처리합니다.
+
+Proxy::action1을(를) 호출합니다.
+action1 작업을 처리합니다.
+
+Action1 실행횟수=2
+</code></pre></div></div>
+
+<p>13장 프록시 패턴 317</p>
+
+<h2 id="1311-정리">13.11 정리</h2>
+
+<p>프록시 패턴의 적용 사례는 매우 다양합니다. 또한 다른 패턴과 결합하여 프록시 패턴이 사용되는 경우도 많습니다.</p>
+
+<p>프록시 패턴의 특징은 투명성을 이용해 객체를 분리하여 재위임한다는 것입니다. 분리된 객체를 위임함으로써 대리 작업을 중간 단계에 삽입할 수 있으며, 분리된 객체를 동적으로 연결함으로써 객체의 실행 시점을 관리할 수도 있습니다. 프록시 패턴은 세밀한 객체의 접근이 필요할 때도 매우 유용합니다.</p>
+
+<p>318 2부 구조 패턴</p>
+
+
+
+            <!-- 다음/이전 학습 페이지네이션 -->
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+
+<div class="d-flex justify-content-between align-items-center mt-5 mb-4 py-3 border-top border-bottom">
+  <div>
+    
+      <span class="text-muted small me-2">이전 학습</span>
+      <a href="/ch12/" class="text-decoration-none fw-semibold">
+        &laquo; CHAPTER 12 플라이웨이트 패턴
+      </a>
+    
+  </div>
+
+  <div class="text-end">
+    
+  </div>
+</div>
+
+
+            <div class="mt-10">
+                <!-- 구글 에스센스 광고 -->
+                <script async
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3321560028329475"
+                    crossorigin="anonymous"></script>
+                <!-- jinydev-java -->
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3321560028329475"
+                    data-ad-slot="9323221865" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+
+        </div>
+
+        <div class="bd-toc mt-3 mb-5 my-lg-0 ps-xl-3 mb-lg-5 text-body-secondary">
+
+  <button class="btn btn-link p-md-0 mb-2 mb-md-0 text-decoration-none bd-toc-toggle d-md-none" type="button"
+    data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents">
+    서브목차
+    <svg class="bi d-md-none ms-2" aria-hidden="true">
+      <use xlink:href="#chevron-expand"></use>
+    </svg>
+  </button>
+
+  <strong class="d-none d-md-block h6 my-2">서브목차</strong>
+
+  <div class="collapse bd-toc-collapse" id="tocContents">
+    <nav id="TableOfContents">
+      <!--
+      <ul>
+        <li><a href="#quick-start">Quick start</a></li>
+        <li><a href="#cdn-links">CDN links</a></li>
+        <li><a href="#next-steps">Next steps</a></li>
+        <li><a href="#js-components">JS components</a></li>
+        <li><a href="#important-globals">Important globals</a>
+          <ul>
+            <li><a href="#html5-doctype">HTML5 doctype</a></li>
+            <li><a href="#responsive-meta-tag">Responsive meta tag</a></li>
+            <li><a href="#box-sizing">Box-sizing</a></li>
+            <li><a href="#reboot">Reboot</a></li>
+          </ul>
+        </li>
+        <li><a href="#community">Community</a></li>
+      </ul>
+      -->
+    </nav>
+  </div>
+</div>
+    </main>
+
+
+</div>
+
+  <footer class="container">
+  <hr class="mt-5 mb-3">
+  <div class="row align-items-center pb-3">
+    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+      <p class="mb-0 text-secondary">Copyright 2017~2026 JinyDev. All Rights Reserved.</p>
+    </div>
+    <div class="col-md-6 text-center text-md-end">
+      
+      <a href="https://datas.jiny.dev" class="text-decoration-none text-secondary ms-3">빅데이터</a>
+      
+      <a href="https://mysql.jiny.dev" class="text-decoration-none text-secondary ms-3">MySQL</a>
+      
+      <a href="https://php.jiny.dev" class="text-decoration-none text-secondary ms-3">PHP</a>
+      
+      <a href="https://java.jiny.dev" class="text-decoration-none text-secondary ms-3">자바</a>
+      
+      <a href="https://git.jiny.dev" class="text-decoration-none text-secondary ms-3">깃&깃허브</a>
+      
+      <a href="https://linux.jiny.dev" class="text-decoration-none text-secondary ms-3">리눅스</a>
+      
+    </div>
+  </div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+    window.addEventListener('load', async function () {
+      mermaid.initialize({ startOnLoad: false });
+
+      const mermaidCodes = document.querySelectorAll('pre code.language-mermaid');
+      const mermaidDivs = [];
+
+      mermaidCodes.forEach(codeBlock => {
+        const mermaidDefinition = codeBlock.textContent.trim();
+        const container = codeBlock.closest('div.highlighter-rouge');
+
+        const mermaidDiv = document.createElement('div');
+        mermaidDiv.className = 'mermaid';
+        mermaidDiv.textContent = mermaidDefinition;
+
+        if (container) {
+          container.replaceWith(mermaidDiv);
+        } else {
+          const pre = codeBlock.parentElement;
+          if (pre) pre.replaceWith(mermaidDiv);
+        }
+        mermaidDivs.push(mermaidDiv);
+      });
+
+      if (mermaidDivs.length > 0) {
+        await mermaid.run({ nodes: mermaidDivs });
+      }
+    });
+  </script>
+  <script src="/assets/js/toc.js"></script>
+  <script src="/assets/js/sidebar.js"></script>
+
+</body>
+
+</html>

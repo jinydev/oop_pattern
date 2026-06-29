@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Outer Box: Hello -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="30" width="320" height="140" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+    <text x="60" y="58" font-family="'Inter', sans-serif" font-size="15" font-weight="bold" fill="#334155">Hello</text>
+  </g>
+
+  <!-- Inner Box: Korean -->
+  <g filter="url(#shadow)">
+    <rect x="150" y="80" width="150" height="60" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="225" y="116" font-family="'Inter', sans-serif" font-size="14" font-weight="600" fill="#0f172a" text-anchor="middle">Korean</text>
+  </g>
+
+  <!-- Red arrow indicating internal creation -->
+  <g>
+    <!-- Curve arrow from Hello text area to Korean box -->
+    <path d="M 100,55 C 110,95 140,110 142,110" fill="none" stroke="#ef4444" stroke-width="2" />
+    <polygon points="140,105 148,110 140,115" fill="#ef4444" />
+  </g>
+</svg>

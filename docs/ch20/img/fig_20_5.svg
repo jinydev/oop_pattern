@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 200" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Context Circle (Top) -->
+  <g filter="url(#shadow)">
+    <circle cx="190" cy="50" r="35" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" />
+    <text x="190" y="54" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#1e3a8a" text-anchor="middle">상태 패턴</text>
+  </g>
+
+  <!-- Concrete States (Bottom) -->
+  <!-- State 1 -->
+  <g transform="translate(30, 130)" filter="url(#shadow)">
+    <rect width="90" height="40" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="45" y="19" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#334155" text-anchor="middle">상태 객체</text>
+    <text x="45" y="31" font-family="monospace" font-size="8" fill="#64748b" text-anchor="middle">process()</text>
+  </g>
+
+  <!-- State 2 -->
+  <g transform="translate(145, 130)" filter="url(#shadow)">
+    <rect width="90" height="40" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="45" y="19" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#334155" text-anchor="middle">상태 객체</text>
+    <text x="45" y="31" font-family="monospace" font-size="8" fill="#64748b" text-anchor="middle">process()</text>
+  </g>
+
+  <!-- State 3 -->
+  <g transform="translate(260, 130)" filter="url(#shadow)">
+    <rect width="90" height="40" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="45" y="19" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#334155" text-anchor="middle">상태 객체</text>
+    <text x="45" y="31" font-family="monospace" font-size="8" fill="#64748b" text-anchor="middle">process()</text>
+  </g>
+
+  <!-- Arrows from bottom blocks pointing up to top circle -->
+  <g>
+    <!-- Left -> Center -->
+    <path d="M 85,130 L 160,82" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="156,79 165,79 161,87" fill="#ef4444" />
+    <text x="115" y="103" font-family="monospace" font-size="8" font-weight="bold" fill="#b91c1c">0x01</text>
+
+    <!-- Center -> Center -->
+    <path d="M 190,130 L 190,93" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="186,93 190,85 194,93" fill="#ef4444" />
+    <text x="205" y="108" font-family="monospace" font-size="8" font-weight="bold" fill="#b91c1c">0x02</text>
+
+    <!-- Right -> Center -->
+    <path d="M 295,130 L 220,82" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="219,87 215,79 224,79" fill="#ef4444" />
+    <text x="265" y="103" font-family="monospace" font-size="8" font-weight="bold" fill="#b91c1c">0x04</text>
+  </g>
+</svg>

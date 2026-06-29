@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 180" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Object Boundary Circle -->
+  <g transform="translate(130, 10)">
+    <circle cx="80" cy="80" r="75" fill="#ffffff" stroke="#3b82f6" stroke-width="2" />
+    <text x="80" y="25" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#1e3a8a" text-anchor="middle">객체 내부</text>
+
+    <!-- Slots -->
+    <g transform="translate(30, 35)" filter="url(#shadow)">
+      <rect width="100" height="24" rx="3" fill="#fee2e2" stroke="#ef4444" stroke-width="1" />
+      <text x="50" y="15" font-family="monospace" font-size="9" font-weight="bold" fill="#991b1b" text-anchor="middle">private</text>
+    </g>
+
+    <g transform="translate(30, 68)" filter="url(#shadow)">
+      <rect width="100" height="24" rx="3" fill="#fef3c7" stroke="#f59e0b" stroke-width="1" />
+      <text x="50" y="15" font-family="monospace" font-size="9" font-weight="bold" fill="#92400e" text-anchor="middle">protected</text>
+    </g>
+
+    <g transform="translate(30, 101)" filter="url(#shadow)">
+      <rect width="100" height="24" rx="3" fill="#dcfce7" stroke="#10b981" stroke-width="1" />
+      <text x="50" y="15" font-family="monospace" font-size="9" font-weight="bold" fill="#065f46" text-anchor="middle">public</text>
+    </g>
+  </g>
+
+  <!-- External labels -->
+  <!-- Left Side (Access restricted / cannot restore) -->
+  <g transform="translate(15, 50)">
+    <rect width="95" height="40" rx="4" fill="#fee2e2" stroke="#fca5a5" stroke-width="1" />
+    <text x="47" y="16" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#991b1b" text-anchor="middle">복구 실패</text>
+    <text x="47" y="28" font-family="'Inter', sans-serif" font-size="8" fill="#7f1d1d" text-anchor="middle">(접근 제한)</text>
+
+    <!-- Arrows to private and protected -->
+    <path d="M 95,12 L 142,12" fill="none" stroke="#ef4444" stroke-width="1.2" />
+    <polygon points="142,9 148,12 142,15" fill="#ef4444" />
+    <path d="M 95,25 L 142,45" fill="none" stroke="#ef4444" stroke-width="1.2" />
+    <polygon points="141,41 148,47 144,48" fill="#ef4444" />
+  </g>
+
+  <!-- Right Side (External access / can restore) -->
+  <g transform="translate(310, 90)">
+    <rect width="95" height="40" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1" />
+    <text x="47" y="16" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#065f46" text-anchor="middle">복구 성공</text>
+    <text x="47" y="28" font-family="'Inter', sans-serif" font-size="8" fill="#064e3b" text-anchor="middle">(외부 접근)</text>
+
+    <!-- Arrow to public -->
+    <path d="M 0,20 L -45,20" fill="none" stroke="#10b981" stroke-width="1.2" />
+    <polygon points="-45,17 -51,20 -45,23" fill="#10b981" />
+  </g>
+</svg>

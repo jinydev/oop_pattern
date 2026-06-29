@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 220" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Left: 일반 상속 (Normal Inheritance) -->
+  <g>
+    <text x="110" y="30" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#64748b" text-anchor="middle">일반 상속</text>
+
+    <!-- Top Circle -->
+    <g filter="url(#shadow)">
+      <circle cx="110" cy="70" r="28" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+      <text x="110" y="74" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#334155" text-anchor="middle">일반 클래스</text>
+    </g>
+
+    <!-- Link -->
+    <path d="M 110,98 L 110,132" fill="none" stroke="#94a3b8" stroke-width="1.5" />
+    <polygon points="106,132 110,140 114,132" fill="#94a3b8" />
+    <text x="150" y="120" font-family="monospace" font-size="10" fill="#64748b" text-anchor="middle">extends</text>
+
+    <!-- Bottom Circle -->
+    <g filter="url(#shadow)">
+      <circle cx="110" cy="168" r="28" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+      <text x="110" y="172" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#334155" text-anchor="middle">일반 클래스</text>
+    </g>
+  </g>
+
+  <!-- Divider Line -->
+  <line x1="220" y1="20" x2="220" y2="200" stroke="#e2e8f0" stroke-width="1" />
+
+  <!-- Right: 추상 상속 (Abstract Inheritance / Polymorphism) -->
+  <g>
+    <text x="380" y="30" font-family="'Inter', sans-serif" font-size="12" font-weight="bold" fill="#64748b" text-anchor="middle">추상 상속</text>
+
+    <!-- Top Circle: 추상 클래스 -->
+    <g filter="url(#shadow)">
+      <circle cx="350" cy="70" r="28" fill="#ffffff" stroke="#0284c7" stroke-width="2" />
+      <text x="350" y="74" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#0284c7" text-anchor="middle">추상 클래스</text>
+    </g>
+
+    <!-- Branching dotted paths to two sub-classes -->
+    <path d="M 350,98 L 350,115 L 350,132" fill="none" stroke="#0284c7" stroke-width="1.2" stroke-dasharray="3,3" />
+    <polygon points="346,132 350,140 354,132" fill="#0284c7" />
+
+    <path d="M 350,98 L 350,115 L 430,115 L 430,132" fill="none" stroke="#0284c7" stroke-width="1.2" stroke-dasharray="3,3" />
+    <polygon points="426,132 430,140 434,132" fill="#0284c7" />
+
+    <!-- Sub Circle 1 (Dashed) -->
+    <g filter="url(#shadow)">
+      <circle cx="350" cy="168" r="28" fill="#ffffff" stroke="#475569" stroke-width="1.5" stroke-dasharray="4,2" />
+      <text x="350" y="172" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#475569" text-anchor="middle">일반 클래스</text>
+    </g>
+
+    <!-- Sub Circle 2 (Dashed) -->
+    <g filter="url(#shadow)">
+      <circle cx="430" cy="168" r="28" fill="#ffffff" stroke="#475569" stroke-width="1.5" stroke-dasharray="4,2" />
+      <text x="430" y="172" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#475569" text-anchor="middle">일반 클래스</text>
+    </g>
+
+    <!-- Red Polymorphism Bracket / Line -->
+    <path d="M 300,120 L 300,195 L 470,195 L 470,120" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <text x="385" y="190" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#b91c1c" text-anchor="middle">다형성</text>
+  </g>
+</svg>

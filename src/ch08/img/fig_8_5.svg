@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 180" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Hello Interface Box -->
+  <g filter="url(#shadow)">
+    <rect x="130" y="25" width="120" height="40" rx="4" fill="#ffffff" stroke="#475569" stroke-width="1.5" />
+    <text x="190" y="44" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#64748b" text-anchor="middle">&lt;&lt;interface&gt;&gt;</text>
+    <text x="190" y="56" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#334155" text-anchor="middle">Hello</text>
+  </g>
+
+  <!-- English Class Box -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="110" width="100" height="40" rx="4" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5" />
+    <text x="90" y="134" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#1e3a8a" text-anchor="middle">English 클래스</text>
+  </g>
+
+  <!-- Korea Class Box -->
+  <g filter="url(#shadow)">
+    <rect x="240" y="110" width="100" height="40" rx="4" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5" />
+    <text x="290" y="134" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#1e3a8a" text-anchor="middle">Korea 클래스</text>
+  </g>
+
+  <!-- Implementation Arrows (Dashed line with hollow triangle pointing to Interface) -->
+  <g>
+    <!-- English implements Hello -->
+    <path d="M 90,110 L 90,85 L 170,85 L 170,71" fill="none" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,2" />
+    <polygon points="165,71 170,65 175,71" fill="#f8fafc" stroke="#64748b" stroke-width="1.5" />
+
+    <!-- Korea implements Hello -->
+    <path d="M 290,110 L 290,85 L 210,85 L 210,71" fill="none" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,2" />
+    <polygon points="205,71 210,65 215,71" fill="#f8fafc" stroke="#64748b" stroke-width="1.5" />
+  </g>
+</svg>

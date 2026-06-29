@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Board easel legs -->
+  <g transform="translate(180, 110)">
+    <line x1="-30" y1="30" x2="-55" y2="90" stroke="#475569" stroke-width="3" stroke-linecap="round" />
+    <line x1="30" y1="30" x2="55" y2="90" stroke="#475569" stroke-width="3" stroke-linecap="round" />
+    <line x1="0" y1="20" x2="0" y2="100" stroke="#334155" stroke-width="2" stroke-linecap="round" />
+  </g>
+
+  <!-- Chalkboard / Board screen -->
+  <g transform="translate(90, 25)" filter="url(#shadow)">
+    <rect width="180" height="110" rx="6" fill="#0f172a" stroke="#475569" stroke-width="3" />
+    
+    <!-- Board grid or tactical content -->
+    <circle cx="30" cy="30" r="6" fill="none" stroke="#ef4444" stroke-width="2" />
+    <text x="30" y="44" font-family="'Inter', sans-serif" font-size="8" fill="#ef4444" text-anchor="middle">Start</text>
+
+    <!-- Path Arrow -->
+    <path d="M 36,30 Q 90,15 110,60" fill="none" stroke="#10b981" stroke-width="2.5" stroke-dasharray="2,2" />
+    <polygon points="107,54 113,63 113,52" fill="#10b981" />
+
+    <!-- Obstacles / Steps -->
+    <text x="90" y="40" font-family="monospace" font-size="12" font-weight="bold" fill="#f59e0b" text-anchor="middle">X</text>
+    <text x="70" y="80" font-family="monospace" font-size="12" font-weight="bold" fill="#f59e0b" text-anchor="middle">X</text>
+
+    <!-- Sub-route -->
+    <path d="M 110,60 Q 120,95 150,75" fill="none" stroke="#3b82f6" stroke-width="2.5" />
+    <polygon points="144,72 153,74 148,81" fill="#3b82f6" />
+
+    <circle cx="150" cy="75" r="5" fill="#3b82f6" />
+    <text x="150" y="90" font-family="'Inter', sans-serif" font-size="8" fill="#3b82f6" text-anchor="middle">Goal</text>
+  </g>
+
+  <!-- Title Indicator -->
+  <text x="15" y="20" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#475569">전술 (Tactic): 어떻게 실행할 것인가? (How To)</text>
+</svg>

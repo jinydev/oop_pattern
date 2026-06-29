@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 220" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Left: Superclass (Abstract Class) -->
+  <g transform="translate(20, 20)" filter="url(#shadow)">
+    <rect width="210" height="170" rx="8" fill="#ffffff" stroke="#3b82f6" stroke-width="2" />
+    <path d="M 0,8 A 8,8 0 0 1 8,0 L 202,0 A 8,8 0 0 1 210,8 L 210,25 L 0,25 Z" fill="#3b82f6" />
+    <text x="105" y="16" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">상위 클래스 (추상 클래스)</text>
+
+    <!-- Dotted container box (미리 호출하여 사용) -->
+    <rect x="10" y="35" width="190" height="120" fill="none" stroke="#94a3b8" stroke-dasharray="3,2" stroke-width="1.2" />
+    <text x="20" y="52" font-family="'Inter', sans-serif" font-size="8" fill="#64748b" text-anchor="start">미리 호출하여 사용</text>
+
+    <!-- make() -->
+    <g transform="translate(60, 60)">
+      <rect width="90" height="30" rx="4" fill="#eff6ff" stroke="#2563eb" stroke-width="1.2" />
+      <text x="45" y="19" font-family="monospace" font-size="9" font-weight="bold" fill="#1e3a8a" text-anchor="middle">make()</text>
+      <text x="45" y="-5" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#2563eb" text-anchor="middle">템플릿</text>
+    </g>
+
+    <!-- Bread() oval -->
+    <g transform="translate(60, 110)">
+      <ellipse cx="45" cy="15" rx="45" ry="15" fill="#f8fafc" stroke="#94a3b8" stroke-dasharray="2,2" stroke-width="1" />
+      <text x="45" y="18" font-family="monospace" font-size="9" font-weight="bold" fill="#475569" text-anchor="middle">Bread()</text>
+    </g>
+  </g>
+  <text x="175" y="165" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#94a3b8" text-anchor="middle">후크</text>
+
+  <!-- Right: Subclass -->
+  <g transform="translate(280, 20)" filter="url(#shadow)">
+    <rect width="160" height="170" rx="8" fill="#ffffff" stroke="#ea580c" stroke-width="2" />
+    <path d="M 0,8 A 8,8 0 0 1 8,0 L 152,0 A 8,8 0 0 1 160,8 L 160,25 L 0,25 Z" fill="#ea580c" />
+    <text x="80" y="16" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">하위 클래스</text>
+
+    <!-- Bread() implemented -->
+    <g transform="translate(30, 60)">
+      <rect width="100" height="40" rx="4" fill="#fffedd" stroke="#f59e0b" stroke-width="1.2" />
+      <text x="50" y="20" font-family="monospace" font-size="9" font-weight="bold" fill="#92400e" text-anchor="middle">Bread()</text>
+      <text x="50" y="32" font-family="'Inter', sans-serif" font-size="7" fill="#f59e0b" text-anchor="middle">실제 내용을 구현</text>
+    </g>
+  </g>
+
+  <!-- Flow arrows -->
+  <!-- make() calling subclass Bread() -->
+  <path d="M 170,95 L 305,95" fill="none" stroke="#ef4444" stroke-width="1.2" />
+  <polygon points="305,92 311,95 305,98" fill="#ef4444" />
+
+  <!-- subclass Bread() hooking back to superclass Bread() -->
+  <path d="M 310,130 Q 230,145 175,130" fill="none" stroke="#94a3b8" stroke-dasharray="3,2" stroke-width="1.2" />
+  <polygon points="177,126 170,130 177,134" fill="#94a3b8" />
+</svg>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 180" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Invoker (Left) -->
+  <g filter="url(#shadow)">
+    <circle cx="100" cy="90" r="50" fill="#ffffff" stroke="#0f172a" stroke-width="2" />
+    <text x="100" y="55" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#0f172a" text-anchor="middle">인보커</text>
+
+    <!-- Internal slots representing appended command references -->
+    <rect x="85" y="72" width="30" height="15" rx="3" fill="#ea580c" />
+    <rect x="85" y="95" width="30" height="15" rx="3" fill="#ea580c" />
+  </g>
+
+  <!-- Command Objects (Right) -->
+  <!-- Command 1 -->
+  <g filter="url(#shadow)">
+    <circle cx="280" cy="55" r="28" fill="#ffffff" stroke="#ea580c" stroke-width="1.5" />
+    <text x="280" y="59" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#475569" text-anchor="middle">명령 객체</text>
+  </g>
+
+  <!-- Command 2 -->
+  <g filter="url(#shadow)">
+    <circle cx="280" cy="125" r="28" fill="#ffffff" stroke="#ea580c" stroke-width="1.5" />
+    <text x="280" y="129" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#475569" text-anchor="middle">명령 객체</text>
+  </g>
+
+  <!-- Dotted references -->
+  <g>
+    <!-- Invoker -> Command 1 -->
+    <path d="M 115,79 L 252,59" fill="none" stroke="#ef4444" stroke-width="1.2" stroke-dasharray="4,3" />
+    <polygon points="248,56 252,59 249,63" fill="#ef4444" />
+
+    <!-- Invoker -> Command 2 -->
+    <path d="M 115,102 L 252,121" fill="none" stroke="#ef4444" stroke-width="1.2" stroke-dasharray="4,3" />
+    <polygon points="249,117 252,121 248,124" fill="#ef4444" />
+  </g>
+</svg>

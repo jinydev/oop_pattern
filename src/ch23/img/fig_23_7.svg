@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 220" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Top Left: Computer Client (Dashed) -->
+  <g transform="translate(20, 30)">
+    <rect width="100" height="50" rx="6" fill="none" stroke="#64748b" stroke-dasharray="3,2" stroke-width="1.5" />
+    <text x="50" y="29" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#475569" text-anchor="middle">컴퓨터 (Client)</text>
+  </g>
+
+  <!-- Dotted indicator line from Computer to Interface -->
+  <path d="M 120,55 L 185,55" fill="none" stroke="#ef4444" stroke-dasharray="3,2" stroke-width="1.2" />
+  <polygon points="185,52 191,55 185,58" fill="#ef4444" />
+  
+  <text x="152" y="45" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#ef4444" text-anchor="middle">호환성을 위한 약속된 정보</text>
+
+  <!-- Middle: Interface (USB interface) -->
+  <g transform="translate(195, 30)" filter="url(#shadow)">
+    <rect width="130" height="50" rx="6" fill="#ffffff" stroke="#3b82f6" stroke-width="2" />
+    <path d="M 0,6 A 6,6 0 0 1 6,0 L 124,0 A 6,6 0 0 1 130,6 L 130,20 L 0,20 Z" fill="#3b82f6" />
+    <text x="65" y="13" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#ffffff" text-anchor="middle">인터페이스 (Interface)</text>
+    <text x="65" y="38" font-family="monospace" font-size="10" font-weight="bold" fill="#1e3a8a" text-anchor="middle">USB 인터페이스</text>
+  </g>
+
+  <!-- Bottom: USB Devices (Mouse, Keyboard, Printer, Scanner) -->
+  <!-- Mouse -->
+  <g transform="translate(20, 130)" filter="url(#shadow)">
+    <rect width="80" height="40" rx="4" fill="#ffffff" stroke="#ea580c" stroke-width="1.5" />
+    <text x="40" y="24" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#c2410c" text-anchor="middle">마우스</text>
+  </g>
+  <path d="M 60,130 L 210,75" fill="none" stroke="#ea580c" stroke-width="1.2" />
+  <polygon points="204,73 213,73 208,81" fill="#ea580c" />
+
+  <!-- Keyboard -->
+  <g transform="translate(130, 130)" filter="url(#shadow)">
+    <rect width="80" height="40" rx="4" fill="#ffffff" stroke="#ea580c" stroke-width="1.5" />
+    <text x="40" y="24" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#c2410c" text-anchor="middle">키보드</text>
+  </g>
+  <path d="M 170,130 L 235,83" fill="none" stroke="#ea580c" stroke-width="1.2" />
+  <polygon points="230,81 238,80 235,88" fill="#ea580c" />
+
+  <!-- Printer -->
+  <g transform="translate(240, 130)" filter="url(#shadow)">
+    <rect width="80" height="40" rx="4" fill="#ffffff" stroke="#ea580c" stroke-width="1.5" />
+    <text x="40" y="24" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#c2410c" text-anchor="middle">프린터</text>
+  </g>
+  <path d="M 280,130 L 270,83" fill="none" stroke="#ea580c" stroke-width="1.2" />
+  <polygon points="273,81 268,79 267,86" fill="#ea580c" />
+
+  <!-- Scanner (Dashed/unconnected/future expansion illustration) -->
+  <g transform="translate(350, 130)">
+    <rect width="80" height="40" rx="4" fill="none" stroke="#94a3b8" stroke-dasharray="3,2" stroke-width="1.2" />
+    <text x="40" y="24" font-family="'Inter', sans-serif" font-size="10" fill="#64748b" text-anchor="middle">스캐너</text>
+  </g>
+</svg>

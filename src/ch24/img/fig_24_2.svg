@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 220" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Top label: 구문 분석 (Parser) -->
+  <text x="145" y="30" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#2563eb" text-anchor="middle">구문 분석 (Parser)</text>
+  
+  <!-- Dotted lines from 구문 분석 to 문장 해석 and 표현식 해석 -->
+  <path d="M 145,35 L 75,80" fill="none" stroke="#3b82f6" stroke-dasharray="3,2" stroke-width="1.2" />
+  <polygon points="73,76 72,83 79,81" fill="#3b82f6" />
+  
+  <path d="M 145,35 L 210,80" fill="none" stroke="#3b82f6" stroke-dasharray="3,2" stroke-width="1.2" />
+  <polygon points="206,81 213,83 212,76" fill="#3b82f6" />
+
+  <!-- Top label: 어휘 분석 (Lexer) -->
+  <text x="350" y="30" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#ea580c" text-anchor="middle">어휘 분석 (Lexer)</text>
+  
+  <!-- Dotted line from 어휘 분석 to 다음 토큰 읽기 -->
+  <path d="M 350,35 L 350,80" fill="none" stroke="#ea580c" stroke-dasharray="3,2" stroke-width="1.2" />
+  <polygon points="347,80 350,85 353,80" fill="#ea580c" />
+
+  <!-- Block 1: 문장 해석 -->
+  <g transform="translate(20, 85)" filter="url(#shadow)">
+    <rect width="110" height="40" rx="4" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5" />
+    <text x="55" y="24" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#1e3a8a" text-anchor="middle">문장 해석</text>
+  </g>
+
+  <!-- Arrow from 문장 해석 to 표현식 해석 -->
+  <path d="M 130,105 L 160,105" fill="none" stroke="#3b82f6" stroke-width="1.5" />
+  <polygon points="160,102 166,105 160,108" fill="#3b82f6" />
+
+  <!-- Block 2: 표현식 해석 -->
+  <g transform="translate(170, 85)" filter="url(#shadow)">
+    <rect width="110" height="40" rx="4" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5" />
+    <text x="55" y="24" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#1e3a8a" text-anchor="middle">표현식 해석</text>
+  </g>
+
+  <!-- Arrow from 표현식 해석 to 다음 토큰 읽기 -->
+  <path d="M 280,105 L 310,105" fill="none" stroke="#ea580c" stroke-width="1.5" />
+  <polygon points="310,102 316,105 310,108" fill="#ea580c" />
+
+  <!-- Block 3: 다음 토큰 읽기 -->
+  <g transform="translate(320, 85)" filter="url(#shadow)">
+    <rect width="110" height="40" rx="4" fill="#ffffff" stroke="#ea580c" stroke-width="1.5" />
+    <text x="55" y="24" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" fill="#c2410c" text-anchor="middle">다음 토큰 읽기</text>
+  </g>
+
+  <!-- Feedback loop from 다음 토큰 읽기 to 문장 해석 -->
+  <path d="M 375,125 L 375,160 L 75,160 L 75,130" fill="none" stroke="#475569" stroke-width="1.2" />
+  <polygon points="72,130 75,125 78,130" fill="#475569" />
+</svg>

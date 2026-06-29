@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 160" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="8" />
+
+  <!-- Diamond 1 -->
+  <g transform="translate(30, 20)" filter="url(#shadow)">
+    <polygon points="60,10 110,35 60,60 10,35" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5" />
+    <text x="60" y="38" font-family="monospace" font-size="9" fill="#1e3a8a" text-anchor="middle">0x01</text>
+  </g>
+  <g transform="translate(30, 95)" filter="url(#shadow)">
+    <rect width="120" height="28" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+    <text x="60" y="18" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#475569" text-anchor="middle">동작 처리</text>
+  </g>
+
+  <!-- Diamond 2 -->
+  <g transform="translate(180, 20)" filter="url(#shadow)">
+    <polygon points="60,10 110,35 60,60 10,35" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5" />
+    <text x="60" y="38" font-family="monospace" font-size="9" fill="#1e3a8a" text-anchor="middle">0x02</text>
+  </g>
+  <g transform="translate(180, 95)" filter="url(#shadow)">
+    <rect width="120" height="28" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+    <text x="60" y="18" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#475569" text-anchor="middle">동작 처리</text>
+  </g>
+
+  <!-- Diamond 3 (Dotted/Future) -->
+  <g transform="translate(320, 20)" filter="url(#shadow)">
+    <polygon points="60,10 110,35 60,60 10,35" fill="#fcfaf2" stroke="#ea580c" stroke-width="1.5" stroke-dasharray="3,2" />
+    <text x="60" y="38" font-family="monospace" font-size="9" fill="#7c2d12" text-anchor="middle">0x04</text>
+  </g>
+  <g transform="translate(320, 95)" filter="url(#shadow)">
+    <rect width="120" height="28" rx="4" fill="#ffffff" stroke="#ea580c" stroke-width="1.2" stroke-dasharray="3,2" />
+    <text x="60" y="18" font-family="'Inter', sans-serif" font-size="9" font-weight="bold" fill="#ea580c" text-anchor="middle">동작 처리</text>
+  </g>
+
+  <!-- Connecting Lines -->
+  <g>
+    <!-- Diam 1 -> Diam 2 -->
+    <path d="M 140,55 L 180,55" fill="none" stroke="#ef4444" stroke-width="1.5" />
+    <polygon points="180,51 188,55 180,59" fill="#ef4444" />
+
+    <!-- Diam 2 -> Diam 3 -->
+    <path d="M 290,55 L 322,55" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,2" />
+    <polygon points="322,51 330,55 322,59" fill="#ef4444" />
+    <text x="306" y="45" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#ef4444" text-anchor="middle">계속 추가..</text>
+
+    <!-- Diam 1 -> Rect 1 -->
+    <path d="M 90,80 L 90,95" fill="none" stroke="#64748b" stroke-width="1.2" />
+    <polygon points="87,95 90,101 93,95" fill="#64748b" />
+
+    <!-- Diam 2 -> Rect 2 -->
+    <path d="M 240,80 L 240,95" fill="none" stroke="#64748b" stroke-width="1.2" />
+    <polygon points="237,95 240,101 243,95" fill="#64748b" />
+
+    <!-- Diam 3 -> Rect 3 -->
+    <path d="M 380,80 L 380,95" fill="none" stroke="#ea580c" stroke-width="1.2" stroke-dasharray="3,2" />
+    <polygon points="377,95 380,101 383,95" fill="#ea580c" />
+  </g>
+</svg>
